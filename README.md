@@ -2,6 +2,8 @@
 
 소방학교 AI 강의의 **교육생용 강의 사이트**입니다. Vercel에 연결되어 `main` 에 올리면 자동으로 배포됩니다.
 
+- 주소: **https://www.jg-sobang.com/** (Vercel 기본 주소 `fire-ai-classroom.vercel.app` 도 동작)
+
 | 경로 | 내용 |
 |---|---|
 | `index.html` | 강의 목록 첫 화면 |
