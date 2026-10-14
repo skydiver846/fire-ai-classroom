@@ -140,6 +140,13 @@
 .trouble.is-right { border-color: var(--ok); }
 .why { margin: 8px 0 0; color: var(--muted); }
 
+/* 활동마다 맨 위의 진행 순서 안내 */
+.how-to { margin: -6px 0 16px; padding: 12px 16px 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); border-radius: 10px; background: var(--accent-soft); }
+.how-to-title { margin: 0 0 6px; color: var(--accent); font-size: .85rem; font-weight: 800; letter-spacing: .02em; }
+.how-to ol { display: grid; gap: 4px; margin: 0; padding-left: 1.4rem; }
+.how-to li { margin: 0; line-height: 1.6; }
+.how-to li::marker { color: var(--accent); font-weight: 800; }
+
 /* 기본 실습(간단 모드)과 선택 활동 구분 */
 .extra-head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin: 48px 0 0; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 18px; }
 .extra-head small { color: var(--muted); font-size: 13px; font-weight: 600; }

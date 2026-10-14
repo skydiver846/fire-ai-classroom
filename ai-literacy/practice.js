@@ -40,7 +40,74 @@
     return rows.slice(2);
   }
 
+  // 활동마다 교육생이 보는 진행 순서 (활동 제목으로 찾음)
+  const HOW_TO = {
+    '웹 서비스를 식당으로 옮겨 보기': [
+      '왼쪽의 웹 서비스 항목마다 오른쪽 상자를 눌러 식당의 무엇에 해당하는지 고릅니다.',
+      '모두 고르면 <strong>[채점하기]</strong>를 누릅니다.',
+      '틀린 항목 아래에 나온 정답을 보고, 강의 안내의 “전체를 꿰는 비유” 표와 비교해 봅니다.'
+    ],
+    '눌러 보며 비교하는 주문 태블릿': [
+      '<strong>[1단계 · HTML만]</strong>이 선택된 상태에서 미리보기의 <strong>[담기]</strong>를 눌러 봅니다.',
+      '<strong>[2단계] → [3단계] → [4단계]</strong>를 차례로 누르고, 단계마다 [담기]를 눌러 무엇이 달라졌는지 봅니다.',
+      '단계마다 노란 상자의 <strong>“살펴보기”</strong> 설명을 읽습니다.',
+      '궁금하면 맨 아래 <strong>“이 단계의 코드 보기”</strong>를 열어 실제 코드를 봅니다.'
+    ],
+    '주문 태블릿 코드를 직접 고쳐 보기': [
+      '단계 버튼을 고르고 노란 상자의 <strong>도전 과제</strong>를 읽습니다.',
+      '<strong>HTML / CSS / JavaScript</strong> 탭을 눌러 고칠 코드를 엽니다.',
+      '코드를 고친 뒤 <strong>[▶ 실행]</strong>(Ctrl + Enter)을 눌러 미리보기를 확인합니다.',
+      '코드가 꼬이면 <strong>[이 단계 처음으로]</strong>로 되돌립니다.'
+    ],
+    '계좌 이체와 트랜잭션': [
+      '먼저 “은행 전체 돈”이 <strong>150,000원</strong>인 것을 확인합니다.',
+      '<strong>“② 입금 직전에 서버 정전”만</strong> 체크하고 [10만 원 이체 실행] → 은행 전체 돈이 줄어드는지 봅니다.',
+      '[잔액 초기화] 후 <strong>“트랜잭션으로 묶기”도</strong> 체크하고 다시 실행 → 돈이 되돌아오는지(Rollback) 봅니다.',
+      '정전 체크를 끄고 실행 → 정상 이체(Commit)를 봅니다. 아래 미션 3개가 모두 체크되면 끝입니다.'
+    ],
+    '목욕탕 열쇠로 로그인 유지하기': [
+      '로그인하지 않고 <strong>[GET /me]</strong> → 401(누구세요?)을 받습니다.',
+      '아이디 hong, 비밀번호 1234로 <strong>[POST /login]</strong> → 다시 [GET /me] → 200을 받습니다.',
+      '<strong>[GET /admin]</strong> → 403(권한 없음)을 받습니다.',
+      '<strong>[쿠키 지우기]</strong> 후 [GET /me] → 다시 401. 오른쪽 기록과 서버의 세션 장부를 함께 봅니다.'
+    ],
+    '눌러서 장부에 질문하기': [
+      '<strong>“준비됐습니다”</strong> 문구가 뜰 때까지 잠시 기다립니다.',
+      '<strong>1번부터 6번까지</strong> 버튼을 차례로 누릅니다.',
+      '누를 때마다 나오는 <strong>SQL · 해설 · 결과 표</strong>를 읽습니다.',
+      '5번(이사)을 다시 해 보려면 <strong>[DB 처음 상태로]</strong>를 누릅니다.'
+    ],
+    'SQL을 직접 써 보기': [
+      '과제 버튼을 고르고 노란 상자의 과제를 읽습니다.',
+      '왼쪽 <strong>표 구조</strong>를 보며 검은 상자에 SQL을 씁니다.',
+      '<strong>[▶ 실행]</strong>(Ctrl + Enter) → 맞으면 “정답입니다”가 나옵니다.',
+      '막히면 <strong>[힌트]</strong>, 결과가 이상하면 <strong>[DB 초기화]</strong>를 누릅니다.'
+    ],
+    'DNS 길찾기와 TTL': [
+      '<strong>[주소 찾기]</strong>를 눌러 위의 경로가 차례로 켜지는 것을 봅니다.',
+      '바로 한 번 더 [주소 찾기] → 이번에는 <strong>캐시</strong>에서 즉시 답이 나옵니다.',
+      '<strong>[서버 이사]</strong> → [주소 찾기] → 옛 주소로 가는 빨간 기록을 봅니다.',
+      '<strong>[시간 +60초]</strong>를 5번 누른 뒤 [주소 찾기] → 새 주소를 받습니다. 미션 4개가 체크되면 끝입니다.'
+    ],
+    '배포 장애, 원인부터 좁히기': [
+      '증상을 읽고 가장 먼저 의심할 원인 하나를 고릅니다.',
+      '고르면 바로 정답과 해설이 나옵니다.',
+      '6개를 모두 풀고 맨 아래 점수를 확인합니다.'
+    ],
+    '문제와 해결 기술 잇기': [
+      '문제마다 오른쪽 상자에서 그 문제를 해결한 기술을 고릅니다.',
+      '모두 고르면 <strong>[채점하기]</strong>를 누릅니다.',
+      '틀린 항목의 정답을 확인하고, <strong>[문제 순서 섞기]</strong>로 한 번 더 풀어 봅니다.'
+    ],
+    '막연한 요청을 구체적으로 다듬기': [
+      '“막연한 요청”을 읽고, 강의에서 배운 용어를 넣어 아래 칸에 다시 씁니다.',
+      '<strong>[모범 요청과 비교]</strong>를 누릅니다.',
+      '내가 넣은 핵심 용어(초록색)와 빠진 용어를 확인하고 모범 요청을 읽어 봅니다.'
+    ]
+  };
+
   function labShell(no, kind, title, goal) {
+    const steps = HOW_TO[title] || [];
     const section = document.createElement('section');
     section.className = 'lab';
     section.innerHTML = `
@@ -49,6 +116,7 @@
         <h3>${title}</h3>
         <p class="lab-goal">${goal}</p>
       </header>
+      ${steps.length ? `<div class="how-to"><p class="how-to-title">이렇게 진행하세요</p><ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol></div>` : ''}
       <div class="lab-body"></div>`;
     return { section, body: section.querySelector('.lab-body') };
   }
