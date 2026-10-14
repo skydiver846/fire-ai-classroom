@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 리터러시 · 웹 서비스의 뿌리</title>
+<meta name="description" content="웹 서비스의 뿌리를 프론트엔드, 백엔드, 데이터베이스·스토리지, 웹서버·배포의 흐름으로 배우는 AI 리터러시 강의자료 (교육생용)">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="practice.css">
+</head>
+<body>
+<div class="app" id="app" data-edition="student">
+  <aside class="side" id="side">
+    <a class="brand" href="#guide">
+      <small>AI 리터러시 · 바이브코딩을 위한</small>
+      <strong>웹 서비스의 뿌리 강의자료</strong>
+    </a>
+    <div class="tools">
+      <input type="search" id="q" placeholder="전체 자료에서 찾기 (예: 트랜잭션)" aria-label="강의자료 검색" autocomplete="off">
+    </div>
+    <nav id="nav" aria-label="강의자료 목차"></nav>
+  </aside>
+
+  <main>
+    <div class="topbar"><button type="button" id="menu" aria-controls="side">☰ 목차</button><span id="topTitle"></span></div>
+    <div class="crumb" id="crumb"></div>
+    <article id="doc"></article>
+    <div class="pager" id="pager"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script src="content.js"></script>
+<script src="practice.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

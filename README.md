@@ -8,6 +8,7 @@
 |---|---|
 | `index.html` | 강의 목록 첫 화면 |
 | `fire-ai/` | 생성형 AI 업무 활용 입문 |
+| `ai-literacy/` | AI 리터러시 · 웹 서비스의 뿌리 (교육생용). `skydiver846/ai-literacy-course-site` 저장소에서 `node build-student.mjs ../fire-ai-classroom/ai-literacy` 로 만든 결과물이라 직접 고치지 않음. 강사용은 Claude 아티팩트로 따로 둠 |
 | `fire-ai-free/` | 같은 강의의 **무료 계정판** 보존본 (Claude Team 전환 전, 목록에는 링크하지 않음) |
 | `network-check.html` | 강사용 강의장 PC 접속 점검 (목록에는 링크하지 않음) |
 
