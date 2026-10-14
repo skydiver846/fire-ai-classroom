@@ -256,12 +256,15 @@
 
     pager.innerHTML = `${prev ? `<a class="prev" href="#${prev.id}"><span>← 이전</span>${prev.short}</a>` : ''}${next ? `<a class="next" href="#${next.id}"><span>다음 →</span>${next.short}</a>` : ''}`;
     doc.querySelectorAll('.copy-button').forEach(b => b.addEventListener('click', copyBlock));
-    renderDiagrams();
     side.classList.remove('open');
-    requestAnimationFrame(() => {
+    // 흐름도가 그려지면 위쪽 높이가 바뀌므로, 제목 위치로 바로 이동한 뒤 그림이 끝나면 한 번 더 맞춥니다.
+    const jump = () => {
       const target = anchor && document.getElementById(anchor);
-      if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
-    });
+      if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+      else if (!anchor) window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    jump();
+    renderDiagrams().then(() => { if (anchor && current().d === d) jump(); });
   }
 
   /* ───────── 흐름도 ───────── */

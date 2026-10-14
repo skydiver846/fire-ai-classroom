@@ -51,6 +51,8 @@
 img { max-width: 100%; }
 html, body { height: 100%; }
 html { scroll-behavior: smooth; }
+/* 흐름도가 늦게 그려져도 브라우저가 화면 위치를 붙잡지 않게 합니다(페이지는 항상 맨 위 또는 지정한 제목에서 시작). */
+html, body { overflow-anchor: none; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.75 var(--font-body); word-break: keep-all; }
 button, input, select, textarea { font: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
