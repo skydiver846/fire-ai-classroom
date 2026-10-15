@@ -362,7 +362,9 @@
 
     function showError(message) {
       errorBox.hidden = false;
-      errorBox.textContent = `JavaScript 오류: ${message}. 괄호와 따옴표 짝이 맞는지 확인해 보세요.`;
+      // 브라우저 내부 문구(appendChild 등)는 빼고 핵심 오류만 보여 줍니다.
+      const plainMessage = message.replace(/Failed to execute '\w+' on '\w+':\s*/, '').trim();
+      errorBox.textContent = `JavaScript 오류: ${plainMessage}. 괄호와 따옴표 짝이 맞는지 확인해 보세요.`;
     }
 
     function run() {
@@ -639,7 +641,7 @@
     { title: '조건으로 고르기 · WHERE', goal: '30세 이상인 고객의 <strong>이름만</strong> 조회하세요.',
       hint: 'SELECT name FROM customers WHERE ...', answer: 'SELECT name FROM customers WHERE age >= 30;' },
     { title: '두 표 잇기 · JOIN', goal: '홍길동이 주문한 <strong>상품과 금액</strong>을 조회하세요. <code>orders</code>에는 이름 대신 <code>customer_id</code>만 있습니다.',
-      hint: 'orders JOIN customers ON orders.customer_id = customers.id',
+      hint: "두 표를 orders JOIN customers ON orders.customer_id = customers.id 로 잇고, WHERE customers.name = '홍길동' 으로 홍길동만 고릅니다.",
       answer: "SELECT orders.item, orders.price\nFROM orders\nJOIN customers ON orders.customer_id = customers.id\nWHERE customers.name = '홍길동';" },
     { title: '묶어서 합계 · GROUP BY', goal: '고객 이름별 <strong>주문 총액</strong>을 구하세요.',
       hint: 'SUM(orders.price) 와 GROUP BY customers.name',
@@ -911,8 +913,8 @@
       if (cache && left() > 0) {
         const stale = cache.ip !== realIp;
         say(stale
-          ? `캐시에서 바로 <code>${cache.ip}</code>를 받았습니다. 하지만 가게는 이미 <code>${realIp}</code>로 이사했습니다. <strong>옛 건물로 찾아갑니다.</strong> 남은 TTL ${left()}초가 지나야 새 주소를 묻습니다.`
-          : `캐시에서 바로 <code>${cache.ip}</code>를 받았습니다. 아무에게도 묻지 않아 가장 빠릅니다. (남은 TTL ${left()}초)`, stale ? 'fail' : 'ok');
+          ? `캐시에서 바로 <code>${cache.ip}</code> 주소를 받았습니다. 하지만 가게는 이미 <code>${realIp}</code> 주소로 이사했습니다. <strong>옛 건물로 찾아갑니다.</strong> 남은 TTL ${left()}초가 지나야 새 주소를 묻습니다.`
+          : `캐시에서 바로 <code>${cache.ip}</code> 주소를 받았습니다. 아무에게도 묻지 않아 가장 빠릅니다. (남은 TTL ${left()}초)`, stale ? 'fail' : 'ok');
         missions.complete(stale ? 'stale' : 'cached');
       } else {
         const hadOld = cache && cache.ip !== realIp;
@@ -938,7 +940,7 @@
     body.querySelector('[data-act="move"]').addEventListener('click', () => {
       realIp = realIp === OLD_IP ? NEW_IP : OLD_IP;
       missions.movedSeen = true;
-      say(`가게가 이사했습니다. 네임서버의 A 레코드가 <code>${realIp}</code>로 바뀌었습니다. 이미 받아 둔 캐시는 그대로입니다.`, 'note');
+      say(`가게가 이사했습니다. 네임서버의 A 레코드가 <code>${realIp}</code> 주소로 바뀌었습니다. 이미 받아 둔 캐시는 그대로입니다.`, 'note');
       draw();
     });
     body.querySelector('[data-act="flush"]').addEventListener('click', () => { cache = null; say('캐시를 비웠습니다.', 'muted'); draw(); });
