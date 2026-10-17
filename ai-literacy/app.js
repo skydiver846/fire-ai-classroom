@@ -30,10 +30,11 @@
     { id: 'lab-database', group: '실습', kind: 'lab', course: 'database', short: '실습 03 · SQL 실습실', title: '실습 03. SQL 실습실',
       lede: '브라우저 안의 작은 DB에 SQL로 질문합니다. 표 보기부터 JOIN, 정규화, DB와 스토리지의 역할 분리까지 6개 과제를 풉니다.' },
     { id: 'lab-deploy', group: '실습', kind: 'lab', course: 'deploy', short: '실습 04 · DNS와 장애 진단', title: '실습 04. DNS 길찾기와 장애 진단',
-      lede: '도메인 주소를 찾아가는 길과 TTL 캐시를 시뮬레이터로 확인하고, 배포 중 자주 만나는 증상의 원인을 짚어 봅니다.' }
+      lede: '도메인 주소를 찾아가는 길과 TTL 캐시를 시뮬레이터로 확인하고, 배포 중 자주 만나는 증상의 원인을 짚어 봅니다.' },
+    { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' }
   ];
-  const ORDER = ['guide', ...TEACHER.pages.map(p => p.id), 'lab-guide', 'frontend', 'lab-frontend', 'backend', 'lab-backend', 'database', 'lab-database', 'deploy', 'lab-deploy'];
-  const GROUPS = ['강의 개요', '본 강의', '실습'];
+  const ORDER = ['guide', ...TEACHER.pages.map(p => p.id), 'lab-guide', 'frontend', 'lab-frontend', 'backend', 'lab-backend', 'database', 'lab-database', 'deploy', 'lab-deploy', 'board'];
+  const GROUPS = ['강의 개요', '본 강의', '실습', '마무리'];
   const byId = Object.fromEntries(DOCS.map(d => [d.id, d]));
   const byFile = Object.fromEntries(DOCS.filter(d => d.file).map(d => [d.file.replace(/\.md$/, ''), d]));
   const reading = ORDER.map(id => byId[id]).filter(Boolean);
@@ -186,7 +187,7 @@
   function docText(d) {
     if (d.kind === 'lecture') return stripMarkdown(withNotes(d.id, content[d.file] || ''));
     if (d.kind === 'teacher') return stripMarkdown(d.body);
-    return stripMarkdown(`${d.title} ${d.lede} ${(TEACHER.notes[d.id] || []).map(n => n.md).join(' ')}`);
+    return stripMarkdown(`${d.title} ${d.lede || ''} ${(TEACHER.notes[d.id] || []).map(n => n.md).join(' ')}`);
   }
 
   /* ───────── 목차 · 검색 ───────── */
@@ -223,9 +224,12 @@
     return { prev: reading[i - 1], next: reading[i + 1] };
   }
 
+  let stopBoard = () => {};
   function render() {
     const { d, anchor } = current();
     const { prev, next } = neighbours(d);
+    stopBoard();
+    stopBoard = () => {};
     renderNav();
     topTitle.textContent = d.short;
     const docnav = `<p class="docnav">${prev ? `← <a href="#${prev.id}">${prev.short}</a>` : ''}${prev && next ? ' | ' : ''}${next ? `다음 → <a href="#${next.id}">${next.short}</a>` : ''}</p>`;
@@ -237,7 +241,14 @@
       const full = withNotes(d.id, markdown);
       const title = (full.match(/^#\s+(.+)$/m) || [, d.short])[1];
       crumb.textContent = `${d.group} · ${d.file}`;
-      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}`;
+      // 생각해 보기(점수 없음) → 본문 → 강의 후 퀴즈
+      const quiz = window.QuizUI && window.QUIZ && window.QUIZ[d.id];
+      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${quiz ? window.QuizUI.warmup(d.id) : ''}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}${quiz ? '<section class="quiz" id="quiz"></section>' : ''}`;
+      if (quiz) window.QuizUI.mountQuiz(document.getElementById('quiz'), d.id, { teacher: IS_TEACHER });
+    } else if (d.kind === 'board') {
+      crumb.textContent = `${d.group} · 강의 후 퀴즈 결과`;
+      doc.innerHTML = `<h1>${d.title}</h1>${docnav}<div id="board"></div>`;
+      if (window.QuizUI) stopBoard = window.QuizUI.mountBoard(document.getElementById('board'), { teacher: IS_TEACHER });
     } else if (d.kind === 'teacher') {
       crumb.textContent = `${d.group} · 강사 전용`;
       const title = (d.body.match(/^#\s+(.+)$/m) || [, d.short])[1];

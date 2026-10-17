@@ -140,6 +140,85 @@
 .trouble.is-right { border-color: var(--ok); }
 .why { margin: 8px 0 0; color: var(--muted); }
 
+/* 생각해 보기 (강의 맨 앞, 점수 없음) */
+.warmup { margin: 0 0 24px; padding: 14px 18px; border: 1px dashed color-mix(in srgb, var(--ask) 55%, var(--line)); border-radius: 10px; background: color-mix(in srgb, var(--ask) 7%, var(--paper)); }
+.warmup-title { margin: 0 0 4px; color: var(--ask); font-size: .85rem; font-weight: 800; }
+.warmup-q { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.warmup-note { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+
+/* 강의 후 퀴즈 */
+.quiz { margin-top: 56px; padding: 22px; border: 2px solid var(--accent); border-radius: 16px; background: var(--paper); }
+.quiz-kind { margin: 0; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .04em; }
+.quiz-head h2 { margin: 4px 0 6px; padding: 0; border: 0; font-size: 1.4rem; }
+.quiz-lede { margin: 0 0 16px; color: var(--muted); }
+.quiz-name { display: grid; gap: 4px; max-width: 360px; margin-bottom: 18px; }
+.quiz-name label { font-size: .85rem; font-weight: 800; }
+.quiz-name input { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: var(--bg); }
+.quiz-name small { color: var(--muted); font-size: .78rem; }
+.quiz-list { display: grid; gap: 14px; margin: 0 0 16px; padding-left: 1.4rem; }
+.quiz-item { margin: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+.quiz-item::marker { font-weight: 800; }
+.quiz-q { margin: 0 0 8px; font-weight: 700; }
+.quiz-options { display: grid; gap: 6px; }
+.quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.quiz-option:hover { border-color: var(--accent); }
+.quiz-option input { flex: none; margin-top: 5px; accent-color: var(--accent); }
+.quiz-option .mark { flex: none; color: var(--muted); font-weight: 700; }
+.quiz-option:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.quiz-option.is-answer { border-color: var(--ok); background: var(--ok-bg); font-weight: 700; }
+.quiz-item.is-right { border-color: var(--ok); background: var(--ok-bg); }
+.quiz-item.is-wrong { border-color: var(--fail); background: var(--fail-bg); }
+.quiz-where { margin: 8px 0 0; color: var(--muted); font-size: .85rem; }
+.quiz-item.is-wrong .quiz-where { color: var(--fail); font-weight: 700; }
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.quiz-status { margin: 0; color: var(--muted); font-weight: 700; }
+.quiz-result { margin-top: 12px; padding: 14px 16px; border-radius: 10px; background: var(--surface-2); }
+.quiz-result p { margin: 4px 0; }
+.quiz-score { font-size: 1.1rem; }
+.quiz-score.warn { color: var(--fail); font-weight: 800; }
+.quiz-board-link { margin: 0; }
+
+/* 퀴즈 결과 공유판 */
+.board-block { margin-top: 28px; }
+.board-block h2 { margin: 0 0 10px; }
+.podium { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.podium li { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin: 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.podium .medal { font-size: 1.5rem; }
+.podium strong { font-size: 1.15rem; }
+.podium span:last-child { color: var(--muted); }
+.board-table td, .board-table th { text-align: center; }
+.board-table td:first-child, .board-table th:first-child { text-align: left; }
+.board-table td.done { color: var(--ok); font-weight: 800; }
+.board-table tfoot td { color: var(--muted); font-weight: 700; }
+.rate-group { margin-bottom: 22px; }
+.rate-group h3 { margin: 0 0 8px; font-size: 1rem; }
+.rate-group h3 small { color: var(--muted); font-weight: 600; }
+.rate-row { margin-bottom: 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.rate-row.worst { border-color: var(--fail); }
+.rate-row.worst strong { color: var(--fail); }
+.rate-q { display: grid; grid-template-columns: minmax(0, 1fr) minmax(80px, 160px) 48px; gap: 12px; align-items: center; width: 100%; padding: 10px 12px; border: 0; background: none; color: var(--text); text-align: left; cursor: pointer; }
+.rate-q > span:first-child { min-width: 0; }
+.rate-bar { height: 10px; overflow: hidden; border-radius: 99px; background: var(--surface-2); }
+.rate-bar span { display: block; height: 100%; border-radius: inherit; background: var(--ok); }
+.rate-row.worst .rate-bar span { background: var(--fail); }
+.rate-q strong { text-align: right; font-variant-numeric: tabular-nums; }
+.rate-options { display: grid; gap: 4px; margin: 0; padding: 0 12px 12px; list-style: none; }
+.rate-options li { display: flex; justify-content: space-between; gap: 12px; margin: 0; padding: 6px 10px; border-radius: 6px; background: var(--surface-2); font-size: .88rem; }
+.rate-options li span:last-child { flex: none; font-variant-numeric: tabular-nums; }
+.rate-options li.is-answer { color: var(--ok); background: var(--ok-bg); font-weight: 800; }
+.board-admin { margin-top: 40px; border: 1px dashed var(--line); border-radius: 10px; }
+.board-admin summary { padding: 10px 14px; color: var(--muted); font-weight: 700; cursor: pointer; }
+.board-admin-body { display: grid; gap: 10px; padding: 0 14px 14px; }
+.board-admin-body input { max-width: 260px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: var(--bg); }
+.board-admin-status { margin: 0; color: var(--muted); font-weight: 700; }
+.board-reset-confirm { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--fail); font-weight: 700; }
+
+@media (max-width: 520px) {
+  .quiz { padding: 16px; }
+  .rate-q { grid-template-columns: minmax(0, 1fr) 44px; }
+  .rate-bar { grid-column: 1 / -1; grid-row: 2; }
+}
+
 /* 활동마다 맨 위의 진행 순서 안내 */
 .how-to { margin: -6px 0 16px; padding: 12px 16px 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); border-radius: 10px; background: var(--accent-soft); }
 .how-to-title { margin: 0 0 6px; color: var(--accent); font-size: .85rem; font-weight: 800; letter-spacing: .02em; }
