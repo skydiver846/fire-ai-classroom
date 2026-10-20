@@ -140,6 +140,24 @@
 .trouble.is-right { border-color: var(--ok); }
 .why { margin: 8px 0 0; color: var(--muted); }
 
+/* 강의 본문 속 "바로 해 보기" */
+.inline-slot { margin: 22px 0 30px; }
+.inline-lab { padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); border-left: 5px solid var(--accent); border-radius: 12px; background: var(--paper); }
+.inline-lab .lab-kind { margin: 0; }
+.inline-lab .inline-title { margin: 4px 0 4px; padding: 0; border: 0; font-size: 1.1rem; }
+.inline-lab .lab-goal { margin: 0 0 12px; }
+.inline-lab .how-to { margin: 0 0 12px; }
+.inline-lab.optional { border-left-width: 1px; border-style: dashed; padding: 0; }
+.inline-lab.optional summary { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 12px 16px; font-weight: 700; cursor: pointer; }
+.inline-lab.optional summary small { color: var(--muted); font-weight: 600; }
+.inline-tag { padding: 1px 9px; border-radius: 99px; color: var(--muted); background: var(--surface-2); font-size: .78rem; font-weight: 800; }
+.inline-lab.optional .inline-inner { padding: 0 16px 16px; }
+.inline-lab blockquote.teacher { margin: 8px 0 12px; }
+/* 태블릿 한 단계: 미리보기 + 살펴보기만 작게 */
+.lab-body.one-step .step-note { display: none; }
+.lab-body.one-step .preview-label { display: none; }
+.lab-body.one-step .preview-screen { max-width: 380px; min-height: 0; padding: 14px; border-width: 6px; }
+
 /* 생각해 보기 (강의 맨 앞, 점수 없음) */
 .warmup { margin: 0 0 24px; padding: 14px 18px; border: 1px dashed color-mix(in srgb, var(--ask) 55%, var(--line)); border-radius: 10px; background: color-mix(in srgb, var(--ask) 7%, var(--paper)); }
 .warmup-title { margin: 0 0 4px; color: var(--ask); font-size: .85rem; font-weight: 800; }

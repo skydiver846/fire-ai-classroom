@@ -71,6 +71,16 @@
       '<strong>[GET /admin]</strong> → 403(권한 없음)을 받습니다.',
       '<strong>[쿠키 지우기]</strong> 후 [GET /me] → 다시 401. 오른쪽 기록과 서버의 세션 장부를 함께 봅니다.'
     ],
+    '장부에 질문하기 · 표 · 조건 · JOIN · 정규화': [
+      '<strong>“준비됐습니다”</strong> 문구가 뜰 때까지 잠시 기다립니다.',
+      '<strong>1번부터 5번까지</strong> 버튼을 차례로 누릅니다.',
+      '누를 때마다 나오는 <strong>SQL · 해설 · 결과 표</strong>를 읽습니다. 특히 3번 → 4번 → 5번에서 무엇이 달라지는지 봅니다.',
+      '5번(이사)을 다시 해 보려면 <strong>[DB 처음 상태로]</strong>를 누릅니다.'
+    ],
+    '장부에 질문하기 · 사진은 어디에?': [
+      '버튼을 눌러 게시물 표를 봅니다.',
+      '사진 칸에 그림 대신 <strong>무엇이 들어 있는지</strong> 확인합니다.'
+    ],
     '눌러서 장부에 질문하기': [
       '<strong>“준비됐습니다”</strong> 문구가 뜰 때까지 잠시 기다립니다.',
       '<strong>1번부터 6번까지</strong> 버튼을 차례로 누릅니다.',
@@ -323,11 +333,14 @@
 
   function frontendLab(body, opts = {}) {
     const hostId = `pg-${Math.random().toString(36).slice(2, 8)}`;
+    // opts.only: 본문 속에서 한 단계만 보여 줄 때의 단계 번호(0~3). 이때는 단계 버튼을 숨깁니다.
+    const only = Number.isInteger(opts.only) ? opts.only : null;
     if (opts.simple) body.classList.add('simple');
+    if (only !== null) body.classList.add('one-step');
     body.innerHTML = `
-      <div class="steps" role="tablist" aria-label="실습 단계">
+      ${only === null ? `<div class="steps" role="tablist" aria-label="실습 단계">
         ${FRONT_STEPS.map((s, i) => `<button type="button" role="tab" data-step="${i}" aria-selected="${i === 0}">${i + 1}단계 · ${s.title}</button>`).join('')}
-      </div>
+      </div>` : ''}
       <p class="step-note"></p>
       <div class="playground">
         <div class="editor">
@@ -416,7 +429,7 @@
         input.setRangeText('  ', s, e, 'end');
       }
     });
-    loadStep(0);
+    loadStep(only === null ? 0 : only);
   }
 
   /* ───────────── 2강: 세션 · 쿠키 · 인증/인가 ───────────── */
@@ -806,10 +819,12 @@
       say: 'DB에는 사진 파일 자체가 아니라 <strong>창고(스토리지) 속 위치</strong>만 적혀 있습니다. 장부에는 위치를, 물건은 창고에 둡니다.' }
   ];
 
-  function sqlClickLab(body) {
+  // opts.only: 본문의 절마다 일부 질문만 보여 줄 때의 질문 번호 목록(예: [0,1,2,3,4] 또는 [5])
+  function sqlClickLab(body, opts = {}) {
     const seen = new Set();
+    const items = opts.only || SQL_QUESTIONS.map((_, i) => i);
     body.innerHTML = `
-      <div class="sql-buttons">${SQL_QUESTIONS.map((q, i) => `<button class="lab-button" type="button" data-q="${i}" disabled>${i + 1}. ${q.label}</button>`).join('')}</div>
+      <div class="sql-buttons">${items.map(i => `<button class="lab-button" type="button" data-q="${i}" disabled>${i + 1}. ${SQL_QUESTIONS[i].label}</button>`).join('')}</div>
       <p class="sql-feedback" aria-live="polite">SQL 엔진을 불러오는 중입니다…</p>
       <div class="sql-answer" hidden>
         <p class="panel-label">DB에 보낸 질문 (SQL)</p>
@@ -833,18 +848,18 @@
       body.querySelector('.sql-shown').textContent = q.sql;
       body.querySelector('.sql-say').innerHTML = q.say;
       body.querySelector('.sql-result').innerHTML = resultTable(results[results.length - 1]);
-      feedback.textContent = seen.size === SQL_QUESTIONS.length ? `${SQL_QUESTIONS.length}개를 모두 확인했습니다.` : `${SQL_QUESTIONS.length}개 중 ${seen.size}개 확인`;
+      feedback.textContent = items.length === 1 ? '확인했습니다.' : seen.size === items.length ? `${items.length}개를 모두 확인했습니다.` : `${items.length}개 중 ${seen.size}개 확인`;
     }));
     body.querySelector('[data-act="reset"]').addEventListener('click', () => {
       db.close(); db = fresh();
-      feedback.textContent = 'DB를 처음 상태로 되돌렸습니다. 5번(이사)을 다시 해 볼 수 있습니다.';
+      feedback.textContent = items.includes(4) ? 'DB를 처음 상태로 되돌렸습니다. 5번(이사)을 다시 해 볼 수 있습니다.' : 'DB를 처음 상태로 되돌렸습니다.';
     });
 
     loadSql().then(engine => {
       SQL = engine;
       db = fresh();
       body.querySelectorAll('button[disabled]').forEach(b => { b.disabled = false; });
-      feedback.textContent = '준비됐습니다. 1번부터 차례로 눌러 보세요.';
+      feedback.textContent = items.length > 1 ? `준비됐습니다. ${items[0] + 1}번부터 차례로 눌러 보세요.` : '준비됐습니다. 버튼을 눌러 보세요.';
     }, () => {
       feedback.className = 'sql-feedback fail';
       feedback.textContent = 'SQL 엔진을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로 고쳐 주세요.';
@@ -1009,62 +1024,79 @@
     });
   }
 
-  /* ───────────── 강의별 실습 구성 ───────────── */
-  function mount(courseId, markdown, host, opts = {}) {
+  /* ───────────── 강의 본문 속 "바로 해 보기" ─────────────
+     app.js가 강의의 해당 절 끝에 자리를 만들고 inline(kind, host, …)을 부릅니다.
+     optional: true 이면 접힌 채로 두었다가, 펼칠 때 처음 만듭니다(SQL 엔진 같은 큰 파일도 그때 받음). */
+  const INLINE = {
+    analogy: { time: '약 2분', title: '웹 서비스를 식당으로 옮겨 보기',
+      goal: '바로 위 표의 식당 비유입니다. 각 기술이 식당의 무엇에 해당하는지 골라 보세요.',
+      build: (body, ctx) => matchQuiz(body, sectionTable(ctx.markdown, /전체를 꿰는 비유/).map(([web, place]) => ({ question: web, answer: plain(place) })), { left: '웹 서비스', right: '식당에서는' }) },
+    'tablet-step': { time: '약 1~2분',
+      title: ctx => `주문 태블릿 ${ctx.step + 1}단계 · ${FRONT_STEPS[ctx.step].title}`,
+      goal: ctx => ['방금 배운 HTML만으로 만든 화면입니다. 미리보기의 [담기]를 눌러 보세요.', '같은 화면에 CSS만 더했습니다. 무엇이 달라졌는지, [담기]는 어떤지 보세요.', '이번엔 JavaScript가 더해졌습니다. [담기]를 여러 번 눌러 보세요.', '같은 화면을 상태 중심으로 바꿨습니다. [담기]를 눌러 배지 · 문구 · 금액이 함께 바뀌는지 보세요.'][ctx.step],
+      build: (body, ctx) => frontendLab(body, { simple: true, only: ctx.step }) },
+    playground: { time: '약 10분', title: '주문 태블릿 코드를 직접 고쳐 보기',
+      goal: '같은 화면의 코드를 직접 바꿔 봅니다. 단계마다 도전 과제가 있습니다.', build: body => frontendLab(body) },
+    session: { time: '약 3분', title: '목욕탕 열쇠로 로그인 유지하기',
+      goal: '세션 · 쿠키가 오가는 모습을 보고, 인증(401)과 인가(403)의 차이를 직접 만들어 봅니다.', build: body => sessionLab(body) },
+    transaction: { time: '약 4분', title: '계좌 이체와 트랜잭션',
+      goal: '체크박스 두 개와 버튼 하나로, 중간에 서버가 멈출 때 트랜잭션이 돈을 어떻게 지키는지 비교합니다.', build: body => transactionLab(body) },
+    'sql-ask': { time: ctx => (ctx.only.length > 1 ? '약 4분' : '약 1분'),
+      title: ctx => (ctx.only.length > 1 ? '장부에 질문하기 · 표 · 조건 · JOIN · 정규화' : '장부에 질문하기 · 사진은 어디에?'),
+      goal: ctx => (ctx.only.length > 1 ? '버튼을 누르면 준비된 SQL이 실행됩니다. 표 보기부터 JOIN과 정규화까지 결과로 확인합니다.' : '게시물 표에 사진이 어떻게 들어 있는지 확인합니다.'),
+      build: (body, ctx) => sqlClickLab(body, { only: ctx.only }) },
+    'sql-write': { time: '약 10분', title: 'SQL을 직접 써 보기',
+      goal: '같은 장부에 SQL을 직접 입력해 6개 과제를 풉니다. 막히면 힌트를 보세요.', build: (body, ctx) => sqlLab(body, ctx) },
+    dns: { time: '약 6분', title: 'DNS 길찾기와 TTL',
+      goal: '버튼만 눌러 도메인 주소를 찾는 경로를 따라가고, 서버 이사 후 캐시 때문에 옛 주소로 가는 상황을 재현합니다.', build: body => dnsLab(body) }
+  };
+
+  function inline(kind, host, ctx = {}) {
+    const spec = INLINE[kind];
+    if (!host || !spec) return;
+    const val = v => (typeof v === 'function' ? v(ctx) : v);
+    const title = val(spec.title);
+    const steps = HOW_TO[title] || [];
+    const howTo = steps.length ? `<div class="how-to"><p class="how-to-title">이렇게 진행하세요</p><ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol></div>` : '';
+    const note = ctx.noteHtml || '';
+    if (ctx.optional) {
+      host.innerHTML = `<details class="inline-lab optional"><summary><span class="inline-tag">더 해 보기 · 시간이 있으면</span> ${title} <small>${val(spec.time)}</small></summary>
+        <div class="inline-inner">${note}<p class="lab-goal">${val(spec.goal)}</p>${howTo}<div class="lab-body"></div></div></details>`;
+      const details = host.querySelector('details');
+      details.addEventListener('toggle', () => {
+        const body = details.querySelector('.lab-body');
+        if (details.open && !body.dataset.built) { body.dataset.built = '1'; spec.build(body, ctx); }
+      });
+      return;
+    }
+    host.innerHTML = `<section class="inline-lab">
+        <p class="lab-kind"><span>바로 해 보기</span>${val(spec.time)}</p>
+        <h3 class="inline-title">${title}</h3>
+        ${note}<p class="lab-goal">${val(spec.goal)}</p>${howTo}<div class="lab-body"></div></section>`;
+    spec.build(host.querySelector('.lab-body'), ctx);
+  }
+
+  /* ───────────── 복습 페이지 (강의를 마친 뒤) ───────────── */
+  function mount(courseId, markdown, host) {
     if (!host) return;
-    const course = { id: courseId };
     host.innerHTML = '';
     let no = 0;
-    let extraStarted = false;
     const add = (kind, title, goal, build) => {
       const { section, body } = labShell(no + 1, kind, title, goal);
       host.appendChild(section);
       if (build(body) === false) section.remove(); else no += 1;
     };
-    // 기본 실습 아래부터는 시간이 남거나 복습할 때 하는 선택 활동
-    const addExtra = (...args) => {
-      if (!extraStarted) {
-        extraStarted = true;
-        const head = document.createElement('h2');
-        head.className = 'extra-head';
-        head.innerHTML = '더 해 보기 <small>선택 · 시간이 남거나 복습할 때</small>';
-        host.appendChild(head);
-      }
-      add(...args);
-    };
-
     const matchPairs = sectionTable(markdown, /문제\s*→\s*해결/).map(([q, a]) => ({ question: q, answer: plain(a) }));
     const promptRows = sectionTable(markdown, /AI에게 더 잘 요청하기/);
 
-    if (course.id === 'guide') {
-      const pairs = sectionTable(markdown, /전체를 꿰는 비유/).map(([web, place]) => ({ question: web, answer: plain(place) }));
-      add('선택 활동 · 약 3분', '웹 서비스를 식당으로 옮겨 보기', '4개 강의를 관통하는 식당 비유입니다. 각 기술이 식당의 무엇에 해당하는지 골라 보세요.',
-        body => matchQuiz(body, pairs, { left: '웹 서비스', right: '식당에서는' }));
+    if (courseId === 'deploy') {
+      add('복습 · 약 5분', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 4강 12절 “문제 해결 질문 지도”를 문제로 바꿨습니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz);
     }
-    if (course.id === 'frontend') {
-      add('기본 실습 · 약 7분', '눌러 보며 비교하는 주문 태블릿', '코드를 고치지 않고 1~4단계를 차례로 눌러, HTML · CSS · JavaScript가 각각 무엇을 더하는지 미리보기로 확인합니다.',
-        body => frontendLab(body, { simple: true }));
-      addExtra('코드 놀이터', '주문 태블릿 코드를 직접 고쳐 보기', '같은 화면의 코드를 직접 바꿔 봅니다. 단계마다 도전 과제가 있습니다.', frontendLab);
-    }
-    if (course.id === 'backend') {
-      add('기본 실습 · 약 7분', '계좌 이체와 트랜잭션', '체크박스 두 개와 버튼 하나로, 중간에 서버가 멈출 때 트랜잭션이 돈을 어떻게 지키는지 비교합니다.', transactionLab);
-      addExtra('시뮬레이터', '목욕탕 열쇠로 로그인 유지하기', '세션·쿠키가 오가는 모습을 보고, 인증(401)과 인가(403)의 차이를 직접 만들어 봅니다.', sessionLab);
-    }
-    if (course.id === 'database') {
-      add('기본 실습 · 약 7분', '눌러서 장부에 질문하기', '버튼을 차례로 누르면 준비된 SQL이 실행됩니다. 표 보기, 조건, JOIN, 정규화, DB와 스토리지의 역할 분리를 결과로 확인합니다.', sqlClickLab);
-      addExtra('SQL 실습실', 'SQL을 직접 써 보기', '같은 장부에 SQL을 직접 입력해 6개 과제를 풉니다. 막히면 힌트를 보세요.', body => sqlLab(body, opts));
-    }
-    if (course.id === 'deploy') {
-      add('기본 실습 · 약 7분', 'DNS 길찾기와 TTL', '버튼만 눌러 도메인 주소를 찾는 경로를 따라가고, 서버 이사 후 캐시 때문에 옛 주소로 가는 상황을 재현합니다.', dnsLab);
-      addExtra('진단 퀴즈', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz);
-    }
-    if (course.id !== 'guide') {
-      addExtra('짝 맞추기', '문제와 해결 기술 잇기', '이 강의에 나온 문제마다 그것을 해결한 기술을 고르세요.',
-        body => matchQuiz(body, matchPairs, { left: '문제', right: '해결 기술' }));
-      addExtra('AI 요청 연습', '막연한 요청을 구체적으로 다듬기', '이 강의의 용어를 넣어 AI에게 보낼 요청을 직접 다시 써 보고, 모범 요청의 핵심 용어와 비교합니다.',
-        body => promptLab(body, promptRows));
-    }
+    add('복습 · 약 3분', '문제와 해결 기술 잇기', '이 강의에 나온 문제마다 그것을 해결한 기술을 고르세요.',
+      body => matchQuiz(body, matchPairs, { left: '문제', right: '해결 기술' }));
+    add('복습 · 약 5분', '막연한 요청을 구체적으로 다듬기', '이 강의의 용어를 넣어 AI에게 보낼 요청을 직접 다시 써 보고, 모범 요청의 핵심 용어와 비교합니다.',
+      body => promptLab(body, promptRows));
   }
 
-  window.Practice = { mount };
+  window.Practice = { mount, inline };
 })();

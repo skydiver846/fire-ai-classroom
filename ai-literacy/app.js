@@ -21,20 +21,41 @@
     { id: 'backend', group: '본 강의', kind: 'lecture', short: '02 백엔드', file: 'AI리터러시_02_백엔드.md' },
     { id: 'database', group: '본 강의', kind: 'lecture', short: '03 데이터베이스 · 스토리지', file: 'AI리터러시_03_데이터베이스_스토리지.md' },
     { id: 'deploy', group: '본 강의', kind: 'lecture', short: '04 웹서버 · 배포', file: 'AI리터러시_04_웹서버_배포.md' },
-    { id: 'lab-guide', group: '실습', kind: 'lab', course: 'guide', short: '실습 00 · 식당 비유 맞추기', title: '실습 00. 식당 비유 맞추기',
-      lede: '4개 강의를 하나로 꿰는 식당 비유를 먼저 머리에 넣습니다. 웹 서비스의 각 부분이 식당의 무엇에 해당하는지 골라 보세요.' },
-    { id: 'lab-frontend', group: '실습', kind: 'lab', course: 'frontend', short: '실습 01 · HTML·CSS·JS 놀이터', title: '실습 01. HTML · CSS · JavaScript 놀이터',
-      lede: '주문 태블릿 화면을 HTML → CSS → JavaScript → 상태 중심 순서로 직접 고쳐 보며 1강의 흐름을 손으로 확인합니다.' },
-    { id: 'lab-backend', group: '실습', kind: 'lab', course: 'backend', short: '실습 02 · 로그인과 계좌 이체', title: '실습 02. 로그인 유지와 트랜잭션',
-      lede: '세션·쿠키로 로그인이 유지되는 모습과, 트랜잭션이 돈을 지키는 모습을 시뮬레이터로 직접 만들어 봅니다.' },
-    { id: 'lab-database', group: '실습', kind: 'lab', course: 'database', short: '실습 03 · SQL 실습실', title: '실습 03. SQL 실습실',
-      lede: '브라우저 안의 작은 DB에 SQL로 질문합니다. 표 보기부터 JOIN, 정규화, DB와 스토리지의 역할 분리까지 6개 과제를 풉니다.' },
-    { id: 'lab-deploy', group: '실습', kind: 'lab', course: 'deploy', short: '실습 04 · DNS와 장애 진단', title: '실습 04. DNS 길찾기와 장애 진단',
-      lede: '도메인 주소를 찾아가는 길과 TTL 캐시를 시뮬레이터로 확인하고, 배포 중 자주 만나는 증상의 원인을 짚어 봅니다.' },
-    { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' }
+    { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' },
+    { id: 'lab-frontend', group: '복습', kind: 'lab', course: 'frontend', short: '복습 01 · 프론트엔드', title: '복습 01. 프론트엔드 돌아보기',
+      lede: '1강을 마친 뒤 돌아보는 활동입니다. 시간이 남을 때나 수업 뒤에 해 보세요. 본문 속 실습은 1강 페이지 안에 있습니다.' },
+    { id: 'lab-backend', group: '복습', kind: 'lab', course: 'backend', short: '복습 02 · 백엔드', title: '복습 02. 백엔드 돌아보기',
+      lede: '2강을 마친 뒤 돌아보는 활동입니다. 시간이 남을 때나 수업 뒤에 해 보세요. 로그인 · 계좌 이체 실습은 2강 페이지 안에 있습니다.' },
+    { id: 'lab-database', group: '복습', kind: 'lab', course: 'database', short: '복습 03 · 데이터베이스 · 스토리지', title: '복습 03. 데이터베이스 · 스토리지 돌아보기',
+      lede: '3강을 마친 뒤 돌아보는 활동입니다. 시간이 남을 때나 수업 뒤에 해 보세요. 장부 질문 · SQL 실습은 3강 페이지 안에 있습니다.' },
+    { id: 'lab-deploy', group: '복습', kind: 'lab', course: 'deploy', short: '복습 04 · 웹서버 · 배포', title: '복습 04. 웹서버 · 배포 돌아보기',
+      lede: '4강을 마친 뒤 돌아보는 활동입니다. 장애 진단 퀴즈로 4강 12절 “문제 해결 질문 지도”를 다시 풀어 봅니다. DNS 실습은 4강 페이지 안에 있습니다.' }
   ];
-  const ORDER = ['guide', ...TEACHER.pages.map(p => p.id), 'lab-guide', 'frontend', 'lab-frontend', 'backend', 'lab-backend', 'database', 'lab-database', 'deploy', 'lab-deploy', 'board'];
-  const GROUPS = ['강의 개요', '본 강의', '실습', '마무리'];
+  // 수업 흐름: 강의 4개 → 결과 공유판(마무리), 복습은 그 뒤 (시간이 남을 때나 수업 뒤)
+  const ORDER = ['guide', ...TEACHER.pages.map(p => p.id), 'frontend', 'backend', 'database', 'deploy', 'board', 'lab-frontend', 'lab-backend', 'lab-database', 'lab-deploy'];
+  const GROUPS = ['강의 개요', '본 강의', '마무리', '복습'];
+
+  // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류, 설정]. 활동은 그 절의 끝에 들어갑니다.
+  const INLINE_AT = {
+    guide: [['## 전체를 꿰는 비유', 'analogy', { optional: true }]],
+    frontend: [
+      ['## 2. 웹의 세 가지 기본 약속', 'tablet-step', { step: 0 }],
+      ['## 3. 보기 좋게', 'tablet-step', { step: 1 }],
+      ['## 4. 반응하게', 'tablet-step', { step: 2 }],
+      ['## 6. 직접 조작에서 상태 중심으로', 'tablet-step', { step: 3 }],
+      ['## 6. 직접 조작에서 상태 중심으로', 'playground', { optional: true }]
+    ],
+    backend: [
+      ['## 6. 로그인을 기억하는 법', 'session'],
+      ['## 8. 반만 성공하면 안 되는 일', 'transaction']
+    ],
+    database: [
+      ['### 3-4. 정규화', 'sql-ask', { only: [0, 1, 2, 3, 4] }],
+      ['### 3-4. 정규화', 'sql-write', { optional: true }],
+      ['## 7. 객체 스토리지', 'sql-ask', { only: [5] }]
+    ],
+    deploy: [['## 8. 도메인과 DNS', 'dns']]
+  };
   const byId = Object.fromEntries(DOCS.map(d => [d.id, d]));
   const byFile = Object.fromEntries(DOCS.filter(d => d.file).map(d => [d.file.replace(/\.md$/, ''), d]));
   const reading = ORDER.map(id => byId[id]).filter(Boolean);
@@ -224,6 +245,38 @@
     return { prev: reading[i - 1], next: reading[i + 1] };
   }
 
+  // 강의 본문의 해당 절 끝(다음 같은 단계 이상의 제목, 또는 그 앞의 구분선 바로 앞)에 "바로 해 보기"를 넣습니다.
+  function placeInline(id, markdown) {
+    const list = INLINE_AT[id];
+    if (!list || !window.Practice || !window.Practice.inline) return;
+    const headings = [...doc.querySelectorAll('h2, h3')];
+    const isStop = (el, level) => el && /^H[1-6]$/.test(el.tagName) && Number(el.tagName[1]) <= level;
+    const lastSlot = new Map();
+    const notesShown = new Set();
+    list.forEach(([at, kind, extra = {}]) => {
+      const level = at.match(/^#+/)[0].length;
+      const text = at.replace(/^#+\s*/, '');
+      const heading = headings.find(el => el.tagName === `H${level}` && el.textContent.startsWith(text));
+      if (!heading) return;
+      let end = heading.nextElementSibling;
+      while (end && !isStop(end, level) && !(end.tagName === 'HR' && isStop(end.nextElementSibling, level)) && !end.classList.contains('quiz')) end = end.nextElementSibling;
+      const slot = document.createElement('div');
+      slot.className = 'inline-slot';
+      const prev = lastSlot.get(heading);
+      if (prev) prev.after(slot); else if (end) end.before(slot); else doc.appendChild(slot);
+      lastSlot.set(heading, slot);
+      // 강사용: 같은 종류의 진행 노트는 그 강의에서 처음 나올 때 한 번만 보여 줍니다.
+      const note = TEACHER.notes[`inline:${kind}`];
+      const noteHtml = note && !notesShown.has(kind) ? note.map(n => renderMarkdown(noteLines(n.md).join('\n'))).join('') : '';
+      notesShown.add(kind);
+      try {
+        window.Practice.inline(kind, slot, { ...extra, markdown, teacher: IS_TEACHER, noteHtml });
+      } catch (_) {
+        slot.innerHTML = '<div class="error">실습을 불러오지 못했습니다. 페이지를 새로 고쳐 주세요.</div>';
+      }
+    });
+  }
+
   let stopBoard = () => {};
   function render() {
     const { d, anchor } = current();
@@ -244,6 +297,7 @@
       // 생각해 보기(점수 없음) → 본문 → 강의 후 퀴즈
       const quiz = window.QuizUI && window.QUIZ && window.QUIZ[d.id];
       doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${quiz ? window.QuizUI.warmup(d.id) : ''}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}${quiz ? '<section class="quiz" id="quiz"></section>' : ''}`;
+      placeInline(d.id, markdown);
       if (quiz) window.QuizUI.mountQuiz(document.getElementById('quiz'), d.id, { teacher: IS_TEACHER });
     } else if (d.kind === 'board') {
       crumb.textContent = `${d.group} · 강의 후 퀴즈 결과`;
