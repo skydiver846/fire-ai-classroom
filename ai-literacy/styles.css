@@ -134,6 +134,19 @@ blockquote.teacher { border-left-color: var(--note-line); background: var(--note
 .teacher-label { margin: 2px 0 4px !important; color: var(--note-line); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
 body.hide-teacher .teacher { display: none; }
 
+/* 강사용: 이번 수업 진행 카드(초록) · 건너뛸 절(사선 무늬 + 취소선) */
+.cue { margin: 14px 0; padding: 8px 14px 6px; border-left: 4px solid var(--tip); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--tip) 10%, var(--paper)); }
+.cue > p { margin: 4px 0; }
+.cue .cue-time { margin: 0 0 2px; color: var(--tip); font: 700 13px/1.4 var(--font-mono); letter-spacing: .02em; }
+.skip-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 99px; background: var(--warn); color: var(--paper); font: 700 12px/1.6 var(--font-body); vertical-align: middle; letter-spacing: 0; }
+body:not(.hide-teacher) .skipped {
+  text-decoration: line-through; text-decoration-color: var(--warn); text-decoration-thickness: 1.5px;
+  background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--warn) 16%, transparent) 10px 11.5px);
+}
+body:not(.hide-teacher) .skipped:not(h1, h2, h3, h4) { opacity: .5; }
+blockquote.teacher del { color: var(--muted); text-decoration-color: var(--warn); }
+body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not(.hide-teacher) h4.skipped { color: var(--muted); }
+
 .pager { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; max-width: 760px; margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); }
 .pager a { flex: 1 1 220px; display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); text-decoration: none; }
 .pager a span { color: var(--muted); font-size: 12px; }

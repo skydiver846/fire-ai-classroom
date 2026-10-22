@@ -94,6 +94,7 @@
       return d ? `<a href="#${d.id}">${label || d.short}</a>` : (label || target);
     });
     value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, href) => href.startsWith('#') ? `<a href="${href}">${label}</a>` : `<a href="${href}" target="_blank" rel="noopener">${label}</a>`);
+    value = value.replace(/~~(.+?)~~/g, '<del>$1</del>');
     value = value.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     value = value.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
     value = value.replace(/%%CODE(\d+)%%/g, (_, i) => code[Number(i)]);
@@ -282,6 +283,44 @@
     });
   }
 
+  /* ───────── 강사용: 이번 2시간 수업의 진행 카드 · 건너뛸 절 ───────── */
+  // 진행 카드(⏱)는 해당 제목 바로 아래에, 건너뛸 절은 제목부터 같은 단계의 다음 제목 전까지 사선 무늬 · 취소선으로.
+  // 둘 다 강사 노트처럼 “강사 노트 보기”를 끄면 사라집니다(styles.css).
+  function markLessonPlan(id) {
+    if (!IS_TEACHER) return;
+    const headings = [...doc.querySelectorAll('h1, h2, h3, h4')];
+    const isHeading = el => /^H[1-6]$/.test(el.tagName);
+    const find = at => {
+      const level = at.match(/^#+/)[0].length;
+      const text = at.replace(/^#+\s*/, '');
+      return headings.find(el => el.tagName === `H${level}` && el.textContent.startsWith(text));
+    };
+    (TEACHER.skip?.[id] || []).forEach(at => {
+      const heading = find(at);
+      if (!heading) return;
+      const level = Number(heading.tagName[1]);
+      heading.classList.add('skipped');
+      heading.insertAdjacentHTML('beforeend', ' <span class="skip-badge teacher">⏭ 이번엔 건너뜀</span>');
+      for (let el = heading.nextElementSibling; el && !(isHeading(el) && Number(el.tagName[1]) <= level) && !el.matches('.quiz, .print-foot'); el = el.nextElementSibling) {
+        el.classList.add('skipped');
+      }
+    });
+    // 접혀 있는 선택 활동(더 해 보기)도 이번에는 건너뜀
+    doc.querySelectorAll('.inline-slot').forEach(slot => { if (slot.querySelector('details.optional')) slot.classList.add('skipped'); });
+    (TEACHER.scenario?.[id] || []).forEach(cue => {
+      const html = `<aside class="cue teacher"><p class="cue-time">⏱ ${cue.time}${cue.min ? ` · ${cue.min}분` : ''}</p>${renderMarkdown(cue.md)}</aside>`;
+      if (cue.at === 'top') {
+        const warmup = doc.querySelector('.warmup');
+        if (warmup) warmup.insertAdjacentHTML('beforebegin', html);
+        else (doc.querySelector('.print-button') || doc.querySelector('.docnav')).insertAdjacentHTML('afterend', html);
+      } else if (cue.at === 'quiz') {
+        doc.querySelector('#quiz')?.insertAdjacentHTML('beforebegin', html);
+      } else {
+        find(cue.at)?.insertAdjacentHTML('afterend', html);
+      }
+    });
+  }
+
   let stopBoard = () => {};
   function render() {
     const { d, anchor } = current();
@@ -303,15 +342,18 @@
       const quiz = window.QuizUI && window.QUIZ && window.QUIZ[d.id];
       doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${PRINT_BUTTON}${quiz ? window.QuizUI.warmup(d.id) : ''}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}${quiz ? '<section class="quiz" id="quiz"></section>' : ''}${PRINT_FOOT}`;
       placeInline(d.id, markdown);
+      markLessonPlan(d.id);
       if (quiz) window.QuizUI.mountQuiz(document.getElementById('quiz'), d.id, { teacher: IS_TEACHER });
     } else if (d.kind === 'board') {
       crumb.textContent = `${d.group} · 강의 후 퀴즈 결과`;
       doc.innerHTML = `<h1>${d.title}</h1>${docnav}<div id="board"></div>`;
       if (window.QuizUI) stopBoard = window.QuizUI.mountBoard(document.getElementById('board'), { teacher: IS_TEACHER });
+      markLessonPlan(d.id);
     } else if (d.kind === 'teacher') {
       crumb.textContent = `${d.group} · 강사 전용`;
       const title = (d.body.match(/^#\s+(.+)$/m) || [, d.short])[1];
       doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${PRINT_BUTTON}${renderMarkdown(d.body.replace(/^#\s+.+$/m, ''))}`;
+      markLessonPlan(d.id);
     } else {
       const course = byId[d.course];
       crumb.textContent = `${d.group} · 관련 강의 ${course.short}`;
