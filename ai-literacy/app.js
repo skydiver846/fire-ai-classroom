@@ -21,12 +21,13 @@
   const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
     { id: 'guide', group: '강의 개요', kind: 'lecture', short: '00 강의 안내 · 약어 사전', file: 'AI리터러시_00_강의안내_약어사전.md' },
-    ...TEACHER.pages.map(page => ({ ...page, group: '강의 개요', kind: 'teacher' })),
     { id: 'frontend', group: '본 강의', kind: 'lecture', short: '01 프론트엔드', file: 'AI리터러시_01_프론트엔드.md' },
     { id: 'backend', group: '본 강의', kind: 'lecture', short: '02 백엔드', file: 'AI리터러시_02_백엔드.md' },
     { id: 'database', group: '본 강의', kind: 'lecture', short: '03 데이터베이스 · 스토리지', file: 'AI리터러시_03_데이터베이스_스토리지.md' },
     { id: 'deploy', group: '본 강의', kind: 'lecture', short: '04 웹서버 · 배포', file: 'AI리터러시_04_웹서버_배포.md' },
     { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' },
+    // 강사용: 수업 운영 계획은 마무리(16:00 나눔) 자리에
+    ...TEACHER.pages.map(page => ({ ...page, group: '마무리', kind: 'teacher' })),
     { id: 'lab-frontend', group: '복습', kind: 'lab', course: 'frontend', short: '복습 01 · 프론트엔드', title: '복습 01. 프론트엔드 돌아보기',
       lede: '1강을 마친 뒤 돌아보는 활동입니다. 시간이 남을 때나 수업 뒤에 해 보세요. 본문 속 실습은 1강 페이지 안에 있습니다.' },
     { id: 'lab-backend', group: '복습', kind: 'lab', course: 'backend', short: '복습 02 · 백엔드', title: '복습 02. 백엔드 돌아보기',
@@ -36,8 +37,8 @@
     { id: 'lab-deploy', group: '복습', kind: 'lab', course: 'deploy', short: '복습 04 · 웹서버 · 배포', title: '복습 04. 웹서버 · 배포 돌아보기',
       lede: '4강을 마친 뒤 돌아보는 활동입니다. 장애 진단 퀴즈로 4강 12절 “문제 해결 질문 지도”를 다시 풀어 봅니다. DNS 실습은 4강 페이지 안에 있습니다.' }
   ];
-  // 수업 흐름: 강의 4개 → 결과 공유판(마무리), 복습은 그 뒤 (시간이 남을 때나 수업 뒤)
-  const ORDER = ['guide', ...TEACHER.pages.map(p => p.id), 'frontend', 'backend', 'database', 'deploy', 'board', 'lab-frontend', 'lab-backend', 'lab-database', 'lab-deploy'];
+  // 수업 흐름: 강의 4개 → 결과 공유판(마무리) → 강사용 운영 계획(나눔), 복습은 그 뒤 (시간이 남을 때나 수업 뒤)
+  const ORDER = ['guide', 'frontend', 'backend', 'database', 'deploy', 'board', ...TEACHER.pages.map(p => p.id), 'lab-frontend', 'lab-backend', 'lab-database', 'lab-deploy'];
   const GROUPS = ['강의 개요', '본 강의', '마무리', '복습'];
 
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류, 설정]. 활동은 그 절의 끝에 들어갑니다.
