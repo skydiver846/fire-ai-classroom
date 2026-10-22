@@ -75,7 +75,7 @@
       '<strong>“준비됐습니다”</strong> 문구가 뜰 때까지 잠시 기다립니다.',
       '<strong>1번부터 5번까지</strong> 버튼을 차례로 누릅니다.',
       '누를 때마다 나오는 <strong>SQL · 해설 · 결과 표</strong>를 읽습니다. 특히 3번 → 4번 → 5번에서 무엇이 달라지는지 봅니다.',
-      '5번(이사)을 다시 해 보려면 <strong>[DB 처음 상태로]</strong>를 누릅니다.'
+      '다시 해 보려면 <strong>[처음부터 다시]</strong>를 누릅니다. DB와 ✓ 표시가 모두 처음으로 돌아갑니다.'
     ],
     '장부에 질문하기 · 사진은 어디에?': [
       '버튼을 눌러 게시물 표를 봅니다.',
@@ -85,7 +85,7 @@
       '<strong>“준비됐습니다”</strong> 문구가 뜰 때까지 잠시 기다립니다.',
       '<strong>1번부터 6번까지</strong> 버튼을 차례로 누릅니다.',
       '누를 때마다 나오는 <strong>SQL · 해설 · 결과 표</strong>를 읽습니다.',
-      '5번(이사)을 다시 해 보려면 <strong>[DB 처음 상태로]</strong>를 누릅니다.'
+      '다시 해 보려면 <strong>[처음부터 다시]</strong>를 누릅니다. DB와 ✓ 표시가 모두 처음으로 돌아갑니다.'
     ],
     'SQL을 직접 써 보기': [
       '과제 버튼을 고르고 노란 상자의 과제를 읽습니다.',
@@ -835,7 +835,7 @@
         <p class="sql-say"></p>
         <div class="sql-result"></div>
       </div>
-      <div class="lab-actions"><button class="lab-button ghost" type="button" data-act="reset" disabled>DB 처음 상태로</button></div>`;
+      <div class="lab-actions"><button class="lab-button ghost" type="button" data-act="reset" disabled>처음부터 다시</button></div>`;
     const feedback = body.querySelector('.sql-feedback');
     const answer = body.querySelector('.sql-answer');
     let SQL = null;
@@ -853,9 +853,13 @@
       body.querySelector('.sql-result').innerHTML = resultTable(results[results.length - 1]);
       feedback.textContent = items.length === 1 ? '확인했습니다.' : seen.size === items.length ? `${items.length}개를 모두 확인했습니다.` : `${items.length}개 중 ${seen.size}개 확인`;
     }));
+    // 처음부터 다시: DB · ✓ 표시 · 결과 화면을 모두 처음으로(수업 전 리허설 뒤에도 깨끗하게)
     body.querySelector('[data-act="reset"]').addEventListener('click', () => {
       db.close(); db = fresh();
-      feedback.textContent = items.includes(4) ? 'DB를 처음 상태로 되돌렸습니다. 5번(이사)을 다시 해 볼 수 있습니다.' : 'DB를 처음 상태로 되돌렸습니다.';
+      seen.clear();
+      body.querySelectorAll('[data-q].seen').forEach(b => b.classList.remove('seen'));
+      answer.hidden = true;
+      feedback.textContent = items.length > 1 ? `처음 상태로 되돌렸습니다. ${items[0] + 1}번부터 다시 눌러 보세요.` : '처음 상태로 되돌렸습니다.';
     });
 
     loadSql().then(engine => {
