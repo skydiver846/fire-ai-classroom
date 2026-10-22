@@ -144,6 +144,8 @@ body:not(.hide-teacher) .skipped {
   background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--warn) 16%, transparent) 10px 11.5px);
 }
 body:not(.hide-teacher) .skipped:not(h1, h2, h3, h4) { opacity: .5; }
+/* 교육생용: 이번 수업에서 건너뛰는 절 제목의 표시(내용은 그대로) */
+.later-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border: 1px dashed var(--line); border-radius: 99px; color: var(--muted); font: 600 12px/1.6 var(--font-body); vertical-align: middle; white-space: nowrap; }
 blockquote.teacher del { color: var(--muted); text-decoration-color: var(--warn); }
 body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not(.hide-teacher) h4.skipped { color: var(--muted); }
 
@@ -201,7 +203,7 @@ body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not
   :root { color-scheme: light; }
   body { background: #fff; font-size: 10.5pt; line-height: 1.65; }
   .app, .app.lecture { display: block; }
-  .side, .topbar, .crumb, .docnav, .pager, .print-button, .copy-button, .lecture-toggle, .quiz, .inline-slot > * { display: none !important; }
+  .side, .topbar, .crumb, .docnav, .pager, .print-button, .later-badge, .copy-button, .lecture-toggle, .quiz, .inline-slot > * { display: none !important; }
   main, .app.lecture main { zoom: 1; padding: 0; }
   article, .app.lecture article { max-width: none; margin: 0; }
   article p, article li { max-width: none; }

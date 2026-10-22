@@ -286,11 +286,19 @@
     });
   }
 
-  /* ───────── 강사용: 이번 2시간 수업의 진행 카드 · 건너뛸 절 ───────── */
-  // 진행 카드(⏱)는 해당 제목 바로 아래에, 건너뛸 절은 제목부터 같은 단계의 다음 제목 전까지 사선 무늬 · 취소선으로.
-  // 둘 다 강사 노트처럼 “강사 노트 보기”를 끄면 사라집니다(styles.css).
+  /* ───────── 이번 2시간 수업: 건너뛸 절 · 강사용 진행 카드 ───────── */
+  // 이번 수업에서 건너뛸 절(그 제목부터 같은 단계의 다음 제목 전까지). 강사용: 사선 무늬 · 취소선 · “⏭ 이번엔 건너뜀”,
+  // 교육생용: 제목에 “📖 수업 뒤 읽을거리” 표시만. 진행 카드(⏱)는 강사용 notes.js 의 scenario.
+  const SKIP_THIS_CLASS = {
+    guide: ['## 전체 약어 사전', '## 출처'],
+    frontend: ['## 이 강의를 읽는 방법', '## 5. 브라우저마다', '## 7. 부품 조립 시대', '## 8. 빌드', '### 9-2. SPA가 만든 새 문제', '## 11. 1강 약어 모음', '## 이 단계에서 쓰는 도구', '## 12. 복습'],
+    backend: ['## 2. 서버 코드의 공통 뼈대', '## 3. 데이터를 지키고', '## 4. 코드가 커지면', '## 7. 요청이 몰릴 때', '## 9. 서버 한 대로', '## 10. 거대한 서비스', '## 11. 배포와 운영까지', '## 13. 2강 약어 모음', '## 이 단계에서 쓰는 도구', '## 14. 복습'],
+    database: ['## 1. 전체 지도', '## 2. 파일로 관리하던', '### 3-1. 계층형', '### 3-2. 네트워크형', '### 4-1. ACID', '### 4-3. 대표적인 관계형 DB', '## 5. 대규모 서비스', '## 6. 파일을 서버에', '## 9. 파일 접근 권한', '## 11. 합류', '## 12. 3강 약어 모음', '## 이 단계에서 쓰는 도구', '## 13. 복습'],
+    deploy: ['## 3. 동시 접속 폭증', '## 4. 수동 배포의 한계', '## 7. 배포 플랫폼은', '## 10. 손님이 몰리면', '## 11. 전체 통합 흐름', '## 12. 바이브코딩 문제 해결', '## 13. 4강 약어 모음', '## 14. 복습'],
+    plan: ['## 확장: 8교시 과정']
+  };
+
   function markLessonPlan(id) {
-    if (!IS_TEACHER) return;
     const headings = [...doc.querySelectorAll('h1, h2, h3, h4')];
     const isHeading = el => /^H[1-6]$/.test(el.tagName);
     const find = at => {
@@ -298,9 +306,10 @@
       const text = at.replace(/^#+\s*/, '');
       return headings.find(el => el.tagName === `H${level}` && el.textContent.startsWith(text));
     };
-    (TEACHER.skip?.[id] || []).forEach(at => {
+    (SKIP_THIS_CLASS[id] || []).forEach(at => {
       const heading = find(at);
       if (!heading) return;
+      if (!IS_TEACHER) { heading.insertAdjacentHTML('beforeend', ' <span class="later-badge">📖 수업 뒤 읽을거리</span>'); return; }
       const level = Number(heading.tagName[1]);
       heading.classList.add('skipped');
       heading.insertAdjacentHTML('beforeend', ' <span class="skip-badge teacher">⏭ 이번엔 건너뜀</span>');
@@ -308,6 +317,7 @@
         el.classList.add('skipped');
       }
     });
+    if (!IS_TEACHER) return;
     // 접혀 있는 선택 활동(더 해 보기)도 이번에는 건너뜀
     doc.querySelectorAll('.inline-slot').forEach(slot => { if (slot.querySelector('details.optional')) slot.classList.add('skipped'); });
     (TEACHER.scenario?.[id] || []).forEach(cue => {
