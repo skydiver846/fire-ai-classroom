@@ -416,16 +416,11 @@
   lectureButton.className = 'lecture-toggle';
   document.body.append(lectureButton);
   let ownFullscreen = false;
-  // 교육생용에서는 버튼을 숨깁니다(교육생은 쓸 일이 없음). 강사는 P 키로 켜거나,
-  // 주소 끝에 ?lecture 를 붙여 한 번 열면 그 기기에서는 버튼이 계속 보입니다.
-  if (new URLSearchParams(location.search).has('lecture')) store.set('ail-lecture-button', '1');
-  const showButton = IS_TEACHER || store.get('ail-lecture-button') === '1';
   function setLecture(on, { fullscreen = false } = {}) {
     app.classList.toggle('lecture', on);
     lectureButton.textContent = on ? '강의 모드 끄기' : '강의 모드';
     lectureButton.title = on ? '원래 화면으로 (P 또는 Esc, 화면 전체일 때는 Esc 두 번)' : '목차를 숨기고 글자를 크게 (P)';
     lectureButton.setAttribute('aria-pressed', on);
-    lectureButton.hidden = !showButton && !on;
     store.set('ail-lecture', on ? '1' : '0');
     if (on && fullscreen && document.fullscreenEnabled && !document.fullscreenElement) {
       document.documentElement.requestFullscreen().then(() => { ownFullscreen = true; }, () => {});
