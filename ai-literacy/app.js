@@ -350,6 +350,9 @@
         const { svg } = await window.mermaid.render(id, figures[i].dataset.source);
         if (run !== diagramRun || !figures[i].isConnected) return;
         figures[i].innerHTML = svg;
+        // 강의 모드에서 흐름도를 화면 높이에 맞출 때, 평소 화면보다 작아지지 않게 하는 기준(styles.css)
+        const box = figures[i].querySelector('svg')?.viewBox.baseVal;
+        if (box && box.height) figures[i].style.setProperty('--natural-h', `${box.height}px`);
       } catch (_) {
         document.getElementById(id)?.remove();
         document.getElementById(`d${id}`)?.remove();
