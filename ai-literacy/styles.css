@@ -106,6 +106,8 @@ article code { padding: 1px 5px; border-radius: 4px; background: var(--code); fo
 .code-block { position: relative; margin: 14px 0; }
 .code-block pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--code); font: 14px/1.6 var(--font-code); }
 .code-block pre code { padding: 0; background: none; white-space: pre; font: inherit; }
+.text-figure { margin: 14px 0; }
+.text-figure pre { margin: 0; padding: 12px 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); font: 14px/1.6 var(--font-code); }
 .copy-button { position: absolute; top: 8px; right: 8px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--muted); font: 600 12px var(--font-body); cursor: pointer; }
 .copy-button:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -212,12 +214,12 @@ body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not
   article h1 { font-size: 20pt; }
   article h2 { font-size: 15pt; margin-top: 22px; break-after: avoid; }
   article h3, article h4 { break-after: avoid; }
-  .diagram, .table-wrap, .callout, blockquote, .code-block, .warmup, tr { break-inside: avoid; }
+  .diagram, .table-wrap, .callout, blockquote, .code-block, .text-figure, .warmup, tr { break-inside: avoid; }
   .diagram { overflow: visible; }
   .diagram svg { max-height: 230mm; }
   .table-wrap { overflow: visible; }
   table { font-size: 9pt; }
-  .code-block pre { overflow: visible; white-space: pre-wrap; word-break: break-all; font-size: 9pt; }
+  .code-block pre, .text-figure pre { overflow: visible; white-space: pre-wrap; word-break: break-all; font-size: 9pt; }
   /* 본문 속 실습 자리는 한 줄 안내로 (접힌 선택 활동은 뺌) */
   .inline-slot[data-print-title]::before { content: "✏️ 바로 해 보기 · " attr(data-print-title) " → 강의 사이트에서 직접 해 보세요"; display: block; margin: 12px 0; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 6px; color: var(--muted); font-size: 9.5pt; }
   .print-foot { display: block; margin-top: 28px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9pt; }

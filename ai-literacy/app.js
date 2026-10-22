@@ -123,6 +123,8 @@
         i += 1;
         const source = escapeHtml(block.join('\n'));
         if (lang === 'mermaid') out.push(`<figure class="diagram" data-source="${source}"><pre class="mermaid-src">${source}</pre></figure>`);
+        // text: 글자로 그린 설명 그림(복사할 코드가 아님) → 복사 버튼 없이
+        else if (lang === 'text') out.push(`<figure class="text-figure"><pre>${source}</pre></figure>`);
         else out.push(`<div class="code-block"><button class="copy-button" type="button">복사</button><pre><code>${source}</code></pre></div>`);
         continue;
       }
