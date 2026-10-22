@@ -154,13 +154,21 @@ body.hide-teacher .teacher { display: none; }
 }
 
 /* ── 강의 모드: 목차를 숨기고 본문 칼럼을 가운데에서 통째로 확대 (px · rem이 섞여 있어 zoom으로 한 번에) ── */
-.lecture-toggle { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; padding: 7px 14px; border: 1px solid var(--line); border-radius: 99px; background: var(--paper); color: var(--muted); font-size: 13px; font-weight: 600; box-shadow: var(--shadow); cursor: pointer; }
-.lecture-toggle:hover { border-color: var(--accent); color: var(--accent); }
+/* 눈에 띄는 버튼: 빨간 바탕 + 아이콘, 올리면 살짝 떠오름. 강의 모드 버튼은 처음 열 때 몇 번 깜빡여 위치를 알립니다. */
+.lecture-toggle { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border: 0; border-radius: 99px; background: var(--accent); color: var(--bg); font-size: 14px; font-weight: 700; box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, opacity .2s; animation: attention 1.6s ease-out 1s 3; }
+.lecture-toggle::before { content: "🖥️"; }
+.lecture-toggle:hover { background: var(--accent-ink); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 45%, transparent); }
+@keyframes attention {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent), 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent, 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); }
+}
 .app.lecture { grid-template-columns: minmax(0, 1fr); }
 .app.lecture .side, .app.lecture .topbar { display: none; }
 .app.lecture main { --lz: 1.25; zoom: var(--lz); padding-block: 24px 64px; }
 .app.lecture article, .app.lecture .pager, .app.lecture .crumb { margin-inline: auto; max-width: 760px; }
-.lecture-toggle[aria-pressed="true"] { opacity: .35; }
+/* 강의 모드 중에는 화면을 가리지 않게 차분한 모양으로 (올리면 다시 진하게) */
+.lecture-toggle[aria-pressed="true"] { opacity: .55; background: var(--paper); color: var(--muted); box-shadow: var(--shadow); border: 1px solid var(--line); animation: none; }
+.lecture-toggle[aria-pressed="true"]::before { content: "↩"; }
 .lecture-toggle[aria-pressed="true"]:hover, .lecture-toggle[aria-pressed="true"]:focus-visible { opacity: 1; }
 @media (min-width: 1200px) { .app.lecture main { --lz: 1.4; } }
 @media (min-width: 1500px) { .app.lecture main { --lz: 1.6; } }
@@ -170,8 +178,9 @@ body.hide-teacher .teacher { display: none; }
 @media (max-width: 600px) { .lecture-toggle:not([aria-pressed="true"]) { display: none; } }
 
 /* ── PDF로 저장 · 인쇄 ── */
-.print-button { margin: -14px 0 22px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
-.print-button:hover { border-color: var(--accent); color: var(--accent); }
+.print-button { display: inline-flex; align-items: center; gap: 6px; margin: -14px 0 22px; padding: 7px 14px; border: 1px solid var(--accent); border-radius: 8px; background: var(--accent-soft); color: var(--accent-ink); font-size: 14px; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, color .15s; }
+.print-button::before { content: "📄"; }
+.print-button:hover { background: var(--accent); color: var(--bg); transform: translateY(-2px); box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent); }
 .print-foot { display: none; }
 
 @media print {
@@ -202,5 +211,7 @@ body.hide-teacher .teacher { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .lecture-toggle, .print-button { animation: none; transition: none; }
+  .lecture-toggle:hover, .print-button:hover { transform: none; }
   .side { transition: none; }
 }
