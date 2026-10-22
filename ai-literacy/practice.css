@@ -275,3 +275,6 @@
   .dns-status { grid-template-columns: 1fr; }
   .dns-arrow { display: none; }
 }
+
+/* [처음부터 다시]: 실습 맨 아래 오른쪽 */
+.lab-restart { justify-content: flex-end; margin-top: 12px; }

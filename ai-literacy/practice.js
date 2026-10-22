@@ -119,6 +119,22 @@
   // 강의 후 퀴즈(결과 공유판에 모임)와 헷갈리지 않도록, 복습 · 선택 활동의 퀴즈에 붙이는 표시
   const PRACTICE_TAG = '<em class="practice-tag">연습용 · 결과판에 안 올라감</em>';
 
+  // [처음부터 다시]: 실습을 새 상자에 처음부터 다시 그립니다. ✓ 표시 · 점수 · 기록이 모두 사라지고,
+  // 진행 중이던 애니메이션은 버려진 옛 상자에 그려지므로 새 화면을 건드리지 않습니다.
+  function addRestart(container, build) {
+    const bar = document.createElement('div');
+    bar.className = 'lab-actions lab-restart';
+    bar.innerHTML = '<button class="lab-button ghost" type="button">처음부터 다시</button>';
+    bar.querySelector('button').addEventListener('click', () => {
+      const old = container.querySelector('.lab-body');
+      const fresh = document.createElement('div');
+      fresh.className = old.className;
+      old.replaceWith(fresh);
+      build(fresh);
+    });
+    container.append(bar);
+  }
+
   function labShell(no, kind, title, goal, tag = '') {
     const steps = HOW_TO[title] || [];
     const section = document.createElement('section');
@@ -1044,17 +1060,17 @@
       build: (body, ctx) => frontendLab(body, { simple: true, only: ctx.step }) },
     playground: { time: '약 10분', title: '주문 태블릿 코드를 직접 고쳐 보기',
       goal: '같은 화면의 코드를 직접 바꿔 봅니다. 단계마다 도전 과제가 있습니다.', build: body => frontendLab(body) },
-    session: { time: '약 3분', title: '목욕탕 열쇠로 로그인 유지하기',
+    session: { restart: true, time: '약 3분', title: '목욕탕 열쇠로 로그인 유지하기',
       goal: '세션 · 쿠키가 오가는 모습을 보고, 인증(401)과 인가(403)의 차이를 직접 만들어 봅니다.', build: body => sessionLab(body) },
-    transaction: { time: '약 4분', title: '계좌 이체와 트랜잭션',
+    transaction: { restart: true, time: '약 4분', title: '계좌 이체와 트랜잭션',
       goal: '체크박스 두 개와 버튼 하나로, 중간에 서버가 멈출 때 트랜잭션이 돈을 어떻게 지키는지 비교합니다.', build: body => transactionLab(body) },
     'sql-ask': { time: ctx => (ctx.only.length > 1 ? '약 4분' : '약 1분'),
       title: ctx => (ctx.only.length > 1 ? '장부에 질문하기 · 표 · 조건 · JOIN · 정규화' : '장부에 질문하기 · 사진은 어디에?'),
       goal: ctx => (ctx.only.length > 1 ? '버튼을 누르면 준비된 SQL이 실행됩니다. 표 보기부터 JOIN과 정규화까지 결과로 확인합니다.' : '게시물 표에 사진이 어떻게 들어 있는지 확인합니다.'),
       build: (body, ctx) => sqlClickLab(body, { only: ctx.only }) },
-    'sql-write': { time: '약 10분', title: 'SQL을 직접 써 보기',
+    'sql-write': { restart: true, time: '약 10분', title: 'SQL을 직접 써 보기',
       goal: '같은 장부에 SQL을 직접 입력해 6개 과제를 풉니다. 막히면 힌트를 보세요.', build: (body, ctx) => sqlLab(body, ctx) },
-    dns: { time: '약 6분', title: 'DNS 길찾기와 TTL',
+    dns: { restart: true, time: '약 6분', title: 'DNS 길찾기와 TTL',
       goal: '버튼만 눌러 도메인 주소를 찾는 경로를 따라가고, 서버 이사 후 캐시 때문에 옛 주소로 가는 상황을 재현합니다.', build: body => dnsLab(body) }
   };
 
@@ -1072,7 +1088,10 @@
       const details = host.querySelector('details');
       details.addEventListener('toggle', () => {
         const body = details.querySelector('.lab-body');
-        if (details.open && !body.dataset.built) { body.dataset.built = '1'; spec.build(body, ctx); }
+        if (!details.open || body.dataset.built) return;
+        body.dataset.built = '1';
+        spec.build(body, ctx);
+        if (spec.restart) addRestart(details.querySelector('.inline-inner'), fresh => { fresh.dataset.built = '1'; spec.build(fresh, ctx); });
       });
       return;
     }
@@ -1082,6 +1101,7 @@
         <h3 class="inline-title">${title}</h3>
         ${note}<p class="lab-goal">${val(spec.goal)}</p>${howTo}<div class="lab-body"></div></section>`;
     spec.build(host.querySelector('.lab-body'), ctx);
+    if (spec.restart) addRestart(host.querySelector('.inline-lab'), fresh => spec.build(fresh, ctx));
   }
 
   /* ───────────── 복습 페이지 (강의를 마친 뒤) ───────────── */
@@ -1089,16 +1109,18 @@
     if (!host) return;
     host.innerHTML = '';
     let no = 0;
-    const add = (kind, title, goal, build, tag) => {
+    const add = (kind, title, goal, build, tag, restart) => {
       const { section, body } = labShell(no + 1, kind, title, goal, tag);
       host.appendChild(section);
-      if (build(body) === false) section.remove(); else no += 1;
+      if (build(body) === false) { section.remove(); return; }
+      no += 1;
+      if (restart) addRestart(section, build);
     };
     const matchPairs = sectionTable(markdown, /문제\s*→\s*해결/).map(([q, a]) => ({ question: q, answer: plain(a) }));
     const promptRows = sectionTable(markdown, /AI에게 더 잘 요청하기/);
 
     if (courseId === 'deploy') {
-      add('복습 · 약 5분', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 4강 12절 “문제 해결 질문 지도”를 문제로 바꿨습니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz, PRACTICE_TAG);
+      add('복습 · 약 5분', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 4강 12절 “문제 해결 질문 지도”를 문제로 바꿨습니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz, PRACTICE_TAG, true);
     }
     add('복습 · 약 3분', '문제와 해결 기술 잇기', '이 강의에 나온 문제마다 그것을 해결한 기술을 고르세요.',
       body => matchQuiz(body, matchPairs, { left: '문제', right: '해결 기술' }), PRACTICE_TAG);
