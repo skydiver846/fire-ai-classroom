@@ -167,13 +167,16 @@
         const ordered = /\d+\./.test(listMatch[1]);
         const items = [];
         while (i < lines.length) {
+          // 번호 목록 항목 아래 들여 쓴 "- " 줄은 그 항목의 하위 목록
+          const sub = ordered && items.length && lines[i].match(/^\s{2,}[-*+]\s+(.+)$/);
+          if (sub) { items[items.length - 1].sub.push(sub[1]); i += 1; continue; }
           const m = ordered ? lines[i].match(/^\s*\d+\.\s+(.+)$/) : lines[i].match(/^\s*[-*+]\s+(.+)$/);
           if (!m) break;
-          items.push(m[1]);
+          items.push({ text: m[1], sub: [] });
           i += 1;
         }
         const tag = ordered ? 'ol' : 'ul';
-        out.push(`<${tag}>${items.map(item => `<li>${inline(item)}</li>`).join('')}</${tag}>`);
+        out.push(`<${tag}>${items.map(item => `<li>${inline(item.text)}${item.sub.length ? `<ul>${item.sub.map(t => `<li>${inline(t)}</li>`).join('')}</ul>` : ''}</li>`).join('')}</${tag}>`);
         continue;
       }
 
