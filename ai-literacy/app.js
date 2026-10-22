@@ -423,7 +423,7 @@
   function setLecture(on, { fullscreen = false } = {}) {
     app.classList.toggle('lecture', on);
     lectureButton.textContent = on ? '강의 모드 끄기' : '강의 모드';
-    lectureButton.title = on ? '원래 화면으로 (P 또는 Esc)' : '목차를 숨기고 글자를 크게 (P)';
+    lectureButton.title = on ? '원래 화면으로 (P 또는 Esc, 화면 전체일 때는 Esc 두 번)' : '목차를 숨기고 글자를 크게 (P)';
     lectureButton.setAttribute('aria-pressed', on);
     lectureButton.hidden = !showButton && !on;
     store.set('ail-lecture', on ? '1' : '0');
@@ -433,11 +433,9 @@
     if (!on && ownFullscreen && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   }
   lectureButton.addEventListener('click', () => setLecture(!app.classList.contains('lecture'), { fullscreen: true }));
-  // Esc로 화면 전체가 풀리면 강의 모드도 함께 끕니다(브라우저가 Esc 키를 먼저 가져가기 때문).
+  // 화면 전체가 풀려도(Esc, 다른 탭으로 이동 등) 강의 모드는 그대로 둡니다. 끄려면 Esc를 한 번 더 또는 P.
   document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement || !ownFullscreen) return;
-    ownFullscreen = false;
-    setLecture(false);
+    if (!document.fullscreenElement) ownFullscreen = false;
   });
   setLecture(store.get('ail-lecture') === '1');
 
