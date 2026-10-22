@@ -384,11 +384,46 @@
       store.set('ai-literacy-teacher-notes', toggle.checked ? 'on' : 'off');
     });
   }
+  /* ───────── 강의 모드: 목차를 숨기고 본문을 크게 (프로젝터용) ───────── */
+  // 화면 전체 전환은 막힌 곳(아티팩트 등)에서는 조용히 넘어가고, 목차 숨기기와 확대는 그대로 동작합니다.
+  const lectureButton = document.createElement('button');
+  lectureButton.type = 'button';
+  lectureButton.className = 'lecture-toggle';
+  document.body.append(lectureButton);
+  let ownFullscreen = false;
+  function setLecture(on, { fullscreen = false } = {}) {
+    app.classList.toggle('lecture', on);
+    lectureButton.textContent = on ? '강의 모드 끄기' : '강의 모드';
+    lectureButton.title = on ? '원래 화면으로 (P 또는 Esc)' : '목차를 숨기고 글자를 크게 (P)';
+    lectureButton.setAttribute('aria-pressed', on);
+    store.set('ail-lecture', on ? '1' : '0');
+    if (on && fullscreen && document.fullscreenEnabled && !document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => { ownFullscreen = true; }, () => {});
+    }
+    if (!on && ownFullscreen && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  }
+  lectureButton.addEventListener('click', () => setLecture(!app.classList.contains('lecture'), { fullscreen: true }));
+  // Esc로 화면 전체가 풀리면 강의 모드도 함께 끕니다(브라우저가 Esc 키를 먼저 가져가기 때문).
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement || !ownFullscreen) return;
+    ownFullscreen = false;
+    setLecture(false);
+  });
+  setLecture(store.get('ail-lecture') === '1');
+
   search.addEventListener('input', renderNav);
   document.getElementById('menu').addEventListener('click', () => side.classList.toggle('open'));
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') side.classList.remove('open');
-    if (event.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { event.preventDefault(); search.focus(); }
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
+    if (event.key === 'Escape') {
+      if (side.classList.contains('open')) side.classList.remove('open');
+      else if (app.classList.contains('lecture') && !typing) setLecture(false);
+    }
+    if (event.key === '/' && !typing) { event.preventDefault(); search.focus(); }
+    // 한글 입력 상태에서도 되도록 글자 대신 키 위치(KeyP)로 봅니다.
+    if (event.code === 'KeyP' && !typing && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      setLecture(!app.classList.contains('lecture'), { fullscreen: true });
+    }
   });
   window.addEventListener('hashchange', render);
   if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', renderDiagrams);
