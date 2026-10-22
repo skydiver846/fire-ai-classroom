@@ -155,15 +155,16 @@
     if (opts.teacher) {
       host.innerHTML = `<p class="lede">결과 공유판은 교육생 제출을 받는 <strong>교육생용 사이트</strong>에서 열립니다.</p>
         <p><a class="lab-button primary" href="${BOARD_URL}" target="_blank" rel="noopener">결과 공유판 열기 (새 탭)</a></p>
-        <p class="docnav">관리 기능(정답 표시 · 우수자 공개 · 결과 지우기)은 공유판 맨 아래 “강사 관리”에 있습니다. 관리 비밀번호는 Vercel 환경 변수 <code>QUIZ_ADMIN_KEY</code>에 넣은 값입니다.</p>`;
+        <p class="docnav">강의별 우수자는 공유판에 항상 보입니다. 관리 기능(정답 표시 · 전체 우수자 공개 · 결과 지우기)은 공유판 맨 아래 “강사 관리”에 있습니다. 관리 비밀번호는 Vercel 환경 변수 <code>QUIZ_ADMIN_KEY</code>에 넣은 값입니다.</p>`;
       return () => {};
     }
     const quizIds = Object.keys(window.QUIZ || {});
     const open = new Set();
     host.innerHTML = `
-      <p class="lede">강의 후 퀴즈 제출 현황과 문항별 정답률입니다. 몇 초마다 저절로 새로 고쳐집니다. 개인 점수는 보이지 않습니다.</p>
+      <p class="lede">강의 후 퀴즈 우수자와 제출 현황, 문항별 정답률입니다. 몇 초마다 저절로 새로 고쳐집니다. 우수자 말고는 개인 점수가 보이지 않습니다.</p>
       <p class="board-updated docnav" aria-live="polite">불러오는 중입니다…</p>
-      <section class="board-block"><h2>🏆 우수자</h2><div class="board-top"></div></section>
+      <section class="board-block"><h2>🏅 강의별 우수자</h2><p class="muted-line">각 강의 퀴즈의 상위 3명입니다. 점수가 같으면 먼저 제출한 사람이 앞섭니다.</p><div class="board-quiz-tops"></div></section>
+      <section class="board-block"><h2>🏆 전체 우수자</h2><div class="board-top"></div></section>
       <section class="board-block"><h2>제출 현황</h2><div class="board-people"></div></section>
       <section class="board-block"><h2>문항별 정답률</h2><div class="board-rates"></div></section>
       <details class="board-admin">
@@ -174,8 +175,8 @@
           <div class="lab-actions">
             <button class="lab-button" type="button" data-admin="show-answers">정답 표시</button>
             <button class="lab-button" type="button" data-admin="hide-answers">정답 숨기기</button>
-            <button class="lab-button primary" type="button" data-admin="show-top">우수자 공개</button>
-            <button class="lab-button" type="button" data-admin="hide-top">우수자 숨기기</button>
+            <button class="lab-button primary" type="button" data-admin="show-top">전체 우수자 공개</button>
+            <button class="lab-button" type="button" data-admin="hide-top">전체 우수자 숨기기</button>
           </div>
           <div class="lab-actions">
             <button class="lab-button ghost" type="button" data-admin="reset-ask">결과 모두 지우기…</button>
@@ -194,7 +195,15 @@
       const quizTitle = id => (window.QUIZ[id] ? window.QUIZ[id].title.split(' · ')[0] : id);
       host.querySelector('.board-top').innerHTML = data.top
         ? (data.top.length ? `<ol class="podium">${data.top.map((p, i) => `<li><span class="medal">${['🥇', '🥈', '🥉'][i]}</span><strong>${esc(p.name)}</strong><span>${p.score} / ${p.total}점 · 퀴즈 ${p.quizzes}개</span></li>`).join('')}</ol>` : '<p class="muted-line">아직 제출한 사람이 없습니다.</p>')
-        : '<p class="muted-line">강사가 공개하면 상위 3명이 여기에 나타납니다. (총점이 같으면 마지막 퀴즈를 먼저 낸 순서)</p>';
+        : '<p class="muted-line">강사가 공개하면 4개 퀴즈 총점 상위 3명이 여기에 나타납니다. (총점이 같으면 마지막 퀴즈를 먼저 낸 순서)</p>';
+
+      const time = at => new Date(at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      host.querySelector('.board-quiz-tops').innerHTML = `<div class="quiz-tops">${data.quizIds.map(id => {
+        const top = (data.quizzes[id] && data.quizzes[id].top) || [];
+        return `<div class="quiz-top"><h3>${esc(quizTitle(id))}</h3>${top.length
+          ? `<ol class="podium">${top.map((p, i) => `<li><span class="medal">${['🥇', '🥈', '🥉'][i]}</span><strong>${esc(p.name)}</strong><span>${p.score} / ${p.total}점 · ${time(p.at)} 제출</span></li>`).join('')}</ol>`
+          : '<p class="muted-line">아직 제출한 사람이 없습니다.</p>'}</div>`;
+      }).join('')}</div>`;
 
       host.querySelector('.board-people').innerHTML = data.people.length
         ? `<div class="table-wrap"><table class="board-table"><thead><tr><th>이름</th>${data.quizIds.map(id => `<th>${esc(quizTitle(id))}</th>`).join('')}</tr></thead><tbody>${data.people.map(p => `<tr><td>${esc(p.name)}</td>${p.done.map(d => `<td class="${d ? 'done' : ''}">${d ? '✓' : '·'}</td>`).join('')}</tr>`).join('')}</tbody><tfoot><tr><td>제출</td>${data.quizIds.map(id => `<td>${data.quizzes[id].submitted}명</td>`).join('')}</tr></tfoot></table></div>`
@@ -253,7 +262,7 @@
       try {
         await call('admin', { method: 'POST', body: JSON.stringify({ key: keyInput.value, action }) });
         confirmBox.hidden = true;
-        adminStatus.textContent = { 'show-answers': '정답을 표시했습니다.', 'hide-answers': '정답을 숨겼습니다.', 'show-top': '우수자를 공개했습니다.', 'hide-top': '우수자를 숨겼습니다.', reset: '모든 제출 기록을 지웠습니다.' }[action];
+        adminStatus.textContent = { 'show-answers': '정답을 표시했습니다.', 'hide-answers': '정답을 숨겼습니다.', 'show-top': '전체 우수자를 공개했습니다.', 'hide-top': '전체 우수자를 숨겼습니다.', reset: '모든 제출 기록을 지웠습니다.' }[action];
         clearTimeout(timer);
         load();
       } catch (error) {

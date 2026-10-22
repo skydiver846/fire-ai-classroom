@@ -278,3 +278,11 @@
 
 /* [처음부터 다시]: 실습 맨 아래 오른쪽 */
 .lab-restart { justify-content: flex-end; margin-top: 12px; }
+
+/* 결과 공유판: 강의별 우수자(4칸) */
+.quiz-tops { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.quiz-top { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); }
+.quiz-top h3 { margin: 0 0 8px; font-size: 1rem; }
+.quiz-top .podium li { padding: 8px 12px; }
+.quiz-top .podium .medal { font-size: 1.2rem; }
+.quiz-top .podium span:last-child { color: var(--muted); font-size: .82rem; }

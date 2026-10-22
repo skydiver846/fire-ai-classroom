@@ -1,4 +1,5 @@
-// GET /api/quiz/board  결과 공유판: 제출 현황, 문항별 정답률·선택 분포, (강사가 공개하면) 정답과 상위 3명
+// GET /api/quiz/board  결과 공유판: 제출 현황, 문항별 정답률·선택 분포, 강의별 상위 3명(항상),
+// (강사가 공개하면) 정답과 전체 상위 3명
 // 개인 점수는 돌려주지 않습니다.
 const { redis, toObject, send, fail, PREFIX } = require('../_lib/store');
 const { keys } = require('../_lib/quiz-key');
@@ -31,6 +32,9 @@ module.exports = async (req, res) => {
       });
       quizzes[id] = {
         submitted: subs.length,
+        // 강의별 우수자(항상 공개): 그 퀴즈 점수가 높은 순, 같으면 먼저 제출한 순
+        top: [...subs].sort((a, b) => b.score - a.score || a.at - b.at).slice(0, 3)
+          .map(s => ({ name: s.name, score: s.score, total: s.total, at: s.at })),
         questions: counts.map((c, i) => ({
           counts: c,
           correctRate: subs.length ? Math.round((c[keys[id][i]] / subs.length) * 100) : null,
@@ -40,7 +44,7 @@ module.exports = async (req, res) => {
     });
 
     const list = [...people.values()];
-    // 우수자: 총점이 높은 순, 같으면 마지막 제출을 먼저 마친 순
+    // 전체 우수자: 총점이 높은 순, 같으면 마지막 제출을 먼저 마친 순
     const top = showTop
       ? [...list].sort((a, b) => b.score - a.score || a.last - b.last).slice(0, 3)
           .map(p => ({ name: p.name, score: p.score, total: p.total, quizzes: Object.keys(p.done).length }))
