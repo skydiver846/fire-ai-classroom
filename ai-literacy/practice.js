@@ -116,13 +116,16 @@
     ]
   };
 
-  function labShell(no, kind, title, goal) {
+  // 강의 후 퀴즈(결과 공유판에 모임)와 헷갈리지 않도록, 복습 · 선택 활동의 퀴즈에 붙이는 표시
+  const PRACTICE_TAG = '<em class="practice-tag">연습용 · 결과판에 안 올라감</em>';
+
+  function labShell(no, kind, title, goal, tag = '') {
     const steps = HOW_TO[title] || [];
     const section = document.createElement('section');
     section.className = 'lab';
     section.innerHTML = `
       <header class="lab-head">
-        <p class="lab-kind"><span>활동 ${no}</span>${kind}</p>
+        <p class="lab-kind"><span>활동 ${no}</span>${kind}${tag}</p>
         <h3>${title}</h3>
         <p class="lab-goal">${goal}</p>
       </header>
@@ -1028,7 +1031,7 @@
      app.js가 강의의 해당 절 끝에 자리를 만들고 inline(kind, host, …)을 부릅니다.
      optional: true 이면 접힌 채로 두었다가, 펼칠 때 처음 만듭니다(SQL 엔진 같은 큰 파일도 그때 받음). */
   const INLINE = {
-    analogy: { time: '약 2분', title: '웹 서비스를 식당으로 옮겨 보기',
+    analogy: { time: '약 2분', title: '웹 서비스를 식당으로 옮겨 보기', practiceQuiz: true,
       goal: '바로 위 표의 식당 비유입니다. 각 기술이 식당의 무엇에 해당하는지 골라 보세요.',
       build: (body, ctx) => matchQuiz(body, sectionTable(ctx.markdown, /전체를 꿰는 비유/).map(([web, place]) => ({ question: web, answer: plain(place) })), { left: '웹 서비스', right: '식당에서는' }) },
     'tablet-step': { time: '약 1~2분',
@@ -1060,7 +1063,7 @@
     const howTo = steps.length ? `<div class="how-to"><p class="how-to-title">이렇게 진행하세요</p><ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol></div>` : '';
     const note = ctx.noteHtml || '';
     if (ctx.optional) {
-      host.innerHTML = `<details class="inline-lab optional"><summary><span class="inline-tag">더 해 보기 · 시간이 있으면</span> ${title} <small>${val(spec.time)}</small></summary>
+      host.innerHTML = `<details class="inline-lab optional"><summary><span class="inline-tag">더 해 보기 · 시간이 있으면</span> ${title} <small>${val(spec.time)}</small>${spec.practiceQuiz ? ` ${PRACTICE_TAG}` : ''}</summary>
         <div class="inline-inner">${note}<p class="lab-goal">${val(spec.goal)}</p>${howTo}<div class="lab-body"></div></div></details>`;
       const details = host.querySelector('details');
       details.addEventListener('toggle', () => {
@@ -1081,8 +1084,8 @@
     if (!host) return;
     host.innerHTML = '';
     let no = 0;
-    const add = (kind, title, goal, build) => {
-      const { section, body } = labShell(no + 1, kind, title, goal);
+    const add = (kind, title, goal, build, tag) => {
+      const { section, body } = labShell(no + 1, kind, title, goal, tag);
       host.appendChild(section);
       if (build(body) === false) section.remove(); else no += 1;
     };
@@ -1090,10 +1093,10 @@
     const promptRows = sectionTable(markdown, /AI에게 더 잘 요청하기/);
 
     if (courseId === 'deploy') {
-      add('복습 · 약 5분', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 4강 12절 “문제 해결 질문 지도”를 문제로 바꿨습니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz);
+      add('복습 · 약 5분', '배포 장애, 원인부터 좁히기', '바이브코딩 중 자주 만나는 증상입니다. 4강 12절 “문제 해결 질문 지도”를 문제로 바꿨습니다. 가장 먼저 의심할 원인을 고르세요.', troubleQuiz, PRACTICE_TAG);
     }
     add('복습 · 약 3분', '문제와 해결 기술 잇기', '이 강의에 나온 문제마다 그것을 해결한 기술을 고르세요.',
-      body => matchQuiz(body, matchPairs, { left: '문제', right: '해결 기술' }));
+      body => matchQuiz(body, matchPairs, { left: '문제', right: '해결 기술' }), PRACTICE_TAG);
     add('복습 · 약 5분', '막연한 요청을 구체적으로 다듬기', '이 강의의 용어를 넣어 AI에게 보낼 요청을 직접 다시 써 보고, 모범 요청의 핵심 용어와 비교합니다.',
       body => promptLab(body, promptRows));
   }

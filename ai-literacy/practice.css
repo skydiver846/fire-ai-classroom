@@ -12,6 +12,7 @@
 .lab-head h3 { margin: 4px 0 6px; font-size: 1.28rem; line-height: 1.4; }
 .lab-kind { display: flex; gap: 8px; align-items: center; margin: 0; color: var(--muted); font-size: .78rem; font-weight: 800; letter-spacing: .04em; }
 .lab-kind span { padding: 2px 9px; border-radius: 99px; color: var(--surface); background: var(--brand); }
+.practice-tag { padding: 1px 9px; border: 1px dashed var(--line); border-radius: 99px; color: var(--muted); font-size: .78rem; font-style: normal; font-weight: 700; letter-spacing: 0; white-space: nowrap; }
 .lab-goal { margin: 0 0 18px; color: var(--muted); }
 .lab-body { display: grid; gap: 14px; min-width: 0; }
 .lab-body code { padding: .1em .35em; border-radius: 5px; color: var(--brand-2); background: var(--surface-2); font-family: Consolas, "SFMono-Regular", monospace; font-size: .88em; }
