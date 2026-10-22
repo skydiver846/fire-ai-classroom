@@ -14,6 +14,11 @@
   };
 
   const LAB_NOTE = '모든 실습은 이 브라우저 안에서만 돌아가며, 입력한 내용은 어디에도 전송되지 않습니다.';
+  const SITE_URL = 'https://www.jg-sobang.com/ai-literacy/';
+  // 인쇄 · PDF 마지막에 붙는 안내(화면에는 보이지 않음)
+  const PRINT_FOOT = `<footer class="print-foot"><p>실습과 강의 후 퀴즈는 강의 사이트에서 해 보세요: ${SITE_URL}</p>
+    <p>출처: 양실장의 바이브코딩대학 유튜브 강의 4편의 흐름을 바탕으로 강의용으로 재구성했습니다. 자세한 내용은 강의 사이트의 「00 강의 안내 · 약어 사전 › 출처」를 보세요.</p></footer>`;
+  const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
     { id: 'guide', group: '강의 개요', kind: 'lecture', short: '00 강의 안내 · 약어 사전', file: 'AI리터러시_00_강의안내_약어사전.md' },
     ...TEACHER.pages.map(page => ({ ...page, group: '강의 개요', kind: 'teacher' })),
@@ -296,7 +301,7 @@
       crumb.textContent = `${d.group} · ${d.file}`;
       // 생각해 보기(점수 없음) → 본문 → 강의 후 퀴즈
       const quiz = window.QuizUI && window.QUIZ && window.QUIZ[d.id];
-      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${quiz ? window.QuizUI.warmup(d.id) : ''}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}${quiz ? '<section class="quiz" id="quiz"></section>' : ''}`;
+      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${PRINT_BUTTON}${quiz ? window.QuizUI.warmup(d.id) : ''}${renderMarkdown(full.replace(/^#\s+.+$/m, ''), used)}${quiz ? '<section class="quiz" id="quiz"></section>' : ''}${PRINT_FOOT}`;
       placeInline(d.id, markdown);
       if (quiz) window.QuizUI.mountQuiz(document.getElementById('quiz'), d.id, { teacher: IS_TEACHER });
     } else if (d.kind === 'board') {
@@ -306,7 +311,7 @@
     } else if (d.kind === 'teacher') {
       crumb.textContent = `${d.group} · 강사 전용`;
       const title = (d.body.match(/^#\s+(.+)$/m) || [, d.short])[1];
-      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${renderMarkdown(d.body.replace(/^#\s+.+$/m, ''))}`;
+      doc.innerHTML = `<h1>${inline(title)}</h1>${docnav}${PRINT_BUTTON}${renderMarkdown(d.body.replace(/^#\s+.+$/m, ''))}`;
     } else {
       const course = byId[d.course];
       crumb.textContent = `${d.group} · 관련 강의 ${course.short}`;
@@ -321,6 +326,7 @@
 
     pager.innerHTML = `${prev ? `<a class="prev" href="#${prev.id}"><span>← 이전</span>${prev.short}</a>` : ''}${next ? `<a class="next" href="#${next.id}"><span>다음 →</span>${next.short}</a>` : ''}`;
     doc.querySelectorAll('.copy-button').forEach(b => b.addEventListener('click', copyBlock));
+    doc.querySelector('[data-print]')?.addEventListener('click', printPage);
     side.classList.remove('open');
     // 흐름도가 그려지면 위쪽 높이가 바뀌므로, 제목 위치로 바로 이동한 뒤 그림이 끝나면 한 번 더 맞춥니다.
     const jump = () => {
@@ -358,6 +364,22 @@
         document.getElementById(`d${id}`)?.remove();
       }
     }
+  }
+
+  /* ───────── PDF로 저장 · 인쇄 ───────── */
+  // 어두운 화면에서는 흐름도를 밝은 색으로 다시 그린 뒤 인쇄하고, 인쇄 창이 닫히면 되돌립니다.
+  async function printPage() {
+    const root = document.documentElement;
+    const before = root.dataset.theme;
+    if (isDark()) {
+      root.dataset.theme = 'light';
+      await renderDiagrams();
+      window.addEventListener('afterprint', () => {
+        if (before) root.dataset.theme = before; else delete root.dataset.theme;
+        renderDiagrams();
+      }, { once: true });
+    }
+    try { window.print(); } catch (_) { /* 인쇄가 막힌 환경 */ }
   }
 
   async function copyBlock(event) {

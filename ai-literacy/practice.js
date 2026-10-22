@@ -1072,6 +1072,7 @@
       });
       return;
     }
+    host.dataset.printTitle = title; // 인쇄 · PDF에서는 실습 대신 "사이트에서 해 보기" 한 줄로 바뀝니다(styles.css)
     host.innerHTML = `<section class="inline-lab">
         <p class="lab-kind"><span>바로 해 보기</span>${val(spec.time)}</p>
         <h3 class="inline-title">${title}</h3>
