@@ -139,6 +139,7 @@ body.hide-teacher .teacher { display: none; }
 /* 강사용: 이번 수업 진행 카드(초록) · 건너뛸 절(사선 무늬 + 취소선) */
 .cue { margin: 14px 0; padding: 8px 14px 6px; border-left: 4px solid var(--tip); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--tip) 10%, var(--paper)); }
 .cue > p { margin: 4px 0; }
+.cue .cue-cut { margin: 6px 0 2px; padding-top: 6px; border-top: 1px dashed color-mix(in srgb, var(--warn) 40%, transparent); color: var(--warn); font-size: 13px; font-weight: 600; }
 .cue .cue-time { margin: 0 0 2px; color: var(--tip); font: 700 13px/1.4 var(--font-mono); letter-spacing: .02em; }
 .skip-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 99px; background: var(--warn); color: var(--paper); font: 700 12px/1.6 var(--font-body); vertical-align: middle; letter-spacing: 0; }
 body:not(.hide-teacher) .skipped {
@@ -147,6 +148,11 @@ body:not(.hide-teacher) .skipped {
 }
 body:not(.hide-teacher) .skipped:not(h1, h2, h3, h4) { opacity: .5; }
 /* 교육생용: 이번 수업에서 건너뛰는 절 제목의 표시(내용은 그대로) */
+.later-fold > summary { list-style: none; cursor: pointer; }
+.later-fold > summary::-webkit-details-marker { display: none; }
+.later-fold > summary .later-badge::after { content: " · 펼치기 ▾"; }
+.later-fold[open] > summary .later-badge::after { content: " · 접기 ▴"; }
+.later-fold > summary:hover .later-badge { border-color: var(--accent); color: var(--accent); }
 .later-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border: 1px dashed var(--line); border-radius: 99px; color: var(--muted); font: 600 12px/1.6 var(--font-body); vertical-align: middle; white-space: nowrap; }
 blockquote.teacher del { color: var(--muted); text-decoration-color: var(--warn); }
 body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not(.hide-teacher) h4.skipped { color: var(--muted); }

@@ -297,7 +297,7 @@
     frontend: ['## 이 강의를 읽는 방법', '## 5. 브라우저마다', '## 7. 부품 조립 시대', '## 8. 빌드', '### 9-2. SPA가 만든 새 문제', '## 11. 1강 약어 모음', '## 이 단계에서 쓰는 도구', '## 더 찾아볼 곳', '## 12. 복습'],
     backend: ['## 2. 서버 코드의 공통 뼈대', '## 3. 데이터를 지키고', '## 4. 코드가 커지면', '## 7. 요청이 몰릴 때', '## 9. 서버 한 대로', '## 10. 거대한 서비스', '## 11. 배포와 운영까지', '## 13. 2강 약어 모음', '## 이 단계에서 쓰는 도구', '## 더 찾아볼 곳', '## 14. 복습'],
     database: ['## 1. 전체 지도', '## 2. 파일로 관리하던', '### 3-1. 계층형', '### 3-2. 네트워크형', '### 4-1. ACID', '### 4-3. 대표적인 관계형 DB', '## 5. 대규모 서비스', '## 6. 파일을 서버에', '## 9. 파일 접근 권한', '## 11. 합류', '## 12. 3강 약어 모음', '## 이 단계에서 쓰는 도구', '## 더 찾아볼 곳', '## 13. 복습'],
-    deploy: ['## 3. 동시 접속 폭증', '## 4. 수동 배포의 한계', '## 7. 배포 플랫폼은', '## 10. 손님이 몰리면', '## 11. 전체 통합 흐름', '## 12. 바이브코딩 문제 해결', '## 13. 4강 약어 모음', '## 더 찾아볼 곳', '## 14. 복습'],
+    deploy: ['## 3. 동시 접속 폭증', '## 4. 수동 배포의 한계', '## 6. 반복 배포를 자동으로', '## 7. 배포 플랫폼은', '## 9. HTTP에서 HTTPS로', '## 10. 손님이 몰리면', '## 11. 전체 통합 흐름', '## 12. 바이브코딩 문제 해결', '## 13. 4강 약어 모음', '## 더 찾아볼 곳', '## 14. 복습'],
     plan: ['## 확장: 8교시 과정']
   };
 
@@ -312,19 +312,30 @@
     (SKIP_THIS_CLASS[id] || []).forEach(at => {
       const heading = find(at);
       if (!heading) return;
-      if (!IS_TEACHER) { heading.insertAdjacentHTML('beforeend', ' <span class="later-badge">📖 수업 뒤 읽을거리</span>'); return; }
       const level = Number(heading.tagName[1]);
+      const range = [];
+      for (let el = heading.nextElementSibling; el && !(isHeading(el) && Number(el.tagName[1]) <= level) && !el.matches('.quiz, .print-foot'); el = el.nextElementSibling) range.push(el);
+      if (!IS_TEACHER) {
+        // 교육생용: 제목 한 줄만 보이게 접어 두고, 누르면 펼침(인쇄 · 링크로 갈 때는 자동으로 펼침)
+        heading.insertAdjacentHTML('beforeend', ' <span class="later-badge">📖 수업 뒤 읽을거리</span>');
+        const fold = document.createElement('details');
+        fold.className = 'later-fold';
+        const summary = document.createElement('summary');
+        heading.before(fold);
+        fold.append(summary);
+        summary.append(heading);
+        fold.append(...range);
+        return;
+      }
       heading.classList.add('skipped');
       heading.insertAdjacentHTML('beforeend', ' <span class="skip-badge teacher">⏭ 이번엔 건너뜀</span>');
-      for (let el = heading.nextElementSibling; el && !(isHeading(el) && Number(el.tagName[1]) <= level) && !el.matches('.quiz, .print-foot'); el = el.nextElementSibling) {
-        el.classList.add('skipped');
-      }
+      range.forEach(el => el.classList.add('skipped'));
     });
     if (!IS_TEACHER) return;
     // 접혀 있는 선택 활동(더 해 보기)도 이번에는 건너뜀
     doc.querySelectorAll('.inline-slot').forEach(slot => { if (slot.querySelector('details.optional')) slot.classList.add('skipped'); });
     (TEACHER.scenario?.[id] || []).forEach(cue => {
-      const html = `<aside class="cue teacher"><p class="cue-time">⏱ ${cue.time}${cue.min ? ` · ${cue.min}분` : ''}</p>${renderMarkdown(cue.md)}</aside>`;
+      const html = `<aside class="cue teacher"><p class="cue-time">⏱ ${cue.time}${cue.min ? ` · ${cue.min}분` : ''}</p>${renderMarkdown(cue.md)}${cue.cut ? `<p class="cue-cut">✂ 밀리면: ${inline(cue.cut)}</p>` : ''}</aside>`;
       if (cue.at === 'top') {
         const warmup = doc.querySelector('.warmup');
         if (warmup) warmup.insertAdjacentHTML('beforebegin', html);
@@ -389,6 +400,8 @@
     // 흐름도가 그려지면 위쪽 높이가 바뀌므로, 제목 위치로 바로 이동한 뒤 그림이 끝나면 한 번 더 맞춥니다.
     const jump = () => {
       const target = anchor && document.getElementById(anchor);
+      // 접혀 있는 “수업 뒤 읽을거리” 안의 제목이면 펼친 뒤 이동
+      for (let fold = target && target.closest('details'); fold; fold = fold.parentElement.closest('details')) fold.open = true;
       if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
       else if (!anchor) window.scrollTo({ top: 0, behavior: 'instant' });
     };
@@ -426,6 +439,14 @@
 
   /* ───────── PDF로 저장 · 인쇄 ───────── */
   // 어두운 화면에서는 흐름도를 밝은 색으로 다시 그린 뒤 인쇄하고, 인쇄 창이 닫히면 되돌립니다.
+  // 인쇄 · PDF에는 접힌 “수업 뒤 읽을거리”도 모두 펼쳐 넣고, 인쇄가 끝나면 원래대로
+  let foldedForPrint = [];
+  window.addEventListener('beforeprint', () => {
+    foldedForPrint = [...doc.querySelectorAll('details.later-fold:not([open])')];
+    foldedForPrint.forEach(fold => { fold.open = true; });
+  });
+  window.addEventListener('afterprint', () => { foldedForPrint.forEach(fold => { fold.open = false; }); foldedForPrint = []; });
+
   async function printPage() {
     const root = document.documentElement;
     const before = root.dataset.theme;
