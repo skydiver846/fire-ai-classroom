@@ -93,7 +93,7 @@ module.exports = async (req, res) => {
       if (!title) return send(res, 400, { error: '도구 이름을 적어 주세요.' });
       if (!url) return send(res, 400, { error: '배포 주소를 https:// 로 시작하는 전체 주소로 적어 주세요. 예) https://gear-check-hong.vercel.app' });
       if (!intro) return send(res, 400, { error: '한 줄 소개를 적어 주세요.' });
-      if (!track) return send(res, 400, { error: '트랙(DB / API / 다듬기)을 골라 주세요.' });
+      if (!track) return send(res, 400, { error: '연동(DB / API / 둘 다)을 골라 주세요. 연동은 필수입니다.' });
       const old = (await redis([['HGET', R.WORKS, who.id]]))[0];
       const now = Date.now();
       await redis([['HSET', R.WORKS, who.id, JSON.stringify({ title, url, intro, track, at: old ? JSON.parse(old).at : now, updatedAt: now })]]);

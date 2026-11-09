@@ -12,7 +12,7 @@ const EXCLUDED = `${PREFIX}:excluded`; // 참가 자격 미달로 투표 대상�
 const MAX_PEOPLE = 60;   // 등록 상한 (장난 등록 방지)
 const MAX_FAILS = 8;     // 비밀번호를 이만큼 틀리면 강사가 풀어 줄 때까지 잠김
 const PICKS = 3;         // 1인 투표 수
-const TRACKS = { db: 'DB (공용 장부)', api: 'API (공공데이터)', polish: '다듬기' };
+const TRACKS = { db: 'DB (공용 장부)', api: 'API (공공데이터)', both: 'DB + API' };
 
 const clean = (v, n) => String(v || '').trim().replace(/\s+/g, ' ').slice(0, n);
 const keyOf = name => clean(name, 20).replace(/\s+/g, '').toLowerCase();

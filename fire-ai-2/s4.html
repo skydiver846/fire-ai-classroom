@@ -17,7 +17,7 @@
   <aside class="side" id="side">
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
-    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html" aria-current="page"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · 데이터 연동 · 검증</a><a href="s4.html" aria-current="page"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
     <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
     <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
   </nav>
@@ -96,8 +96,9 @@
 </ol>
 <h3>9-3. 최종 제출 (3분, ⏰ 16:20 마감) · ① 교안 탭</h3>
 <ol>
+<li><strong>제출 전 필수 확인</strong>: 운영 주소(<code>○○.vercel.app</code>)에서 연동이 동작한다 — DB는 다른 기기에 기록이 보이고, API는 실제 값과 측정 시각이 보인다. 안 되면 마감 전에 API (나) 강사 공용 주소로라도 연동합니다</li>
 <li><a href="contest.html">공모 · 투표</a> → 이어서 하기(이름 · 비밀번호)</li>
-<li><strong>2. 산출물 제출</strong> 의 도구 이름 · 한 줄 소개 · 트랙을 최종본으로 고쳐 <strong>[제출하기]</strong> (덮어씀)</li>
+<li><strong>2. 산출물 제출</strong> 의 도구 이름 · 한 줄 소개 · <strong>연동(DB / API / 둘 다)</strong> 을 최종본으로 고쳐 <strong>[제출하기]</strong> (덮어씀)</li>
 </ol>
 <blockquote>
 <p>한 줄 소개: &quot;나는 (무엇)을 만들어 (누가) (어디에) 쓴다.&quot;</p>
@@ -106,7 +107,9 @@
 <hr>
 </section>
 <h2>심사 기준 (둘러볼 때 이것을 보고 3개를 고릅니다)</h2>
-<p><strong>기본 100점</strong> (세 트랙 모두 같음)</p>
+<p><strong>참가 자격</strong> (하나라도 안 되면 투표 대상에서 빠짐)
+마감까지 제출 · 배포 주소가 열림 · <strong>데이터베이스 또는 공공데이터 API 연동이 하나 이상 동작</strong> · <code>PRD.md</code>·<code>README.md</code> 있음 · 실제 개인정보 없음 · 서비스 키 노출 없음</p>
+<p><strong>100점 기준표</strong></p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -117,48 +120,35 @@
 </thead>
 <tbody><tr>
 <td>① 쓸모</td>
-<td>25</td>
+<td>20</td>
 <td>실제 업무의 불편이 분명하고, 내일 바로 쓰겠는가</td>
 </tr>
 <tr>
 <td>② 완성도</td>
-<td>30</td>
+<td>25</td>
 <td>성공 기준 3개가 실제로 되는가, 처음 쓰는 사람도 30초 안에 아는가</td>
 </tr>
 <tr>
-<td>③ 검증과 개선</td>
-<td>25</td>
+<td>③ 데이터 연동</td>
+<td>20</td>
+<td>DB: 다른 사람이 넣은 기록이 새로고침 없이 보이나, 규칙이 PRD와 맞나 / API: 실제 값 · 기준 시각 · 출처가 보이나, 실패하면 안내가 나오나</td>
+</tr>
+<tr>
+<td>④ 검증과 개선</td>
+<td>20</td>
 <td><code>PRD.md</code> 변경 기록에 v0.1 → v0.2 → v0.3과 짝 의견 반영이 있나</td>
 </tr>
 <tr>
-<td>④ 안전과 문서</td>
-<td>20</td>
-<td><code>README.md</code> 에 쓰는 법·데이터가 어디 있는지가 있나, PRD 범위 밖에 &quot;로그인·실제 개인정보&quot;가 있나</td>
+<td>⑤ 안전과 문서</td>
+<td>15</td>
+<td><code>README.md</code> 에 쓰는 법 · 데이터가 어디 있는지가 있나, PRD 범위 밖에 &quot;로그인 · 실제 개인정보&quot;가 있나</td>
 </tr>
 </tbody></table></div>
-<p><strong>가점 최대 +15</strong> (데이터 연동)</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>가점</th>
-<th>조건</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>+10</td>
-<td>DB: 다른 사람이 넣은 기록이 새로고침 없이 보인다 / API: 실제 값·기준 시각·출처가 보인다</td>
-</tr>
-<tr>
-<td>+5</td>
-<td>위 +10을 받고, PRD &quot;데이터&quot; 항목과 README에 데이터가 어디에 저장되거나 어디서 오는지, 누가 무엇을 쓸 수 있는지(DB) 또는 실패하면 어떻게 보이는지(API)가 적혀 있다</td>
-</tr>
-</tbody></table></div>
-<p>DB와 API를 둘 다 붙여도 가점은 최대 +15입니다.</p>
-<p><strong>작품 하나에 30초</strong>: 한 줄 소개 읽기(①) → 설명 없이 눌러 보기(②) → DB면 기록 하나 넣어 보기, API면 값과 시각 보기(가점) → 여유 있으면 주소 뒤에 <code>/PRD.md</code> 를 붙여 변경 기록 보기(③)</p>
-<p><strong>참가 자격</strong>: 마감까지 제출 · 배포 주소가 열림 · <code>PRD.md</code>·<code>README.md</code> 있음 · 실제 개인정보 없음 · 서비스 키 노출 없음</p>
+<p>공공데이터는 주제와 관련이 없어도 ③ 점수가 같습니다. 강사 공용 주소로 연동한 경우도 같은 기준으로 봅니다.</p>
+<p><strong>작품 하나에 30초</strong>: 한 줄 소개 읽기(①) → 설명 없이 눌러 보기(②) → DB면 기록 하나 넣어 보기, API면 값과 시각 보기(③) → 여유 있으면 주소 뒤에 <code>/PRD.md</code> 를 붙여 변경 기록 보기(④)</p>
 <blockquote>
-<p><strong>투표 방법</strong>: 강사가 투표를 열면 [공모 · 투표] 페이지 3번 함께 보기에서 <strong>내 작품을 뺀 3개</strong>에 체크하고 [투표하기]. 닫히기 전까지 다시 고를 수 있습니다.</p>
-<p><strong>결과</strong>: 투표가 끝나면 강사가 결과를 공개하고, 같은 페이지 4번에 득표순이 모두에게 보입니다. 1등은 득표로 정하고, 득표가 같거나 1표 차이면 위 기준표 점수(가점 포함)를 보고 교수부장님이 정합니다.</p>
+<p><strong>투표 방법</strong>: 강사가 투표를 열면 <a href="contest.html">공모 · 투표</a> 페이지 3번 함께 보기에서 <strong>내 작품을 뺀 3개</strong>에 체크하고 [투표하기]. 닫히기 전까지 다시 고를 수 있습니다.</p>
+<p><strong>결과</strong>: 투표가 끝나면 강사가 결과를 공개하고, 같은 페이지 4번에 득표순이 모두에게 보입니다. 1등은 득표로 정하고, 득표가 같거나 1표 차이면 위 기준표 점수를 보고 교수부장님이 정합니다.</p>
 </blockquote>
 <hr>
 
@@ -169,12 +159,12 @@
 </ul>
 <h3>더 해 보기 (선택)</h3>
 <ul>
-<li>다른 트랙도 해 보기: 오늘 DB를 했다면 API를, API를 했다면 DB를 같은 순서(단계 5~7)로</li>
+<li>다른 트랙도 해 보기: 오늘 DB를 했다면 API를, API를 했다면 DB를 같은 순서(단계 5~7)로 (같은 결재 요청서 흐름)</li>
 <li>DB 트랙의 다음 걸음: 지금은 주소를 아는 사람 누구나 쓸 수 있습니다. 실제 업무에 쓰려면 <strong>로그인(Authentication)과 사람별 규칙</strong>, 그리고 기관의 개인정보·클라우드 규정 검토가 필요합니다</li>
 <li>저장소 첫 화면 초록 [Code] → [Download ZIP] 으로 내 업무 폴더에 보관</li>
 </ul>
 </article>
-    <div class="pager"><a class="prev" href="s3.html"><span>← 이전</span>v0.2 자료 붙이기와 검증</a><a class="next" href="contest.html"><span>다음 →</span>공모 · 투표</a></div>
+    <div class="pager"><a class="prev" href="s3.html"><span>← 이전</span>v0.2 데이터 연동(필수)과 검증</a><a class="next" href="contest.html"><span>다음 →</span>공모 · 투표</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

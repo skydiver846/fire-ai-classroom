@@ -17,7 +17,7 @@
   <aside class="side" id="side">
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
-    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html" aria-current="page"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html" aria-current="page"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · 데이터 연동 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
     <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
     <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
   </nav>
@@ -44,7 +44,6 @@
 - 데이터는 아직 진짜로 연결하지 않아.
   · DB 트랙이면: 기록을 이 브라우저(localStorage)에 저장하되, 저장·불러오기 코드를 함수 몇 개로 한곳에 모아 줘.
     다음 단계에서 그 부분만 공용 장부(Firestore)로 바꿀 거야.
-  · 다듬기 트랙이면: 기록을 이 브라우저(localStorage)에만 저장해 줘.
   · API 트랙이면: 진짜 자료 대신 &quot;예시 자료&quot;를 넣고 화면에 &quot;예시 자료&quot;라고 표시해 줘.
     자료를 받아 오는 코드는 함수 하나로 모아 줘. 다음 단계에서 그 함수만 진짜 주소로 바꿀 거야.
 - 외부 사이트에서 무언가를 불러오지 마.
@@ -115,15 +114,11 @@
 </thead>
 <tbody><tr>
 <td>🗂 DB</td>
-<td>단계 5의 <strong>5-DB-1 Firebase 프로젝트 만들기</strong>와 <strong>5-DB-2 장부 만들기</strong>까지</td>
+<td>사전 학습 ④ &quot;개념 한 장&quot;을 다시 읽고, PRD의 &quot;저장할 칸&quot;과 &quot;누가 무엇을 고치나&quot;를 확인 (Firebase 설치는 3교시 시연 후)</td>
 </tr>
 <tr>
 <td>🌤 API</td>
-<td><code>공공데이터 메모.txt</code> 에서 Decoding 키를 찾아 두기</td>
-</tr>
-<tr>
-<td>🛠 다듬기</td>
-<td>짝을 정하고, 짝의 PRD 성공 기준을 미리 읽어 두기</td>
+<td><code>공공데이터 메모.txt</code> 에서 Decoding 키를 찾고, 단계 5의 <strong>5-API-1 주소창 시험</strong>을 미리 해 두기</td>
 </tr>
 </tbody></table></div>
 <h3>3-3. 검토 4문항 보내기</h3>
@@ -218,7 +213,7 @@
 <h3>4-5. 공모 페이지에 v0.1 제출 (1분) · ① 교안 탭</h3>
 <ol>
 <li><strong><a href="contest.html">공모 · 투표</a></strong> → 1번 <strong>등록했으면: 이어서 하기</strong> 에 이름 · 비밀번호 → [이어서 하기]</li>
-<li><strong>2. 산출물 제출</strong>: 도구 이름 · 배포 주소(<code>https://○○.vercel.app</code>) · 한 줄 소개 · 트랙 → <strong>[제출하기]</strong></li>
+<li><strong>2. 산출물 제출</strong>: 도구 이름 · 배포 주소(<code>https://○○.vercel.app</code>) · 한 줄 소개 · 연동(오늘 붙일 트랙) → <strong>[제출하기]</strong></li>
 <li>&quot;제출했습니다&quot;가 나오고 3번 <strong>함께 보기</strong>에 내 카드가 생기면 됩니다. 고친 뒤 다시 내면 덮어씁니다</li>
 </ol>
 <p><strong>✅ 다음으로</strong>: 휴대폰에서 내 주소가 열리고, 공모 페이지에 내 카드가 있다. <strong>✅ 점검 2 (2교시 끝)</strong></p>
@@ -256,7 +251,7 @@
 </tbody></table></div>
 <hr>
 </section></article>
-    <div class="pager"><a class="prev" href="s1.html"><span>← 이전</span>PRD 쓰기</a><a class="next" href="s3.html"><span>다음 →</span>v0.2 자료 붙이기와 검증</a></div>
+    <div class="pager"><a class="prev" href="s1.html"><span>← 이전</span>PRD 쓰기</a><a class="next" href="s3.html"><span>다음 →</span>v0.2 데이터 연동(필수)과 검증</a></div>
   </main>
 </div>
 <script src="assets/site.js"></script>

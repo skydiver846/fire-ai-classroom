@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>v0.2 자료 붙이기와 검증 · 생성형 AI 활용능력 향상교육 2차</title>
+<title>v0.2 데이터 연동(필수)과 검증 · 생성형 AI 활용능력 향상교육 2차</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -17,77 +17,103 @@
   <aside class="side" id="side">
     <nav aria-label="목차">
     <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
-    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html" aria-current="page"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html" aria-current="page"><span class="n">3</span>3교시 · 데이터 연동 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
     <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
     <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
   </nav>
   </aside>
   <main>
-    <article><header class="hero"><span class="hero-no">3</span><div class="hero-body"><p class="eyebrow">3교시 · 15:00~15:50 · 설명 ② 열쇠와 규칙</p><h1>v0.2 자료 붙이기와 검증</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 5번째"><span style="width:71.4%"></span></div><span class="prog-t">5 / 7</span></div></div></header>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 25분 · 혼자 해 보는 부분</p><h2>🛠 다듬기 트랙: 단계 5·6 대신 (25분)</h2>
-<blockquote>
-<p>🎯 <strong>목표</strong>: 짝이 v0.1을 써 보고 준 의견으로 고칠 점 3가지를 고친다. (가점은 없지만 기본 100점은 같습니다)</p>
-<p>⏭ <strong>끝나면</strong>: 단계 7 검증</p>
-</blockquote>
-<ol>
-<li>짝과 운영 주소를 바꿔 휴대폰으로 <strong>설명 없이 3분</strong>씩 써 봅니다. 헷갈린 곳 · 안 되는 곳을 서로 알려 줍니다</li>
-<li>받은 의견과 내가 찾은 것 중 <strong>고칠 점 3가지</strong>를 고릅니다</li>
-<li>③ Claude Code 탭의 <strong>같은 대화</strong>에 보냅니다</li>
-</ol>
-<pre><code>PRD.md의 성공 기준을 다시 보고, 아래 고칠 점 3가지를 고쳐 줘.
-1. (고칠 점)
-2. (고칠 점)
-3. (고칠 점)
-- 이미 저장된 기록이 지워지지 않게 저장 이름은 바꾸지 마.
-- PRD.md 맨 아래 변경 기록에 v0.2로 무엇을 고쳤는지 적어 줘.
-- 고친 뒤 성공 기준을 하나씩 시험하고 결과를 표로 알려 줘. 시험하지 못한 것은 못 했다고 적어 줘.
-</code></pre>
-<ol start="4">
-<li>다 고쳤다고 하면 단계 7로 갑니다</li>
-</ol>
-<hr>
-</section>
+    <article><header class="hero"><span class="hero-no">3</span><div class="hero-body"><p class="eyebrow">3교시 · 15:00~15:50 · 설명 ② 열쇠와 규칙 + 설치 시연</p><h1>v0.2 데이터 연동(필수)과 검증</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 5번째"><span style="width:71.4%"></span></div><span class="prog-t">5 / 7</span></div></div></header>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 혼자 해 보는 부분</p><h2>단계 5. 자료 붙일 준비 (사람이 직접, 10분)</h2>
 <blockquote>
 <p>🎯 <strong>목표</strong>: 열쇠와 규칙은 <strong>사람이 직접</strong> 준비한다. AI에게 맡기지 않습니다.</p>
-<p>📌 사전 학습 ④·⑤에서 1차 화면에 한 번 해 본 것과 같습니다. 이번에는 <code>team-tool</code> 용으로 한 번 더.</p>
+<p>📌 3교시 시작에 강사가 이 순서를 화면으로 보여 줍니다(설명 ②). 본 뒤 내 트랙을 따라 합니다. 둘 다 하는 사람은 DB부터.</p>
 <p>⏭ <strong>끝나면</strong>: 단계 6</p>
 </blockquote>
-<h3>🗂 DB 트랙</h3>
+<h3>🗂 DB 트랙: Firebase 설치</h3>
 <p><strong>5-DB-1. Firebase 프로젝트 만들기 (3분)</strong></p>
 <ol>
-<li><strong>console.firebase.google.com</strong> → <strong>[프로젝트 만들기]</strong> → 이름 <code>team-tool-</code> + 이니셜 → [계속]</li>
-<li>&quot;Google 애널리틱스 사용 설정&quot; 스위치 <strong>끄기</strong> → <strong>[프로젝트 만들기]</strong> → [계속]</li>
+<li><strong>console.firebase.google.com</strong> → <strong>[프로젝트 만들기]</strong> (또는 [Firebase 프로젝트 시작하기])</li>
+<li>프로젝트 이름: <code>team-tool-</code> + 내 이니셜 (예: <code>team-tool-hgd</code>) → [계속]</li>
+<li>Gemini(AI 도우미) 질문이 나오면 원하는 대로 → [계속]</li>
+<li><strong>&quot;이 프로젝트에서 Google 애널리틱스 사용 설정&quot; 스위치를 끕니다</strong> → <strong>[프로젝트 만들기]</strong><ul>
+<li>&quot;Google 애널리틱스 구성&quot;(계정 선택) 화면이 나오면 <strong>[이전]</strong> 으로 돌아가 스위치를 끕니다</li>
+</ul>
+</li>
+<li>1분쯤 뒤 [계속] → &quot;○○님, 안녕하세요&quot; 첫 화면이 보이면 됩니다</li>
 </ol>
 <p><strong>5-DB-2. 장부(Firestore) 만들기 (3분)</strong></p>
 <ol>
 <li>왼쪽 <strong>제품 카테고리 → 데이터베이스 및 스토리지 → Firestore</strong> → <strong>[데이터베이스 만들기]</strong></li>
-<li>① <strong>Standard</strong> → ② 위치 <strong>asia-northeast3 (Seoul)</strong> → ③ <strong>프로덕션 모드</strong> → ④ 백업 하지 않음 → 만들기</li>
+<li>네 단계를 차례로 고릅니다<ul>
+<li>① <strong>버전 선택</strong>: <strong>Standard</strong> → [다음]</li>
+<li>② <strong>데이터베이스 ID 및 위치</strong>: ID는 <code>(default)</code> 그대로, 위치 <strong>asia-northeast3 (Seoul)</strong> → [다음]. ⚠️ 위치는 나중에 못 바꿉니다</li>
+<li>③ <strong>구성</strong>: <strong>프로덕션 모드에서 시작</strong> → [만들기]</li>
+<li>④ <strong>예약된 백업</strong>: 하지 않음</li>
+</ul>
+</li>
+<li>위쪽에 <strong>데이터 · 규칙 · 색인</strong> 탭이 보이면 됩니다</li>
 </ol>
+<blockquote>
+<p>💡 <strong>프로덕션 모드</strong> = 처음에는 아무도 장부를 못 쓰게 잠근 상태입니다. 단계 6에서 PRD대로 만든 <strong>규칙</strong>을 게시해 필요한 만큼만 엽니다.</p>
+</blockquote>
 <p><strong>5-DB-3. 웹 앱 설정값 받기 (2분)</strong></p>
 <ol>
-<li><strong>프로젝트 개요</strong> → <strong>[+ 앱 추가]</strong> → <strong>웹(<code>&lt;/&gt;</code>)</strong> → 닉네임 <code>team-tool</code> → 호스팅 체크 안 함 → <strong>[앱 등록]</strong></li>
-<li><code>const firebaseConfig = { … };</code> 를 복사해 메모장에 둡니다 → [콘솔로 이동]</li>
+<li>왼쪽 위 <strong>프로젝트 개요</strong>(집 모양) → 위쪽 <strong>[+ 앱 추가]</strong> → <strong>웹(<code>&lt;/&gt;</code>)</strong></li>
+<li>앱 닉네임 <code>team-tool</code> → <strong>Firebase 호스팅은 체크하지 않음</strong> → <strong>[앱 등록]</strong></li>
+<li>나온 코드 중 <code>const firebaseConfig = {</code> 부터 <code>};</code> 까지 복사 → 메모장에 붙여 둡니다 → [콘솔로 이동]</li>
 </ol>
 <blockquote>
-<p>💡 <code>apiKey</code> 는 비밀이 아닙니다. 장부를 지키는 것은 단계 6에서 게시할 <strong>규칙</strong>입니다.</p>
+<p>💡 <code>apiKey</code> 라는 이름이지만 <strong>비밀이 아닙니다</strong>. 화면 코드에 그대로 들어가는 설정값입니다. 장부를 지키는 것은 <strong>규칙</strong>입니다.</p>
 </blockquote>
-<h3>🌤 API 트랙</h3>
-<p>둘 중 하나를 고릅니다.</p>
-<p><strong>(가) 내 서비스 키로 (권장, 사전 학습 ⑤에서 해 본 방법)</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>막히면</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>위치 칸이 비어 있고 눌리지 않음</td>
+<td>① 버전 선택의 연필을 눌러 Standard를 다시 고르고 [다음]. 그래도 안 되면 창을 닫고 F5 후 처음부터</td>
+</tr>
+<tr>
+<td>결제 · Blaze 업그레이드 안내</td>
+<td>누르지 않습니다. 무료(Spark)로 충분합니다</td>
+</tr>
+<tr>
+<td>오른쪽에 Gemini 창이 열림</td>
+<td>쓰지 않으니 닫아도 됩니다</td>
+</tr>
+</tbody></table></div>
+<h3>🌤 API 트랙: 키 확인과 금고에 넣기</h3>
+<p>둘 중 하나를 고릅니다. 사전 학습 ①에서 활용신청이 <strong>승인</strong>됐으면 (가), 아니면 (나).</p>
+<p><strong>(가) 내 서비스 키로 (권장)</strong></p>
+<p><strong>5-API-1. 주소창에서 키가 되는지 시험 (3분)</strong></p>
 <ol>
-<li>⑤ Vercel 탭 → <strong><code>team-tool</code> 프로젝트</strong> → <strong>Settings</strong> → <strong>Environment Variables</strong></li>
-<li><strong>Key</strong> <code>DATA_GO_KR_KEY</code> / <strong>Value</strong>: <code>공공데이터 메모.txt</code> 의 <strong>Decoding 키</strong> / Environments <strong>모두 체크</strong> → <strong>[Save]</strong></li>
+<li>아래 주소의 <code>여기에키</code> 자리에 <code>공공데이터 메모.txt</code> 의 <strong>Decoding 키</strong>를 붙여 <strong>내 Chrome 주소창</strong>에서 엽니다 (이 주소는 어디에도 공유하지 않습니다)</li>
+</ol>
+<pre><code>https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=여기에키&amp;returnType=json&amp;sidoName=서울&amp;numOfRows=3&amp;ver=1.0
+</code></pre>
+<ol start="2">
+<li><code>&quot;resultCode&quot;:&quot;00&quot;</code> 과 <code>stationName</code>(측정소), <code>pm10Value</code>, <code>pm25Value</code>, <code>dataTime</code>(측정 시각)이 보이면 키가 됩니다</li>
+<li><code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code> 가 나오면 승인 반영 전입니다 → <strong>(나)</strong> 로 갑니다</li>
+</ol>
+<p><strong>5-API-2. Vercel 금고(환경 변수)에 키 넣기 (2분)</strong></p>
+<ol>
+<li>⑤ Vercel 탭 → <strong><code>team-tool</code> 프로젝트</strong> → 위쪽 <strong>Settings</strong> → 왼쪽 <strong>Environment Variables</strong></li>
+<li><strong>Key</strong> <code>DATA_GO_KR_KEY</code> / <strong>Value</strong>: Decoding 키 / <strong>Environments</strong>: Production · Preview · Development <strong>모두 체크</strong> → <strong>[Save]</strong></li>
 </ol>
 <blockquote>
-<p>⚠️ 사전 학습 때 1차 프로젝트에 넣은 키는 <code>team-tool</code> 프로젝트에는 없습니다. 프로젝트마다 따로 넣습니다. 키는 이 화면에만 넣고 채팅 · GitHub에는 붙이지 않습니다.</p>
+<p>⚠️ <strong>서비스 키는 진짜 비밀</strong>입니다. 이 Vercel 화면에만 넣고, Claude Code 채팅 · GitHub · 화면 코드에는 붙이지 않습니다. 화면은 키를 모르고, <strong>우리 주방(서버 함수)</strong> 만 금고에서 꺼내 씁니다.</p>
 </blockquote>
-<p><strong>(나) 강사 공용 주소로 (키 승인이 아직 안 된 경우)</strong></p>
+<p><strong>(나) 강사 공용 주소로 (키 승인이 아직 안 됐거나, 가장 빨리 연동하고 싶을 때)</strong></p>
 <ol>
 <li>브라우저에서 <code>https://www.jg-sobang.com/api/air?sido=서울</code> (서울 대신 내 시도: 경기, 부산 …)을 엽니다</li>
 <li><code>&quot;items&quot;:[{&quot;station&quot;:…</code> 같은 글자 덩어리가 보이면 됩니다. 앞부분을 복사해 둡니다</li>
+<li>키 · 서버 함수 없이 바로 연결됩니다. 키는 강사 쪽 금고에만 있습니다</li>
 </ol>
-<p><strong>✅ 다음으로</strong>: (DB) firebaseConfig를 복사해 두었다 / (API 가) Vercel에 키를 넣었다 / (API 나) 공용 주소에서 자료가 보인다.</p>
+<p><strong>✅ 다음으로</strong>: (DB) firebaseConfig를 복사해 두었다 / (API 가) 주소창 시험이 되고 Vercel에 키를 넣었다 / (API 나) 공용 주소에서 자료가 보인다.</p>
 <hr>
 </section>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 6. v0.2 만들기: 자료 붙이기 (15분)</h2>
@@ -154,7 +180,7 @@ API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간
 <p><strong>✅ 다음으로</strong>: Claude가 다 고쳤다고 하고, (DB) 규칙을 게시했다.</p>
 <hr>
 </section>
-<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 20분 · 혼자 해 보는 부분</p><h2>단계 7. v0.2 검증: 미리보기로 확인하고 결재 (20분)</h2>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 7. v0.2 검증: 미리보기로 확인하고 결재 (15분)</h2>
 <blockquote>
 <p>🎯 <strong>목표</strong>: 결재 <strong>전에</strong> 미리보기 주소로 내 트랙의 검증을 하고, 모두 ○이면 결재한다.</p>
 <p>📌 1차 복습: 운영 주소는 결재 전까지 그대로입니다. 미리보기에서 먼저 봅니다.</p>
@@ -167,26 +193,6 @@ API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간
 <li>휴대폰으로도 보려면 미리보기 화면에서 QR 코드 생성 → 찍기 (4-3에서 Vercel Authentication을 껐어야 열림)</li>
 </ol>
 <h3>7-2. 내 트랙 검증</h3>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>🛠 다듬기 트랙 검증</th>
-<th>○/✕</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>고친 점 3가지가 미리보기 주소에서 됐다</td>
-<td></td>
-</tr>
-<tr>
-<td>운영 주소는 아직 예전 그대로다 (결재 전이라 맞음)</td>
-<td></td>
-</tr>
-<tr>
-<td>결재 후 운영 주소에서 v0.1 때 넣은 기록이 그대로 남아 있다</td>
-<td></td>
-</tr>
-</tbody></table></div>
 <div class="table-wrap"><table>
 <thead>
 <tr>
