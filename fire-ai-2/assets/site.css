@@ -464,3 +464,21 @@ article pre.figure code { white-space: pre; word-break: normal; }
 .work .rank { font-size: 13px; font-weight: 800; color: var(--accent); }
 .vote-bar { position: sticky; bottom: env(safe-area-inset-bottom, 0px); display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); box-shadow: 0 -2px 10px rgba(16, 24, 40, .08); z-index: 3; }
 .empty { color: var(--muted); padding: 12px 0; }
+
+/* ───────── 2차 추가: 누를 수 있는 곳에 마우스를 올리면 블록으로 강조 ───────── */
+.mods a, .tile, .pager a, .group a, .btn, .steps-bar a, .work, .contest button, .copy { transition: background-color .15s, border-color .15s, box-shadow .15s, transform .15s, color .15s; }
+/* 목록 줄: 줄 전체가 연한 빨강 블록 + 왼쪽 빨간 막대 + 번호 상자 빨강 */
+.mods a { border-radius: 10px; box-shadow: inset 0 0 0 0 var(--accent); }
+.mods a:hover, .mods a:focus-visible { background: var(--accent-soft); box-shadow: inset 4px 0 0 var(--accent); padding-left: 14px; outline: none; }
+.mods a:hover .no, .mods a:focus-visible .no { background: var(--accent); box-shadow: none; }
+.mods a:hover .t, .mods a:focus-visible .t { font-weight: 700; color: var(--accent); }
+/* 빨간 단추: 진하게 + 살짝 떠오름 */
+.btn:hover, .btn:focus-visible, .contest button:not(:disabled):hover { filter: brightness(.88); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200, 50, 30, .35); }
+/* 바로가기 칸 · 이전/다음 · 작품 카드: 테두리 빨강 + 연한 빨강 바탕 + 떠오름 */
+.tile:hover, .tile:focus-visible, .pager a:hover, .pager a:focus-visible { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 6px 16px rgba(16, 24, 40, .12); transform: translateY(-2px); outline: none; }
+.work:hover { border-color: var(--accent); box-shadow: 0 6px 16px rgba(16, 24, 40, .12); }
+/* 왼쪽 목차 · 단계 칩 */
+.group a:hover { background: var(--accent-soft); color: var(--accent); }
+.group a:hover .n { border-color: var(--accent); color: var(--accent); }
+.steps-bar a:not([aria-current="step"]):hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .btn:hover, .tile:hover, .pager a:hover { transform: none; } }
