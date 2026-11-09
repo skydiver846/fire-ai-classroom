@@ -475,3 +475,29 @@ html.big-cursor input:not([type]), html.big-cursor input[inputmode], html.big-cu
 .cursor-toggle { flex: none; font: 700 15px var(--font-body); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; white-space: nowrap; }
 .cursor-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
 @media (max-width: 900px) { .cursor-toggle { display: none; } }
+
+/* ───────── 2차 추가: 판서 도구 (줌잇처럼 화면 위에 그리기, assets/draw.js) ───────── */
+.draw-canvas { position: fixed; inset: 0; z-index: 40; pointer-events: none; touch-action: none; }
+.draw-canvas.active { pointer-events: auto; cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 48 48%22%3E%3Cg stroke-linecap=%22round%22%3E%3Cpath d=%22M24 4v14M24 30v14M4 24h14M30 24h14%22 stroke=%22%23ffffff%22 stroke-width=%226%22/%3E%3Cpath d=%22M24 4v14M24 30v14M4 24h14M30 24h14%22 stroke=%22%23111111%22 stroke-width=%222.6%22/%3E%3C/g%3E%3Ccircle cx=%2224%22 cy=%2224%22 r=%223%22 fill=%22%23e5262a%22 stroke=%22%23ffffff%22 stroke-width=%221.5%22/%3E%3C/svg%3E") 24 24, crosshair; }
+.draw-canvas.active[data-tool="eraser"] { cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 48 48%22%3E%3Ccircle cx=%2224%22 cy=%2224%22 r=%2216%22 fill=%22rgba%28255,255,255,.35%29%22 stroke=%22%23ffffff%22 stroke-width=%225%22/%3E%3Ccircle cx=%2224%22 cy=%2224%22 r=%2216%22 fill=%22none%22 stroke=%22%23111111%22 stroke-width=%222.4%22/%3E%3C/svg%3E") 24 24, cell; }
+.draw-box { position: fixed; z-index: 41; top: calc(var(--head-h) + 12px); right: max(16px, env(safe-area-inset-right, 0px)); display: grid; justify-items: end; gap: 8px; font-family: var(--font-body); }
+.draw-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 12px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: #1b2230; font: 700 14px var(--font-body); text-align: left; cursor: pointer; white-space: nowrap; }
+.draw-btn svg { flex: none; }
+.draw-btn:hover { background: #eef1f5; }
+.draw-btn[aria-pressed="true"] { background: #c8321e; color: #fff; }
+.draw-btn:focus-visible, .draw-sw:focus-visible, .draw-w:focus-visible { outline: 3px solid #1f6feb; outline-offset: 2px; }
+.draw-toggle { width: auto; padding: 10px 16px; border-radius: 999px; background: #14213d; color: #fff; box-shadow: 0 4px 14px rgba(16, 24, 40, .25), inset 0 -3px 0 #c8321e; }
+.draw-toggle:hover { background: #1f2f52; }
+.draw-toggle[aria-pressed="true"] { background: #c8321e; box-shadow: 0 4px 14px rgba(16, 24, 40, .25); }
+.draw-panel { display: none; width: 168px; padding: 8px; gap: 2px; border: 1px solid #dde1e8; border-radius: 14px; background: #ffffff; box-shadow: 0 10px 30px rgba(16, 24, 40, .22); max-height: calc(100vh - var(--head-h) - 90px); overflow-y: auto; }
+.draw-box.open .draw-panel { display: grid; }
+.draw-swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; padding: 8px 4px; margin: 4px 0; border-block: 1px solid #dde1e8; }
+.draw-sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #c3c9d3; cursor: pointer; padding: 0; justify-self: center; }
+.draw-sw[aria-pressed="true"] { outline: 3px solid #14213d; outline-offset: 2px; border-color: #ffffff; }
+.draw-widths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 8px; margin-bottom: 4px; border-bottom: 1px solid #dde1e8; }
+.draw-w { height: 30px; display: grid; place-items: center; border: 1px solid #dde1e8; border-radius: 8px; background: #fff; cursor: pointer; }
+.draw-w i { display: block; width: 26px; border-radius: 4px; background: #1b2230; }
+.draw-w[aria-pressed="true"] { border-color: #c8321e; box-shadow: 0 0 0 1px #c8321e; }
+html.drawing .vote-bar { z-index: 2; }
+@media (max-width: 900px) { .draw-btn span { display: none; } .draw-panel { width: auto; } .draw-swatches { grid-template-columns: repeat(2, 1fr); } .draw-widths { grid-template-columns: 1fr; } .draw-toggle span { display: inline; } }
+@media print { .draw-canvas, .draw-box { display: none; } }
