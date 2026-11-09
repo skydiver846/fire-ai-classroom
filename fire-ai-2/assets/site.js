@@ -90,3 +90,22 @@
   window.addEventListener("scroll", update, { passive: true });
   update();
 })();
+
+// 2차 추가: 큰 커서 켜고 끄기 (처음에는 켜짐, 이 PC 브라우저에 기억)
+(function () {
+  var KEY = "f2-big-cursor", root = document.documentElement;
+  var on = true;
+  try { on = localStorage.getItem(KEY) !== "0"; } catch (e) {}
+  root.classList.toggle("big-cursor", on);
+  var head = document.querySelector(".masthead");
+  if (!head) return;
+  var btn = document.createElement("button");
+  btn.type = "button"; btn.className = "cursor-toggle";
+  function paint() { btn.setAttribute("aria-pressed", on ? "true" : "false"); btn.textContent = on ? "큰 커서 켜짐" : "큰 커서 꺼짐"; }
+  btn.addEventListener("click", function () {
+    on = !on; root.classList.toggle("big-cursor", on); paint();
+    try { localStorage.setItem(KEY, on ? "1" : "0"); } catch (e) {}
+  });
+  paint();
+  head.appendChild(btn);
+})();
