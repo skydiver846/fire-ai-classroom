@@ -5,6 +5,8 @@
 const fs = require('fs'), path = require('path'), { marked } = require('marked');
 const ROOT = path.join(__dirname, '..'), OUT = path.join(ROOT, 'fire-ai-2');
 const read = f => fs.readFileSync(path.join(__dirname, f), 'utf8');
+// 브라우저가 예전 스타일·스크립트를 오래 들고 있지 않게, 파일 내용이 바뀌면 주소 뒤 ?v= 가 바뀌게 함
+const ver = f => require('crypto').createHash('md5').update(fs.readFileSync(path.join(OUT, f))).digest('hex').slice(0, 8);
 
 const TITLE = '생성형 AI 활용능력 향상교육 2차';
 const WHEN = '11. 18.(수) 13:00~17:00 · 교육훈련관 2층 정보화교육장';
@@ -79,7 +81,7 @@ function page(p, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(p.title || '처음 화면')} · ${TITLE}</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=${ver('assets/site.css')}">
 </head>
 <body>
 <header class="masthead">
@@ -96,8 +98,8 @@ function page(p, body) {
     ${pager}
   </main>
 </div>
-<script src="assets/site.js"></script>
-${p.script ? `<script src="${p.script}"></script>\n` : ''}</body>
+<script src="assets/site.js?v=${ver('assets/site.js')}"></script>
+${p.script ? `<script src="${p.script}?v=${ver(p.script)}"></script>\n` : ''}</body>
 </html>
 `;
 }
