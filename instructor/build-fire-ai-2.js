@@ -45,8 +45,10 @@ function render(md) {
     h = h.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>')
          .replace(/<input disabled="" type="checkbox">/g, '<input type="checkbox">')
          .replace(/<a href="(https?:)/g, '<a target="_blank" rel="noopener" href="$1');
-    const m = c.match(/^## (단계 \d+\.|🛠)[^\n]*\(([^)]*?(\d+)분)\)/);
-    if (m) h = `<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 ${m[3]}분 · 혼자 해 보는 부분</p>${h}</section>`;
+    // 실습 절: 교안의 "단계 N", "🛠 다듬기", 사전 학습의 "⑤ 실습 A", "⑥ 실습 B". 제목 끝 "(…N분)"의 N을 시간으로
+    const head = (c.match(/^## [^\n]*/) || [''])[0];
+    const min = (head.match(/(\d+)분\)\s*$/) || [])[1];
+    if (min && /^## (단계 \d+\.|🛠|[⑤⑥] 실습)/.test(head)) h = `<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 ${min}분 · 혼자 해 보는 부분</p>${h}</section>`;
     return h;
   }).join('\n');
 }
@@ -107,7 +109,7 @@ const home = `
   <p class="note"><b>11. 18.(수) 13:00~17:00</b> · 교육훈련관 2층 정보화교육장 · 1차 교육생 대상 (별도 신청 없음)</p>
   <h2>수업 전 · 사전 학습</h2>
   <ol class="mods">${mod('prework.html', '11. 16.~17.')}</ol>
-  <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 점검, 웹 서비스의 뿌리 읽기, 사전 기획 메모, 선택 연구(가점)를 한 장에 정리했습니다.</p>
+  <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 점검, 웹 서비스의 뿌리 읽기, 1차 화면에 데이터베이스 · 공공데이터 API 붙여 보기(필수)를 한 장에 정리했습니다. 약 3시간.</p>
   <h2>수업 (4교시) · 혼자 해 보는 날</h2>
   <ol class="mods">${mod('flow.html', '시작 전 10분')}${mod('s1.html', '13:00')}${mod('s2.html', '14:00')}${mod('s3.html', '15:00')}${mod('s4.html', '16:00')}</ol>
   <p class="note">오늘은 강사가 시범을 보이지 않습니다. <b>이 교안이 교재</b>입니다. 막히면 ① 각 단계의 "막히면" 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>
@@ -117,7 +119,7 @@ const home = `
   <h2>바로가기</h2>
   <div class="tiles">${tile('Claude Code', 'https://claude.ai/code', '단계 2~9')}${tile('GitHub', 'https://github.com/', '저장소 · 결재')}${tile('Vercel', 'https://vercel.com/', '배포 · 미리보기')}${tile('Firebase 콘솔', 'https://console.firebase.google.com/', 'DB 트랙')}${tile('공공데이터포털', 'https://www.data.go.kr/', 'API 트랙')}${tile('웹 서비스의 뿌리', 'https://www.jg-sobang.com/ai-literacy/', '사전 학습')}</div>
   <h2>준비물</h2>
-  <ul><li><b>사전 학습</b>: 11. 16.(월)~17.(화) — <a href="prework.html">사전 학습</a></li><li>본인 휴대폰 (문자 인증, 만든 화면 시험)</li><li>비밀번호 수첩</li><li>공공데이터 API 메모 (API 트랙), 선택 연구 메모 (선택 연구를 한 사람)</li></ul>
+  <ul><li><b>사전 학습</b>: 11. 16.(월)~17.(화) — <a href="prework.html">사전 학습</a></li><li>본인 휴대폰 (문자 인증, 만든 화면 시험)</li><li>비밀번호 수첩</li><li>공공데이터 API 메모, 사전 실습에서 막혔던 곳 메모</li><li>당일 만들 주제 한 줄</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>
   <script>
     // 예전 한 장짜리 교안 주소(#contest 등)로 들어오면 새 페이지로 보냅니다
