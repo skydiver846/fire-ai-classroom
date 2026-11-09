@@ -11,16 +11,16 @@
 :root{
   color-scheme:light;
   --bg:#f5f6f7; --surface:#ffffff; --fg:#1d2430; --muted:#5b6573; --line:#dde1e6;
-  --accent:#b8441f; --accent-soft:#f6e3dc; --code-bg:#eef0f3; --quote:#f1ece6;
+  --accent:#b8441f; --accent-soft:#f6e3dc; --code-bg:#eef0f3; --quote:#f1ece6; --ok:#1f7a4d; --bad:#b42318; --on-accent:#ffffff;
   --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --font-mono:"JetBrains Mono","D2Coding",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#14181e; --surface:#1b2028; --fg:#e4e8ee; --muted:#9aa4b2; --line:#2e3540;
-  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; color-scheme:dark}}
+  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; --ok:#5cc28f; --bad:#ff8a7a; --on-accent:#1b1208; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14181e; --surface:#1b2028; --fg:#e4e8ee; --muted:#9aa4b2; --line:#2e3540;
-  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; color-scheme:dark}
+  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; --ok:#5cc28f; --bad:#ff8a7a; --on-accent:#1b1208; color-scheme:dark}
 
 *{box-sizing:border-box}
 img{max-width:100%}
@@ -63,16 +63,52 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 .diagram svg{max-width:640px;width:100%;height:auto}
 @media (max-width:480px){.doc h1{font-size:23px}.doc h2{font-size:19px}body{font-size:15px}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* 공모 · 투표 */
+.contest .status{display:flex;flex-wrap:wrap;gap:6px 14px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14.5px}
+.contest .status .on{color:var(--ok);font-weight:600}.contest .status .off{color:var(--muted)}
+.c-step{margin-top:8px}
+.contest .hint{color:var(--muted);font-size:15px}
+.c-forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.c-form{display:grid;gap:6px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}
+.c-form h3{margin:0 0 4px;font-size:16px}
+.c-form label{font-size:14px;font-weight:600}
+.c-form input:not([type=radio]){font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);width:100%}
+.c-form fieldset{border:0;padding:0;margin:4px 0;display:flex;flex-wrap:wrap;gap:6px 16px}
+.c-form legend{font-size:14px;font-weight:600;margin-bottom:4px}
+.c-form label.inline{font-weight:400;display:flex;gap:6px;align-items:center}
+.contest button{font:inherit;font-weight:600;padding:9px 16px;border:0;border-radius:6px;background:var(--accent);color:var(--on-accent);cursor:pointer;justify-self:start}
+.contest button:disabled{opacity:.45;cursor:not-allowed}
+.contest button:focus-visible,.c-form input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.contest .msg{margin:0;font-size:14px;min-height:1.2em}
+.contest .msg.err{color:var(--bad)}.contest .msg.ok{color:var(--ok)}
+.contest .me{padding:10px 14px;background:var(--accent-soft);border-radius:8px}
+.c-step[aria-disabled="true"] form{opacity:.55;pointer-events:none}
+.works{list-style:none;padding:0;margin:12px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.work{display:grid;gap:6px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}
+.work.picked{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.work.out{opacity:.55}
+.work h3{margin:0;font-size:16px;overflow-wrap:anywhere}
+.work .who{font-size:13px;color:var(--muted)}
+.work .intro{margin:0;font-size:14.5px;overflow-wrap:anywhere}
+.work .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.work .chip{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.work a.open{font-size:14px;font-weight:600}
+.work label.pick{display:flex;gap:6px;align-items:center;font-size:14px;font-weight:600}
+.work .rank{font-size:13px;font-weight:700;color:var(--accent)}
+.vote-bar{position:sticky;bottom:env(safe-area-inset-bottom,0px);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);z-index:3}
+.empty{color:var(--muted);padding:12px 0}
 </style>
 </head>
 <body>
 
 <header class="top"><div class="top-in">
   <div class="eyebrow"><a class="home" href="../">← AI 강의실</a><b>2차 교육</b><span>함께 쓰는 내 업무 도구 만들기 · 4시간</span></div>
-  <nav class="tabs" aria-label="문서">@@TABS@@</nav>
+  <nav class="tabs" aria-label="문서">@@TABS@@<a class="tab" href="#contest" data-id="contest">공모 · 투표</a></nav>
 </div></header>
 <main>
 @@DOCS@@
+@@CONTEST@@
 </main>
 <script>
 (function(){
@@ -91,5 +127,6 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
   show();
 })();
 </script>
+<script src="contest.js"></script>
 </body>
 </html>

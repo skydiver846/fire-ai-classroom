@@ -11,16 +11,16 @@
 :root{
   color-scheme:light;
   --bg:#f5f6f7; --surface:#ffffff; --fg:#1d2430; --muted:#5b6573; --line:#dde1e6;
-  --accent:#b8441f; --accent-soft:#f6e3dc; --code-bg:#eef0f3; --quote:#f1ece6;
+  --accent:#b8441f; --accent-soft:#f6e3dc; --code-bg:#eef0f3; --quote:#f1ece6; --ok:#1f7a4d; --bad:#b42318; --on-accent:#ffffff;
   --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --font-mono:"JetBrains Mono","D2Coding",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#14181e; --surface:#1b2028; --fg:#e4e8ee; --muted:#9aa4b2; --line:#2e3540;
-  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; color-scheme:dark}}
+  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; --ok:#5cc28f; --bad:#ff8a7a; --on-accent:#1b1208; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14181e; --surface:#1b2028; --fg:#e4e8ee; --muted:#9aa4b2; --line:#2e3540;
-  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; color-scheme:dark}
+  --accent:#ef8a63; --accent-soft:#3a2620; --code-bg:#222833; --quote:#252a31; --ok:#5cc28f; --bad:#ff8a7a; --on-accent:#1b1208; color-scheme:dark}
 
 *{box-sizing:border-box}
 img{max-width:100%}
@@ -63,19 +63,54 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 .diagram svg{max-width:640px;width:100%;height:auto}
 @media (max-width:480px){.doc h1{font-size:23px}.doc h2{font-size:19px}body{font-size:15px}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* 공모 · 투표 */
+.contest .status{display:flex;flex-wrap:wrap;gap:6px 14px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14.5px}
+.contest .status .on{color:var(--ok);font-weight:600}.contest .status .off{color:var(--muted)}
+.c-step{margin-top:8px}
+.contest .hint{color:var(--muted);font-size:15px}
+.c-forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.c-form{display:grid;gap:6px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}
+.c-form h3{margin:0 0 4px;font-size:16px}
+.c-form label{font-size:14px;font-weight:600}
+.c-form input:not([type=radio]){font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);width:100%}
+.c-form fieldset{border:0;padding:0;margin:4px 0;display:flex;flex-wrap:wrap;gap:6px 16px}
+.c-form legend{font-size:14px;font-weight:600;margin-bottom:4px}
+.c-form label.inline{font-weight:400;display:flex;gap:6px;align-items:center}
+.contest button{font:inherit;font-weight:600;padding:9px 16px;border:0;border-radius:6px;background:var(--accent);color:var(--on-accent);cursor:pointer;justify-self:start}
+.contest button:disabled{opacity:.45;cursor:not-allowed}
+.contest button:focus-visible,.c-form input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.contest .msg{margin:0;font-size:14px;min-height:1.2em}
+.contest .msg.err{color:var(--bad)}.contest .msg.ok{color:var(--ok)}
+.contest .me{padding:10px 14px;background:var(--accent-soft);border-radius:8px}
+.c-step[aria-disabled="true"] form{opacity:.55;pointer-events:none}
+.works{list-style:none;padding:0;margin:12px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.work{display:grid;gap:6px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}
+.work.picked{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.work.out{opacity:.55}
+.work h3{margin:0;font-size:16px;overflow-wrap:anywhere}
+.work .who{font-size:13px;color:var(--muted)}
+.work .intro{margin:0;font-size:14.5px;overflow-wrap:anywhere}
+.work .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.work .chip{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.work a.open{font-size:14px;font-weight:600}
+.work label.pick{display:flex;gap:6px;align-items:center;font-size:14px;font-weight:600}
+.work .rank{font-size:13px;font-weight:700;color:var(--accent)}
+.vote-bar{position:sticky;bottom:env(safe-area-inset-bottom,0px);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);z-index:3}
+.empty{color:var(--muted);padding:12px 0}
 </style>
 </head>
 <body>
 
 <header class="top"><div class="top-in">
   <div class="eyebrow"><a class="home" href="../">← AI 강의실</a><b>2차 교육</b><span>함께 쓰는 내 업무 도구 만들기 · 4시간</span></div>
-  <nav class="tabs" aria-label="문서"><a class="tab" href="#prework" data-id="prework">사전 학습</a><a class="tab" href="#workbook" data-id="workbook">실습지</a></nav>
+  <nav class="tabs" aria-label="문서"><a class="tab" href="#prework" data-id="prework">사전 학습</a><a class="tab" href="#workbook" data-id="workbook">실습지</a><a class="tab" href="#contest" data-id="contest">공모 · 투표</a></nav>
 </div></header>
 <main>
 <article id="doc-prework" class="doc" data-id="prework" hidden>
 <h1>2차 교육 사전 학습</h1>
 <blockquote>
-<p>2차 교육(○월 ○일, 4시간) 전에 <strong>필수 약 1시간 30분</strong>, 나눠서 해 오시면 됩니다.
+<p>2차 교육(<strong>11. 18.(수) 13:00~17:00</strong>, 교육훈련관 2층 정보화교육장) 전에 <strong>필수 약 1시간 30분</strong>, 나눠서 해 오시면 됩니다.
 여유가 있으면 <strong>선택 연구</strong>(Firebase 또는 공공데이터 API)도 해 오세요. 연구한 것을 당일 산출물에 붙이면 <strong>가점(최대 +15)</strong> 이 있습니다.
 2차는 강사 시범 없이 각자 혼자 만드는 날이라, 미리 해 온 만큼 수업 시간이 여유로워집니다.</p>
 </blockquote>
@@ -90,31 +125,31 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>D-2</strong></td>
+<td><strong>11. 16.(월)</strong></td>
 <td>① 계정·환경 점검</td>
 <td>10분</td>
 <td>모두</td>
 </tr>
 <tr>
-<td><strong>D-2</strong></td>
+<td><strong>11. 16.(월)</strong></td>
 <td>② 공공데이터 활용신청</td>
 <td>10분</td>
 <td>API 트랙·연구 B</td>
 </tr>
 <tr>
-<td><strong>D-1</strong></td>
+<td><strong>11. 17.(화)</strong></td>
 <td>③ 웹 서비스의 뿌리, 꼭 필요한 부분만 읽기 + 퀴즈 2개</td>
 <td>50분</td>
 <td>모두</td>
 </tr>
 <tr>
-<td><strong>D-1</strong></td>
+<td><strong>11. 17.(화)</strong></td>
 <td>④ 1차 흐름 다시 보기</td>
 <td>10분</td>
 <td>모두</td>
 </tr>
 <tr>
-<td><strong>D-1</strong></td>
+<td><strong>11. 17.(화)</strong></td>
 <td>⑤ 사전 기획 메모 써서 제출</td>
 <td>15분</td>
 <td>모두</td>
@@ -132,9 +167,9 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <td>모두</td>
 </tr>
 </tbody></table></div>
-<p><strong>D-2에 먼저 하는 이유</strong>: 공공데이터 서비스 키는 승인돼도 실제로 쓰기까지 1시간~하루가 걸립니다. 계정 문제도 미리 알아야 강사가 도와드릴 수 있습니다.</p>
+<p><strong>11. 16.(월)까지 먼저 하는 이유</strong>: 공공데이터 서비스 키는 승인돼도 실제로 쓰기까지 1시간~하루가 걸립니다. 계정 문제도 미리 알아야 강사가 도와드릴 수 있습니다.</p>
 <hr>
-<h2>① 계정·환경 점검 (D-2, 10분)</h2>
+<h2>① 계정·환경 점검 (11. 16.(월)까지, 10분)</h2>
 <p>업무 Chrome 프로필에서 아래를 하나씩 열어 봅니다. 안 되는 것이 있으면 강사에게 바로 알려 주세요.</p>
 <div class="tbl"><table>
 <thead>
@@ -179,7 +214,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <p>💡 비밀번호를 잊었으면 지금 재설정해 두세요. 당일 문자 인증이 몰리면 오래 걸립니다.</p>
 </blockquote>
 <hr>
-<h2>② 공공데이터 활용신청 (D-2, API 트랙·연구 B를 할 사람, 10분)</h2>
+<h2>② 공공데이터 활용신청 (11. 16.(월)까지, API 트랙·연구 B를 할 사람, 10분)</h2>
 <ol>
 <li>data.go.kr 회원가입·로그인</li>
 <li>검색창에 <strong>한국환경공단_에어코리아_대기오염정보</strong> (또는 쓰고 싶은 API) → <strong>오픈 API</strong> 탭 → [활용신청]</li>
@@ -197,7 +232,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 신청을 못 했거나 승인이 늦어도 괜찮습니다. 당일 강사 공용 주소로 실습합니다.</p>
 </blockquote>
 <hr>
-<h2>③ 웹 서비스의 뿌리, 꼭 필요한 부분만 (D-1, 50분)</h2>
+<h2>③ 웹 서비스의 뿌리, 꼭 필요한 부분만 (11. 17.(화)까지, 50분)</h2>
 <p>2차에서는 <strong>데이터베이스</strong>와 <strong>공공데이터 API</strong>를 내 화면에 붙입니다. 그 전에 &quot;웹 서비스가 어떤 부품으로 이루어져 있나&quot;를 식당 하나에 빗대어 봅니다.</p>
 <p>강의 사이트: <strong><a target="_blank" rel="noopener" href="http://www.jg-sobang.com/ai-literacy/">www.jg-sobang.com/ai-literacy/</a></strong> (AI 리터러시 · 웹 서비스의 뿌리)
 원래 2시간 강의지만, <strong>아래 표의 절만</strong> 읽으면 됩니다. 나머지는 관심 있을 때 보세요.</p>
@@ -342,7 +377,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <li>&quot;인증&quot;과 &quot;인가&quot;의 차이는? (사원증 / 출입 권한)</li>
 </ol>
 <hr>
-<h2>④ 1차 흐름 다시 보기 (D-1, 10분)</h2>
+<h2>④ 1차 흐름 다시 보기 (11. 17.(화)까지, 10분)</h2>
 <p>2차의 앞부분(PRD → 계획 → 만들기 → 검토 → 결재 → 배포)은 1차와 같은 길을 <strong>혼자</strong> 갑니다.</p>
 <ol>
 <li><a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai/flow.html">www.jg-sobang.com/fire-ai/flow.html</a> (흐름도: 내 화면이 웹 주소가 되기까지) 를 열고 [다음 ▶] 으로 9단계를 넘겨 봅니다.</li>
@@ -373,7 +408,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 </tr>
 </tbody></table></div>
 <hr>
-<h2>⑤ 사전 기획 메모 (D-1, 15분) → 제출</h2>
+<h2>⑤ 사전 기획 메모 (11. 17.(화)까지, 15분) → 제출</h2>
 <p>당일 PRD 인터뷰를 빨리 끝내기 위한 메모입니다. 완벽하지 않아도 됩니다. 아래를 채워 <strong>강사가 보낸 구글 폼</strong>에 붙여넣어 제출합니다.</p>
 <pre tabindex="0"><code>1. 만들 도구 이름:
 2. 지금 불편한 점 (한두 줄):
@@ -526,6 +561,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <td>선택 연구를 산출물에 반영 (Firebase 공용 장부 또는 공공데이터 API)</td>
 </tr>
 </tbody></table></div>
+<p><strong>제출 · 투표 · 결과 공개는 모두 교안 안에서 합니다.</strong> 당일 <a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/">www.jg-sobang.com/fire-ai-2/</a> 의 [공모 · 투표] 탭에서 참가 등록 → 산출물 주소 제출 → 모두의 작품을 함께 보고 1인 3표 투표 → 결과 공개 순서로 진행합니다.</p>
 <p>참가 자격: 마감까지 제출 · 주소가 열림 · <code>PRD.md</code>·<code>README.md</code> 있음 · 실제 개인정보 없음 · 서비스 키 노출 없음</p>
 </article>
 <article id="doc-workbook" class="doc" data-id="workbook" hidden>
@@ -624,7 +660,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <tr>
 <td>2교시</td>
 <td>2 계획 받기 · 3 v0.1 만들기 · 4 v0.1 배포</td>
-<td>2교시 끝: 제출 시트에 v0.1 주소</td>
+<td>2교시 끝: [공모 · 투표] 탭에 v0.1 주소 제출</td>
 </tr>
 <tr>
 <td>3교시</td>
@@ -642,6 +678,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <h2>단계 0. 준비 (5분)</h2>
 <ul>
 <li><input disabled="" type="checkbox"> 업무 Chrome 프로필에서 <strong>github.com</strong>, <strong>claude.ai/code</strong>, <strong>app.netlify.com</strong> 세 곳에 로그인돼 있다</li>
+<li><input disabled="" type="checkbox"> 교안 <strong>[공모 · 투표]</strong> 탭(<a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/#contest">www.jg-sobang.com/fire-ai-2/#contest</a>) 1번에서 <strong>참가 등록</strong>을 했다 (이름 · 소속 · 비밀번호 숫자 4자리. 제출과 투표에 다시 씁니다)</li>
 <li><input disabled="" type="checkbox"> 오늘 만들 <strong>주제 한 가지</strong>와 <strong>트랙(DB / API / 다듬기)</strong> 을 정했다 (아래 표 참고)</li>
 <li><input disabled="" type="checkbox"> (API 트랙) 공공데이터포털 활용신청이 <strong>승인</strong>됐는지 확인했다. 승인 안 됐어도 괜찮습니다. 강사 공용 주소를 씁니다(단계 5)</li>
 </ul>
@@ -858,7 +895,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <li>초록 <strong>Published</strong> → 주소 이름 바꾸기: Project configuration → Change project name → 예) <code>gear-check-hong</code></li>
 <li>휴대폰으로 주소를 열어 봅니다 (PC Chrome에서 오른쪽 클릭 → QR 코드 생성)</li>
 </ol>
-<p><strong>4-3. 제출 시트에 v0.1 주소를 적습니다.</strong> ✅ <strong>점검 2 (2교시 끝)</strong></p>
+<p><strong>4-3. 교안 <strong>[공모 · 투표]</strong> 탭(<a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/#contest">www.jg-sobang.com/fire-ai-2/#contest</a>) 2번에 v0.1 주소를 제출합니다.</strong> 나중에 고친 뒤 다시 내면 덮어씁니다. ✅ <strong>점검 2 (2교시 끝)</strong></p>
 <div class="tbl"><table>
 <thead>
 <tr>
@@ -1184,18 +1221,8 @@ API 정보 (활용신청 상세 화면에서 복사):
 - PRD.md: 맨 아래 변경 기록에 v0.3, &quot;다음에 할 것&quot; 3가지.
 </code></pre>
 <p>→ [Create PR] → 미리보기 확인 → [Merge] → 운영 주소 최종 확인</p>
-<p><strong>제출 시트에 적기</strong> (⏰ 4교시 20분 마감)</p>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>이름</th>
-<th>도구 이름</th>
-<th>배포 주소</th>
-<th>한 줄 소개</th>
-<th>트랙 (DB / API / 다듬기)</th>
-</tr>
-</thead>
-</table></div>
+<p><strong>최종 제출</strong> (⏰ 4교시 20분, 16:20 마감)</p>
+<p>교안 <strong>[공모 · 투표]</strong> 탭(<a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/#contest">www.jg-sobang.com/fire-ai-2/#contest</a>) 2번에서 도구 이름 · 배포 주소 · 한 줄 소개 · 트랙을 최종본으로 다시 냅니다. 낸 작품은 3번 <strong>함께 보기</strong>에 바로 올라가 모두가 볼 수 있습니다.</p>
 <blockquote>
 <p>한 줄 소개: &quot;나는 (무엇)을 만들어 (누가) (어디에) 쓴다.&quot;</p>
 </blockquote>
@@ -1252,7 +1279,8 @@ API 정보 (활용신청 상세 화면에서 복사):
 <p><strong>작품 하나에 30초</strong>: 한 줄 소개 읽기(①) → 설명 없이 눌러 보기(②) → DB면 기록 하나 넣어 보기, API면 값과 시각 보기(가점) → 여유 있으면 주소 뒤에 <code>/PRD.md</code> 를 붙여 변경 기록 보기(③)</p>
 <p><strong>참가 자격</strong>: 마감까지 제출 · 배포 주소가 열림 · <code>PRD.md</code>·<code>README.md</code> 있음 · 실제 개인정보 없음 · 서비스 키 노출 없음</p>
 <blockquote>
-<p>1등은 득표로 정하고, 득표가 같거나 1표 차이면 위 기준표 점수(가점 포함)를 보고 교수부장님이 정합니다.</p>
+<p><strong>투표 방법</strong>: 강사가 투표를 열면 [공모 · 투표] 탭 3번 함께 보기에서 <strong>내 작품을 뺀 3개</strong>에 체크하고 [투표하기]. 닫히기 전까지 다시 고를 수 있습니다.
+<strong>결과</strong>: 투표가 끝나면 강사가 결과를 공개하고, 같은 탭 4번에 득표순이 모두에게 보입니다. 1등은 득표로 정하고, 득표가 같거나 1표 차이면 위 기준표 점수(가점 포함)를 보고 교수부장님이 정합니다.</p>
 </blockquote>
 <hr>
 <h2>과정 뒤에 (선택)</h2>
@@ -1261,6 +1289,70 @@ API 정보 (활용신청 상세 화면에서 복사):
 <li>DB 트랙의 다음 걸음: 지금은 주소를 아는 사람 누구나 쓸 수 있습니다. 실제 업무에 쓰려면 <strong>로그인(Authentication)과 사람별 규칙</strong>, 그리고 기관의 개인정보·클라우드 규정 검토가 필요합니다</li>
 <li>저장소 첫 화면 초록 [Code] → [Download ZIP] 으로 내 업무 폴더에 보관</li>
 </ul>
+</article>
+
+<article id="doc-contest" class="doc contest" data-id="contest" hidden>
+<h1>공모 · 투표</h1>
+<p>각자 만든 업무 도구를 여기에 제출하면 모두가 함께 보고, 동료 투표로 1등을 뽑습니다. 결과는 강사가 공개하면 이 화면에 모두에게 보입니다.</p>
+
+<div class="status" id="c-status" aria-live="polite">불러오는 중…</div>
+
+<section class="c-step" id="c-login-box">
+  <h2>1. 참가 등록 · 이어서 하기</h2>
+  <p class="hint">1교시 시작할 때 <b>한 번만 등록</b>합니다. 비밀번호(숫자 4자리)는 제출과 투표에 다시 쓰니 기억해 두세요.</p>
+  <div class="c-forms">
+    <form id="c-register" class="c-form">
+      <h3>처음이면: 참가 등록</h3>
+      <label for="r-name">이름</label><input id="r-name" maxlength="20" autocomplete="off" required>
+      <label for="r-dept">소속</label><input id="r-dept" maxlength="30" autocomplete="off" required>
+      <label for="r-pin">비밀번호 (숫자 4자리)</label><input id="r-pin" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="off" required>
+      <button type="submit">등록하기</button>
+      <p class="msg" id="r-msg" role="status"></p>
+    </form>
+    <form id="c-login" class="c-form">
+      <h3>등록했으면: 이어서 하기</h3>
+      <label for="l-name">이름</label><input id="l-name" maxlength="20" autocomplete="off" required>
+      <label for="l-pin">비밀번호</label><input id="l-pin" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="off" required>
+      <button type="submit">이어서 하기</button>
+      <p class="msg" id="l-msg" role="status"></p>
+    </form>
+  </div>
+  <p class="me" id="c-me" hidden></p>
+</section>
+
+<section class="c-step" id="c-submit-box">
+  <h2>2. 산출물 제출</h2>
+  <p class="hint">2교시 끝에 v0.1 주소부터 내고, 고칠 때마다 다시 내면 덮어씁니다. 마감은 4교시 20분(16:20)입니다. 배포 주소는 누구나 열 수 있으니 실제 개인정보가 없는지 한 번 더 보세요.</p>
+  <form id="c-submit" class="c-form wide">
+    <label for="s-title">도구 이름</label><input id="s-title" maxlength="40" placeholder="예) 교육 장비 점검표" required>
+    <label for="s-url">배포 주소</label><input id="s-url" type="url" maxlength="200" placeholder="https://gear-check-hong.netlify.app" required>
+    <label for="s-intro">한 줄 소개</label><input id="s-intro" maxlength="120" placeholder="나는 (무엇)을 만들어 (누가) (어디에) 쓴다." required>
+    <fieldset><legend>트랙</legend>
+      <label class="inline"><input type="radio" name="track" value="db" id="s-db"> DB (공용 장부)</label>
+      <label class="inline"><input type="radio" name="track" value="api" id="s-api"> API (공공데이터)</label>
+      <label class="inline"><input type="radio" name="track" value="polish" id="s-polish"> 다듬기</label>
+    </fieldset>
+    <button type="submit">제출하기</button>
+    <p class="msg" id="s-msg" role="status"></p>
+  </form>
+</section>
+
+<section class="c-step">
+  <h2>3. 함께 보기 · 투표</h2>
+  <p class="hint">작품을 눌러 휴대폰으로 써 보세요. 투표가 열리면 <b>내 작품을 뺀 3개</b>를 골라 [투표하기]를 누릅니다. 투표는 닫히기 전까지 다시 고를 수 있습니다. 보는 기준: 쓸모 · 완성도 · 검증과 개선 · 안전과 문서, 데이터 연동은 가점.</p>
+  <div class="vote-bar" id="c-vote-bar" hidden>
+    <span id="c-vote-count">0 / 3 골랐습니다</span>
+    <button type="button" id="c-vote-btn" disabled>투표하기</button>
+    <span class="msg" id="v-msg" role="status"></span>
+  </div>
+  <ol class="works" id="c-works"></ol>
+</section>
+
+<section class="c-step" id="c-result-box" hidden>
+  <h2>4. 결과</h2>
+  <p class="hint">동료 투표 득표순입니다. 득표가 같거나 1표 차이면 심사 기준표 점수를 보고 교수부장님이 정합니다.</p>
+  <div class="tbl"><table><thead><tr><th>순위</th><th>도구 이름</th><th>만든 사람</th><th>득표</th></tr></thead><tbody id="c-results"></tbody></table></div>
+</section>
 </article>
 
 </main>
@@ -1281,5 +1373,6 @@ API 정보 (활용신청 상세 화면에서 복사):
   show();
 })();
 </script>
+<script src="contest.js"></script>
 </body>
 </html>

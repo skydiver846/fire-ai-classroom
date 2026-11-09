@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>2차 공모 관리</title>
+<style>
+/* 강사 전용 공모 관리: 단계 스위치 + 참가자 표 */
+:root{color-scheme:light;--bg:#f5f6f7;--surface:#fff;--fg:#1d2430;--muted:#5b6573;--line:#dde1e6;--accent:#b8441f;--soft:#f6e3dc;--ok:#1f7a4d;--bad:#b42318;
+  --font:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#14181e;--surface:#1b2028;--fg:#e4e8ee;--muted:#9aa4b2;--line:#2e3540;--accent:#ef8a63;--soft:#3a2620;--ok:#5cc28f;--bad:#ff8a7a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14181e;--surface:#1b2028;--fg:#e4e8ee;--muted:#9aa4b2;--line:#2e3540;--accent:#ef8a63;--soft:#3a2620;--ok:#5cc28f;--bad:#ff8a7a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 var(--font)}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px;display:grid;gap:16px}
+h1{margin:0;font-size:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+input{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+button{font:inherit;font-weight:600;padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);cursor:pointer}
+button.main{background:var(--accent);border-color:var(--accent);color:#fff}
+button.danger{color:var(--bad)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.flag{display:flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px}
+.flag b.on{color:var(--ok)}.flag b.off{color:var(--muted)}
+.msg{min-height:1.2em;margin:0}.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;word-break:keep-all}
+th{background:var(--soft);white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+tr.out td{opacity:.55}
+td a{color:var(--accent);overflow-wrap:anywhere}
+.muted{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <h1>2차 공모 관리 (강사 전용)</h1>
+  <div class="card">
+    <form id="login" class="row">
+      <label for="key">관리 비밀번호</label>
+      <input id="key" type="password" autocomplete="off">
+      <button class="main" type="submit">불러오기</button>
+      <span class="muted">퀴즈·수요조사와 같은 QUIZ_ADMIN_KEY 입니다. 이 탭에서만 기억합니다.</span>
+    </form>
+    <p class="msg" id="msg" role="status"></p>
+  </div>
+
+  <div class="card" id="panel" hidden>
+    <div class="row" id="flags"></div>
+    <p class="muted">진행 순서: 시작할 때 <b>제출</b> 열기 → 4교시 둘러보기 때 <b>제출</b> 닫고 <b>투표</b> 열기 → 투표가 끝나면 <b>투표</b> 닫고 <b>결과</b> 공개. 결과를 공개하면 교안의 공모 · 투표 탭에 득표순이 모두에게 보입니다.</p>
+    <div class="row" id="sum"></div>
+  </div>
+
+  <div class="tbl" id="tablebox" hidden>
+    <table>
+      <thead><tr><th>#</th><th>이름 · 소속</th><th>산출물</th><th>트랙</th><th>득표</th><th>내 투표</th><th>관리</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="card" id="danger" hidden>
+    <div class="row">
+      <button class="danger" type="button" id="wipe">공모 자료 전부 지우기</button>
+      <span class="muted">리허설 뒤 정리할 때만 씁니다. 되돌릴 수 없습니다.</span>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var key = '';
+  try { key = sessionStorage.getItem('f2-admin') || ''; } catch (_) {}
+  var data = null;
+  var LABEL = { submit: '제출', vote: '투표', result: '결과 공개' };
+
+  function say(t, ok) { $('msg').textContent = t; $('msg').className = 'msg ' + (ok ? 'ok' : 'err'); }
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
+  function api(body) {
+    body.key = key;
+    return fetch('/api/fire-contest/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) throw new Error(d.error || r.status); return d; }); });
+  }
+  function act(body, done) { api(body).then(function () { say(done || '반영했습니다.', true); load(); }).catch(function (e) { say(e.message, false); }); }
+
+  function load() {
+    return api({ action: 'state' }).then(function (d) {
+      data = d; try { sessionStorage.setItem('f2-admin', key); } catch (_) {}
+      $('panel').hidden = $('tablebox').hidden = $('danger').hidden = false;
+      render();
+    }).catch(function (e) { say(e.message, false); });
+  }
+
+  function render() {
+    var f = $('flags'); f.textContent = '';
+    ['submit', 'vote', 'result'].forEach(function (k) {
+      var on = data.flags[k] === '1';
+      var box = el('span', null, 'flag');
+      box.appendChild(el('span', LABEL[k]));
+      box.appendChild(el('b', on ? '열림' : '닫힘', on ? 'on' : 'off'));
+      var b = el('button', on ? '닫기' : (k === 'result' ? '공개하기' : '열기'));
+      b.type = 'button';
+      b.addEventListener('click', function () { act({ action: 'set', flag: k, on: !on }, LABEL[k] + (on ? ' 닫음' : ' 열었음')); });
+      box.appendChild(b); f.appendChild(box);
+    });
+    var rows = data.rows, s = $('sum'); s.textContent = '';
+    var works = rows.filter(function (r) { return r.work; }).length, voted = rows.filter(function (r) { return r.picks.length; }).length;
+    s.appendChild(el('span', '참가 ' + rows.length + '명 · 제출 ' + works + '개 · 투표 ' + voted + '명'));
+    var refresh = el('button', '새로 고침'); refresh.type = 'button'; refresh.addEventListener('click', load); s.appendChild(refresh);
+
+    var nameOf = {}; rows.forEach(function (r) { nameOf[r.id] = r.name; });
+    var body = $('rows'); body.textContent = '';
+    rows.slice().sort(function (a, b) { return b.votes - a.votes || a.at - b.at; }).forEach(function (r, i) {
+      var tr = el('tr'); if (r.excluded) tr.className = 'out';
+      tr.appendChild(el('td', String(i + 1)));
+      var who = el('td'); who.appendChild(el('div', r.name)); who.appendChild(el('div', r.dept + (r.locked ? ' · 잠김' : ''), 'muted')); tr.appendChild(who);
+      var w = el('td');
+      if (r.work) {
+        w.appendChild(el('div', r.work.title));
+        var a = el('a', r.work.url); a.href = r.work.url; a.target = '_blank'; a.rel = 'noopener'; w.appendChild(a);
+        w.appendChild(el('div', r.work.intro, 'muted'));
+        var pa = el('a', 'PRD.md 열기'); pa.href = r.work.url.replace(/\/?$/, '/') + 'PRD.md'; pa.target = '_blank'; pa.rel = 'noopener';
+        var ra = el('a', 'README.md 열기'); ra.href = r.work.url.replace(/\/?$/, '/') + 'README.md'; ra.target = '_blank'; ra.rel = 'noopener';
+        var links = el('div', null, 'muted'); links.appendChild(pa); links.appendChild(document.createTextNode(' · ')); links.appendChild(ra); w.appendChild(links);
+        if (r.excluded) w.appendChild(el('div', '투표 대상에서 뺌: ' + r.excluded, 'muted'));
+      } else w.appendChild(el('span', '미제출', 'muted'));
+      tr.appendChild(w);
+      tr.appendChild(el('td', r.work ? (data.tracks[r.work.track] || r.work.track) : ''));
+      tr.appendChild(el('td', String(r.votes), 'num'));
+      tr.appendChild(el('td', r.picks.map(function (p) { return nameOf[p] || p; }).join(', ')));
+      var tools = el('td'); var row = el('div', null, 'row');
+      function btn(label, fn, cls) { var b = el('button', label, cls); b.type = 'button'; b.addEventListener('click', fn); row.appendChild(b); }
+      if (r.work && !r.excluded) btn('투표 대상에서 빼기', function () {
+        act({ action: 'exclude', id: r.id, reason: '참가 자격 미달' }, r.name + ' 산출물을 투표 대상에서 뺐습니다.');
+      });
+      if (r.excluded) btn('되돌리기', function () { act({ action: 'include', id: r.id }); });
+      if (r.locked) btn('잠금 풀기', function () { act({ action: 'unlock', id: r.id }); });
+      btn('비밀번호 0000으로', function () { act({ action: 'reset-pin', id: r.id, pin: '0000' }, r.name + ' 비밀번호를 0000으로 바꿨습니다. 본인에게 알려 주세요.'); });
+      btn('지우기', function () {
+        if (tr.dataset.confirm !== '1') { tr.dataset.confirm = '1'; say(r.name + ': 한 번 더 누르면 참가자·산출물·투표를 지웁니다.', false); return; }
+        act({ action: 'delete-person', id: r.id }, r.name + ' 지웠습니다.');
+      }, 'danger');
+      tools.appendChild(row); tr.appendChild(tools);
+      body.appendChild(tr);
+    });
+  }
+
+  var wipeArmed = false;
+  $('wipe').addEventListener('click', function () {
+    if (!wipeArmed) { wipeArmed = true; $('wipe').textContent = '정말 지우려면 한 번 더 누르기'; return; }
+    wipeArmed = false; $('wipe').textContent = '공모 자료 전부 지우기';
+    act({ action: 'delete-all' }, '공모 자료를 모두 지웠습니다.');
+  });
+  $('login').addEventListener('submit', function (e) { e.preventDefault(); key = $('key').value; load(); });
+  if (key) load();
+})();
+</script>
+</body>
+</html>
