@@ -15,6 +15,7 @@
 | `api/quiz/` | AI 리터러시 강의 후 퀴즈의 서버 함수(제출·채점, 결과 공유판, 강사 관리). 위와 같은 방법으로 만들어짐. Vercel Storage(Upstash Redis)와 환경 변수 `QUIZ_ADMIN_KEY` 가 필요 (방법은 `ai-literacy-course-site` README) |
 | `fire-ai-free/` | 같은 강의의 **무료 계정판** 보존본 (Claude Team 전환 전, 목록에는 링크하지 않음) |
 | `network-check.html` | 강사용 강의장 PC 접속 점검 (목록에는 링크하지 않음) |
+| `fire-ai-2/check.html` | 2차 접속 점검: 공모 서버, Firebase(Firestore 실제 쓰기·실시간 시험 포함), 공공데이터 API |
 
 ## 이 저장소의 파일은 직접 고치지 않습니다
 
