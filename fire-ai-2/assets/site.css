@@ -465,13 +465,11 @@ article pre.figure code { white-space: pre; word-break: normal; }
 .vote-bar { position: sticky; bottom: env(safe-area-inset-bottom, 0px); display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); box-shadow: 0 -2px 10px rgba(16, 24, 40, .08); z-index: 3; }
 .empty { color: var(--muted); padding: 12px 0; }
 
-/* ───────── 2차 추가: 큰 커서 (발표 화면에서 잘 보이게, 머리띠의 [큰 커서] 단추로 켜고 끔) ───────── */
+/* ───────── 2차 추가: 큰 커서 (발표 화면에서 잘 보이게, 항상 켬) ───────── */
 html.big-cursor, html.big-cursor body { cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 56 56%22%3E%3Cpath d=%22M5 3 L5 45 L15 35 L22 51 L30 47.5 L23 32 L37 32 Z%22 fill=%22%23ffffff%22 stroke=%22%23111111%22 stroke-width=%223.2%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E") 6 3, auto; }
 html.big-cursor a, html.big-cursor button, html.big-cursor summary, html.big-cursor label,
 html.big-cursor [role="button"], html.big-cursor input[type="checkbox"], html.big-cursor input[type="radio"],
 html.big-cursor select, html.big-cursor .copy, html.big-cursor .tab { cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2268%22 viewBox=%220 0 60 64%22%3E%3Cpath d=%22M20 30 V9 a5 5 0 0 1 10 0 V27 V22 a4.5 4.5 0 0 1 9 0 V28 V25 a4.5 4.5 0 0 1 9 0 V31 V29 a4 4 0 0 1 8 0 V44 c0 9 -7 16 -16 16 H31 c-6 0 -10 -3 -13 -7 L7 39 a4.5 4.5 0 0 1 7 -6 L20 39 Z%22 fill=%22%23ffffff%22 stroke=%22%23111111%22 stroke-width=%223%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2225%22 cy=%228%22 r=%223%22 fill=%22%23c8321e%22/%3E%3C/svg%3E") 27 6, pointer; }
 html.big-cursor input[type="text"], html.big-cursor input[type="url"], html.big-cursor input[type="password"],
 html.big-cursor input:not([type]), html.big-cursor input[inputmode], html.big-cursor textarea { cursor: text; }
-.cursor-toggle { flex: none; font: 700 15px var(--font-body); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; white-space: nowrap; }
-.cursor-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
-@media (max-width: 900px) { .cursor-toggle { display: none; } }
+@media (max-width: 900px) { 
