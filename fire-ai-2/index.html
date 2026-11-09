@@ -186,13 +186,13 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <td>오른쪽 위에 내 프로필 사진 □</td>
 </tr>
 <tr>
-<td>Netlify 로그인</td>
-<td>app.netlify.com</td>
-<td>1차에 만든 내 사이트가 목록에 보임 □</td>
+<td>Vercel 로그인</td>
+<td>vercel.com ([Continue with GitHub])</td>
+<td>1차에 만든 내 프로젝트가 목록에 보임 □</td>
 </tr>
 <tr>
 <td>1차 내 화면</td>
-<td>○○.netlify.app</td>
+<td>○○.vercel.app</td>
 <td>휴대폰에서 열림 □</td>
 </tr>
 <tr>
@@ -229,7 +229,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 </li>
 </ol>
 <blockquote>
-<p>⚠️ <strong>일반 인증키(서비스 키)</strong> 는 비밀번호와 같습니다. 메신저·메일·채팅에 붙여넣지 않습니다. 당일 Netlify 설정 화면에만 직접 넣습니다.
+<p>⚠️ <strong>일반 인증키(서비스 키)</strong> 는 비밀번호와 같습니다. 메신저·메일·채팅에 붙여넣지 않습니다. 당일 Vercel 설정 화면에만 직접 넣습니다.
 신청을 못 했거나 승인이 늦어도 괜찮습니다. 당일 강사 공용 주소로 실습합니다.</p>
 </blockquote>
 <hr>
@@ -259,7 +259,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <tr>
 <td><strong>백엔드</strong></td>
 <td>주방</td>
-<td>API 트랙의 &quot;우리 주방&quot;(Netlify 서버 함수)</td>
+<td>API 트랙의 &quot;우리 주방&quot;(Vercel 서버 함수)</td>
 </tr>
 <tr>
 <td><strong>데이터베이스</strong></td>
@@ -274,7 +274,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <tr>
 <td><strong>배포</strong></td>
 <td>가게 개업</td>
-<td>GitHub에 결재 → Netlify가 자동으로 공개 (1차에서 해 봄)</td>
+<td>GitHub에 결재 → Vercel이 자동으로 공개 (1차에서 해 봄)</td>
 </tr>
 </tbody></table></div>
 <p>1차에서 만든 화면은 <strong>홀만 있고, 손님이 각자 수첩에 적는 가게</strong>였습니다. 그래서 짝이 적은 기록이 내 휴대폰에는 보이지 않았습니다. 2차에서는 여기에 <strong>장부</strong>(DB 트랙) 또는 <strong>주방과 거래처</strong>(API 트랙)를 붙입니다.</p>
@@ -356,7 +356,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <td>10</td>
 <td>04 웹서버·배포</td>
 <td><strong>5.</strong> 중 &quot;환경 변수&quot; 상자, <strong>7. 배포 플랫폼은 무엇을 대신해 주나</strong></td>
-<td>키를 코드 밖 금고에 두는 이유, Netlify가 하는 일</td>
+<td>키를 코드 밖 금고에 두는 이유, Vercel이 하는 일</td>
 <td>4분</td>
 </tr>
 <tr>
@@ -403,8 +403,8 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <td>결재하기 (원본에 합치기)</td>
 </tr>
 <tr>
-<td>Deploy Preview</td>
-<td>GitHub 결재 요청서의 Netlify 댓글</td>
+<td>Preview (미리보기)</td>
+<td>GitHub 결재 요청서의 Vercel 봇 댓글 [Visit Preview]</td>
 <td>결재 전 미리보기 주소</td>
 </tr>
 </tbody></table></div>
@@ -485,10 +485,10 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 </ul>
 </li>
 <li>나온 글자 덩어리(JSON)에서 내 화면에 보여 줄 값 <strong>3개</strong>와 <strong>측정·기준 시각</strong>이 어느 칸에 있는지 찾습니다. (예: <code>pm10Value</code>, <code>pm25Value</code>, <code>dataTime</code>)</li>
-<li><strong>(심화)</strong> 1차 <code>my-tool</code> 저장소에서 실제로 붙여 봅니다. Netlify 내 사이트 → Site configuration → Environment variables 에 <code>DATA_GO_KR_KEY</code> 로 키를 넣고, claude.ai/code 에 &quot;Netlify 서버 함수가 공공데이터포털을 대신 부르고 키는 process.env.DATA_GO_KR_KEY 로만 읽게 해서, 이 값들을 화면에 보여 줘&quot; + 요청 변수 표 → [Create PR] → 미리보기 확인.</li>
+<li><strong>(심화)</strong> 1차 <code>my-tool</code> 저장소에서 실제로 붙여 봅니다. vercel.com → 내 프로젝트 → Settings → Environment Variables 에 <code>DATA_GO_KR_KEY</code> 로 키를 넣고(모든 환경 체크), claude.ai/code 에 &quot;Vercel 서버 함수 api/data.js 가 공공데이터포털을 대신 부르고 키는 process.env.DATA_GO_KR_KEY 로만 읽게 해서, 이 값들을 화면에 보여 줘&quot; + 요청 변수 표 → [Create PR] → 미리보기 확인.</li>
 </ol>
 <blockquote>
-<p>⚠️ 서비스 키는 Netlify 설정 화면과 내 브라우저 주소창에만 넣습니다. Claude 채팅·GitHub·메신저에는 넣지 않습니다.</p>
+<p>⚠️ 서비스 키는 Vercel 설정 화면과 내 브라우저 주소창에만 넣습니다. Claude 채팅·GitHub·메신저에는 넣지 않습니다.</p>
 </blockquote>
 <p><strong>연구 메모 3줄</strong> (⑤ 폼에 붙여넣기)</p>
 <pre tabindex="0"><code>1. 쓴 API와 상세기능:
@@ -584,7 +584,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
  📢 설명 ② 열쇠와 규칙 (3교시 시작)
    │
  ⑥ 준비(사람) ─┬─ DB : Firebase 장부 만들기                              ← 3교시 · 단계 5
-               ├─ API: 서비스 키를 Netlify 금고(환경 변수)에
+               ├─ API: 서비스 키를 Vercel 금고(환경 변수)에
                └─ 다듬기: 짝에게 v0.1을 써 보게 하고 고칠 점 3가지 (가점 없음)
  ⑦ 연결(AI)  ─┬─ DB : 장부 규칙 → 내가 읽고 게시, 화면이 장부에 기록      ← 단계 6
                └─ API: 우리 주방(서버 함수)이 공공데이터포털에 주문
@@ -624,7 +624,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <tr>
 <td>도구</td>
 <td>Firebase (구글 계정으로 바로)</td>
-<td>공공데이터포털 + Netlify 서버 함수</td>
+<td>공공데이터포털 + Vercel 서버 함수</td>
 </tr>
 <tr>
 <td>이런 주제에</td>
@@ -679,7 +679,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <hr>
 <h2>단계 0. 준비 (5분)</h2>
 <ul>
-<li><input disabled="" type="checkbox"> 업무 Chrome 프로필에서 <strong>github.com</strong>, <strong>claude.ai/code</strong>, <strong>app.netlify.com</strong> 세 곳에 로그인돼 있다</li>
+<li><input disabled="" type="checkbox"> 업무 Chrome 프로필에서 <strong>github.com</strong>, <strong>claude.ai/code</strong>, <strong>vercel.com</strong> 세 곳에 로그인돼 있다 (Vercel은 1차처럼 [Continue with GitHub])</li>
 <li><input disabled="" type="checkbox"> 교안 <strong>[공모 · 투표]</strong> 탭(<a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/#contest">www.jg-sobang.com/fire-ai-2/#contest</a>) 1번에서 <strong>참가 등록</strong>을 했다 (이름 · 소속 · 비밀번호 숫자 4자리. 제출과 투표에 다시 씁니다)</li>
 <li><input disabled="" type="checkbox"> 오늘 만들 <strong>주제 한 가지</strong>와 <strong>트랙(DB / API / 다듬기)</strong> 을 정했다 (아래 표 참고)</li>
 <li><input disabled="" type="checkbox"> (API 트랙) 공공데이터포털 활용신청이 <strong>승인</strong>됐는지 확인했다. 승인 안 됐어도 괜찮습니다. 강사 공용 주소를 씁니다(단계 5)</li>
@@ -889,14 +889,23 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <li>Claude Code 채팅 옆 패널의 <strong>Changes</strong> 카드 → <strong>[Create PR]</strong> (패널이 안 보이면 세션 제목 줄의 패널 아이콘 또는 ⋮)</li>
 <li>카드에 생긴 결재 요청서를 눌러 GitHub 화면 → <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong> → 보라색 Merged</li>
 </ol>
-<p><strong>4-2. Netlify 연결 (10분, 이 저장소는 처음 한 번)</strong></p>
+<p><strong>4-2. Vercel 연결 (10분, 이 저장소는 처음 한 번)</strong></p>
 <ol>
-<li>app.netlify.com → [Add new project] → [Import an existing project] → GitHub</li>
-<li>목록에 <code>team-tool</code> 이 없으면: 아래 Configure the Netlify app on GitHub → <code>team-tool</code> 추가</li>
-<li><code>team-tool</code> 선택 → 설정은 그대로 → [Deploy]</li>
-<li>초록 <strong>Published</strong> → 주소 이름 바꾸기: Project configuration → Change project name → 예) <code>gear-check-hong</code></li>
+<li><strong>vercel.com</strong> → 로그인(1차처럼 [Continue with GitHub]) → 오른쪽 위 <strong>[Add New…] → [Project]</strong></li>
+<li><strong>Import Git Repository</strong> 목록에서 <code>team-tool</code> 옆 <strong>[Import]</strong><ul>
+<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → 돌아와서 다시</li>
+</ul>
+</li>
+<li><strong>Project Name</strong> 칸을 주소로 쓸 이름으로 바꿉니다. 예) <code>gear-check-hong</code> → 주소가 <code>https://gear-check-hong.vercel.app</code> 이 됩니다<ul>
+<li>Framework Preset 은 <strong>Other</strong>, 나머지 설정은 그대로</li>
+</ul>
+</li>
+<li><strong>[Deploy]</strong> → 1분쯤 뒤 축하 화면이 나오면 <strong>[Continue to Dashboard]</strong> → <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 주소를 엽니다</li>
 <li>휴대폰으로 주소를 열어 봅니다 (PC Chrome에서 오른쪽 클릭 → QR 코드 생성)</li>
 </ol>
+<blockquote>
+<p>💡 이제 GitHub에서 결재(Merge)할 때마다 Vercel이 저절로 다시 배포합니다. 결재 요청서(PR)를 올리면 결재 전 <strong>미리보기(Preview) 주소</strong>도 저절로 생깁니다.</p>
+</blockquote>
 <p><strong>4-3. 교안 <strong>[공모 · 투표]</strong> 탭(<a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2/#contest">www.jg-sobang.com/fire-ai-2/#contest</a>) 2번에 v0.1 주소를 제출합니다.</strong> 나중에 고친 뒤 다시 내면 덮어씁니다. ✅ <strong>점검 2 (2교시 끝)</strong></p>
 <div class="tbl"><table>
 <thead>
@@ -911,11 +920,15 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 </tr>
 <tr>
 <td>주소 이름이 이미 있다고 함</td>
-<td>뒤에 숫자나 이니셜</td>
+<td>뒤에 숫자나 이니셜. 이미 만들었으면 Settings → Domains 에서 <code>○○.vercel.app</code> 옆 [Edit]</td>
 </tr>
 <tr>
 <td>결재했는데 화면이 그대로</td>
-<td>1~2분 뒤 새로고침. Netlify Deploys 에서 Published 확인</td>
+<td>1~2분 뒤 새로고침. Vercel 프로젝트의 <strong>Deployments</strong> 에서 맨 위가 초록 <strong>Ready</strong> 인지 확인</td>
+</tr>
+<tr>
+<td>배포 화면에 Build Failed</td>
+<td>Framework Preset 이 Other 인지 확인. Claude Code에 &quot;Vercel 배포가 실패했어, 빌드 없이 index.html만 배포되게 고쳐 줘&quot;</td>
 </tr>
 </tbody></table></div>
 <hr>
@@ -960,14 +973,14 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <ol>
 <li>data.go.kr → 마이페이지 → 활용신청 현황 → 내 API → <strong>일반 인증키(Decoding)</strong> 복사</li>
 <li>같은 화면의 <strong>End Point</strong>와 <strong>상세기능 이름</strong>, <strong>요청 변수 표</strong>를 메모장에 복사해 둡니다</li>
-<li>app.netlify.com → 내 <code>team-tool</code> → <strong>Site configuration → Environment variables → Add a variable</strong>
-Key: <code>DATA_GO_KR_KEY</code> / Value: 복사한 키 → [Create variable]</li>
+<li>vercel.com → 내 프로젝트 → <strong>Settings → Environment Variables</strong>
+Key: <code>DATA_GO_KR_KEY</code> / Value: 복사한 키 / Environments: 모두 체크(Production, Preview, Development) → <strong>[Save]</strong></li>
 </ol>
 <blockquote>
-<p>⚠️ 서비스 키는 <strong>진짜 비밀</strong>입니다. Claude Code 채팅, GitHub, 화면 코드 어디에도 붙여넣지 않습니다. Netlify 설정 화면에만 넣습니다.</p>
+<p>⚠️ 서비스 키는 <strong>진짜 비밀</strong>입니다. Claude Code 채팅, GitHub, 화면 코드 어디에도 붙여넣지 않습니다. Vercel 설정 화면에만 넣습니다.</p>
 </blockquote>
 <p><strong>(나) 승인이 안 됨 → 강사 공용 주소 쓰기</strong></p>
-<p>강사가 칠판에 적은 주소를 메모합니다. 예) <code>https://(강사 사이트)/.netlify/functions/air?sido=서울</code>
+<p>강사가 칠판에 적은 주소를 메모합니다. 예) <code>https://www.jg-sobang.com/api/air?sido=서울</code> (서울 대신 내 시도: 경기, 부산 등)
 브라우저 주소창에 열어서 자료(글자 덩어리)가 보이는지 확인합니다. 키는 강사 쪽에만 있어 내가 관리할 것이 없습니다.</p>
 <hr>
 <h2>단계 6. v0.2 만들기: 자료 붙이기 (15분)</h2>
@@ -1000,11 +1013,12 @@ API 정보 (활용신청 상세 화면에서 복사):
 [End Point, 상세기능 이름, 요청 변수 표 붙여넣기]
 보여 줄 값: [예: 서울의 PM10·PM2.5와 측정 시각]
 
-- 서비스 키는 Netlify 환경 변수 DATA_GO_KR_KEY 에 이미 넣어 두었어. 키 값은 묻지 마.
-- 브라우저가 공공데이터포털을 직접 부르지 말고, Netlify 서버 함수 netlify/functions/data.mjs 가 대신 불러서
-  필요한 값만 JSON으로 돌려주게 해 줘. 키는 함수 안에서 process.env.DATA_GO_KR_KEY 로만 읽고 응답에 넣지 마.
-- 결과는 JSON 형식으로 요청해 줘. 함수 응답은 10분 동안 캐시해서 호출 횟수를 아껴 줘.
-- index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /.netlify/functions/data 를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
+- 서비스 키는 Vercel 환경 변수 DATA_GO_KR_KEY 에 이미 넣어 두었어. 키 값은 묻지 마.
+- 브라우저가 공공데이터포털을 직접 부르지 말고, Vercel 서버 함수 api/data.js 가 대신 불러서
+  필요한 값만 JSON으로 돌려주게 해 줘. 함수는 module.exports = async (req, res) =&gt; { … } 모양(Node.js)으로,
+  package.json 없이 동작하게 해 줘. 키는 함수 안에서 process.env.DATA_GO_KR_KEY 로만 읽고 응답에 넣지 마.
+- 결과는 JSON 형식으로 요청해 줘. 함수 응답에 Cache-Control: s-maxage=600 을 붙여 10분 동안 캐시해서 호출 횟수를 아껴 줘.
+- index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /api/data 를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
 - 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
 - 화면 아래에 출처(공공데이터포털, 제공기관, 기준 시각)를 적어 줘.
 - 추가 라이브러리는 쓰지 마. PRD.md 변경 기록에 v0.2를 적어 줘.
@@ -1026,7 +1040,10 @@ API 정보 (활용신청 상세 화면에서 복사):
 <p>1차 복습: 결재하기 전에 <strong>미리보기 주소</strong>로 먼저 봅니다. 운영 주소는 결재 전까지 그대로입니다.</p>
 </blockquote>
 <ol>
-<li>Changes 카드 <strong>[Create PR]</strong> → 결재 요청서를 눌러 GitHub 화면 → 1~2분 뒤 Netlify 댓글의 <strong>Deploy Preview</strong> 링크 (휴대폰용 QR이 있으면 그대로 찍기)</li>
+<li>Changes 카드 <strong>[Create PR]</strong> → 결재 요청서를 눌러 GitHub 화면 → 1~2분 뒤 <strong>Vercel 봇의 댓글</strong> 표에서 <strong>Preview</strong> 의 [Visit Preview] 링크를 엽니다<ul>
+<li>미리보기 주소는 처음에 <strong>Vercel 로그인을 요구</strong>할 수 있습니다(나만 보는 시안이라서). PC에서는 이미 로그인돼 있어 바로 열립니다. 휴대폰이나 짝에게도 보여 주려면: 프로젝트 <strong>Settings → Deployment Protection → Vercel Authentication</strong> 을 끄고 [Save]</li>
+</ul>
+</li>
 <li>미리보기 주소에서 내 트랙의 검증을 합니다.</li>
 </ol>
 <div class="tbl"><table>
@@ -1156,7 +1173,7 @@ API 정보 (활용신청 상세 화면에서 복사):
 </tr>
 <tr>
 <td>(API) &quot;서비스 키가 설정되지 않았습니다&quot;</td>
-<td>환경 변수 이름이 <code>DATA_GO_KR_KEY</code> 인지 확인. 넣은 <strong>뒤에</strong> 배포가 다시 돼야 함 → Claude Code에 &quot;고쳐 줘&quot; 대신, Netlify Deploys → [Trigger deploy]</td>
+<td>환경 변수 이름이 <code>DATA_GO_KR_KEY</code> 인지, Preview에도 체크했는지 확인. 넣은 <strong>뒤에</strong> 배포가 다시 돼야 함 → Vercel <strong>Deployments</strong> → 맨 위 배포의 ⋯ → <strong>[Redeploy]</strong></td>
 </tr>
 <tr>
 <td>(API) <code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code></td>
@@ -1168,15 +1185,19 @@ API 정보 (활용신청 상세 화면에서 복사):
 </tr>
 <tr>
 <td>(API) 함수 주소가 404</td>
-<td>함수 파일이 <code>netlify/functions/</code> 에 있는지. PC에서 index.html 더블클릭으로는 동작하지 않고 미리보기·운영 주소에서만 됨</td>
+<td>함수 파일이 저장소 맨 위 <code>api/</code> 폴더에 있는지(<code>api/data.js</code>). PC에서 index.html 더블클릭으로는 동작하지 않고 미리보기·운영 주소에서만 됨</td>
 </tr>
 <tr>
 <td>미리보기 주소가 안 보임</td>
-<td>결재 요청서 아래 확인 목록이 끝날 때까지 1~2분. Netlify Deploys 에도 &quot;Deploy Preview&quot;로 보임</td>
+<td>결재 요청서 아래 확인 목록이 끝날 때까지 1~2분. Vercel <strong>Deployments</strong> 에도 &quot;Preview&quot;로 보임</td>
+</tr>
+<tr>
+<td>미리보기를 열면 Vercel 로그인 화면</td>
+<td>나만 보는 시안이라 그렇습니다. PC에서 로그인한 Chrome으로 열거나, Settings → Deployment Protection → Vercel Authentication 끄기</td>
 </tr>
 <tr>
 <td>잘못 결재했음</td>
-<td>Netlify Deploys → 이전 배포 → [Publish deploy] 로 즉시 되돌리기</td>
+<td>Vercel <strong>Deployments</strong> → 이전 배포의 ⋯ → <strong>[Promote to Production]</strong>(또는 Instant Rollback) 으로 즉시 되돌리기</td>
 </tr>
 </tbody></table></div>
 <hr>
@@ -1226,7 +1247,7 @@ API 정보 (활용신청 상세 화면에서 복사):
 <p>같은 Claude Code 대화에 보냅니다. 배포 주소는 Claude가 모르므로 직접 적습니다.</p>
 <pre tabindex="0"><code>짝 검증에서 받은 아래 의견을 고치고 문서를 정리해 줘.
 - 고칠 점: [검증표의 ✕와 &quot;가장 헷갈린 곳&quot;]
-- README.md: 이 도구가 무엇인지 한 줄, 쓰는 법 3단계, 배포 주소(https://○○.netlify.app),
+- README.md: 이 도구가 무엇인지 한 줄, 쓰는 법 3단계, 배포 주소(https://○○.vercel.app),
   데이터가 어디에 저장되거나 어디서 오는지(Firebase 공용 장부 / 공공데이터포털)와 출처.
 - PRD.md: 맨 아래 변경 기록에 v0.3, &quot;다음에 할 것&quot; 3가지.
 </code></pre>
@@ -1340,7 +1361,7 @@ API 정보 (활용신청 상세 화면에서 복사):
   <p class="hint">2교시 끝에 v0.1 주소부터 내고, 고칠 때마다 다시 내면 덮어씁니다. 마감은 4교시 20분(16:20)입니다. 배포 주소는 누구나 열 수 있으니 실제 개인정보가 없는지 한 번 더 보세요.</p>
   <form id="c-submit" class="c-form wide">
     <label for="s-title">도구 이름</label><input id="s-title" maxlength="40" placeholder="예) 교육 장비 점검표" required>
-    <label for="s-url">배포 주소</label><input id="s-url" type="url" maxlength="200" placeholder="https://gear-check-hong.netlify.app" required>
+    <label for="s-url">배포 주소</label><input id="s-url" type="url" maxlength="200" placeholder="https://gear-check-hong.vercel.app" required>
     <label for="s-intro">한 줄 소개</label><input id="s-intro" maxlength="120" placeholder="나는 (무엇)을 만들어 (누가) (어디에) 쓴다." required>
     <fieldset><legend>트랙</legend>
       <label class="inline"><input type="radio" name="track" value="db" id="s-db"> DB (공용 장부)</label>

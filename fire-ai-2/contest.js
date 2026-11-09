@@ -1,5 +1,5 @@
 // 2차 교육 공모 · 투표 탭: 참가 등록 → 산출물 제출 → 함께 보기 · 투표 → 결과
-// 서버: /api/fire-contest/board (조회), /api/fire-contest/act (등록·제출·투표·내 정보)
+// 서버: /api/fire-contest/act  GET 조회, POST 등록·제출·투표·내 정보
 (function () {
   var API = '/api/fire-contest/';
   var $ = function (id) { return document.getElementById(id); };
@@ -128,7 +128,7 @@
   function renderAll() { renderStatus(); renderMe(); renderSubmit(); renderWorks(); renderResults(); }
 
   function loadBoard() {
-    return call('board').then(function (d) { state.board = d; renderAll(); })
+    return call('act').then(function (d) { state.board = d; renderAll(); })
       .catch(function (e) { $('c-status').textContent = '현황을 불러오지 못했습니다: ' + e.message; });
   }
 

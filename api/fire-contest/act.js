@@ -1,4 +1,7 @@
-// POST /api/fire-contest/act  참가자가 하는 일 네 가지
+// /api/fire-contest/act
+//   GET  누구나 보는 공모 현황판: 단계(제출·투표·결과 공개), 제출된 산출물, 참가·투표 인원, (결과 공개 뒤) 득표순.
+//        비밀번호·누가 누구에게 투표했는지는 내보내지 않습니다.
+//   POST 참가자가 하는 일 네 가지
 //   { action: 'register', name, dept, pin }                    참가 등록 (이름 + 4자리 비밀번호)
 //   { action: 'submit',   name, pin, title, url, intro, track } 산출물 제출·고치기 (제출이 열려 있을 때)
 //   { action: 'vote',     name, pin, picks: [id, id, id] }       동료 투표·고치기 (투표가 열려 있을 때, 자기 작품 제외 3개)
@@ -23,8 +26,41 @@ async function login(name, pin) {
   return { id, person };
 }
 
+async function board(req, res) {
+  try {
+    const [people, works, votes, flags, excluded] = (await redis([
+      ['HGETALL', R.PEOPLE], ['HGETALL', R.WORKS], ['HGETALL', R.VOTES], ['HGETALL', R.FLAGS], ['HGETALL', R.EXCLUDED]
+    ])).map(toObject);
+    const f = { submit: flags.submit === '1', vote: flags.vote === '1', result: flags.result === '1' };
+    const list = Object.entries(works).map(([id, v]) => {
+      const w = JSON.parse(v);
+      const p = people[id] ? JSON.parse(people[id]) : { name: id, dept: '' };
+      return { id, name: p.name, dept: p.dept, title: w.title, url: w.url, intro: w.intro, track: w.track,
+        updatedAt: w.updatedAt, excluded: Boolean(excluded[id]), reason: excluded[id] || '' };
+    }).sort((a, b) => a.updatedAt - b.updatedAt);
+
+    let results = null;
+    if (f.result) {
+      const count = Object.fromEntries(list.map(w => [w.id, 0]));
+      Object.values(votes).forEach(v => JSON.parse(v).picks.forEach(id => { if (id in count) count[id] += 1; }));
+      results = list.filter(w => !w.excluded).map(w => ({ id: w.id, votes: count[w.id] }))
+        .sort((a, b) => b.votes - a.votes);
+      // 같은 득표는 같은 순위
+      results.forEach((r, i) => { r.rank = i && r.votes === results[i - 1].votes ? results[i - 1].rank : i + 1; });
+    }
+    return send(res, 200, {
+      flags: f, picks: R.PICKS, tracks: R.TRACKS,
+      people: Object.keys(people).length, voted: Object.keys(votes).length,
+      works: list, results, updatedAt: Date.now()
+    });
+  } catch (error) {
+    return fail(res, error);
+  }
+}
+
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') return send(res, 405, { error: 'POST로만 받습니다.' });
+  if (req.method === 'GET') return board(req, res);
+  if (req.method !== 'POST') return send(res, 405, { error: 'GET 또는 POST로만 받습니다.' });
   try {
     const b = readBody(req);
     const action = String(b.action || '');
@@ -55,7 +91,7 @@ module.exports = async (req, res) => {
       const title = R.clean(b.title, 40), intro = R.clean(b.intro, 120), url = R.validUrl(b.url);
       const track = R.TRACKS[b.track] ? String(b.track) : '';
       if (!title) return send(res, 400, { error: '도구 이름을 적어 주세요.' });
-      if (!url) return send(res, 400, { error: '배포 주소를 https:// 로 시작하는 전체 주소로 적어 주세요. 예) https://gear-check-hong.netlify.app' });
+      if (!url) return send(res, 400, { error: '배포 주소를 https:// 로 시작하는 전체 주소로 적어 주세요. 예) https://gear-check-hong.vercel.app' });
       if (!intro) return send(res, 400, { error: '한 줄 소개를 적어 주세요.' });
       if (!track) return send(res, 400, { error: '트랙(DB / API / 다듬기)을 골라 주세요.' });
       const old = (await redis([['HGET', R.WORKS, who.id]]))[0];

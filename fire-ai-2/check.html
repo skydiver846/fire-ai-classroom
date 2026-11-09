@@ -82,7 +82,7 @@
 
     <section aria-labelledby="s3">
       <h2 id="s3">3단계 (선택): 공공데이터 API 직접 불러 보기</h2>
-      <p class="muted">공공데이터 API는 서버(Netlify 함수)가 부르므로 수업에서는 행정망 영향을 받지 않습니다. 사전 학습 연구 B처럼 <b>내 브라우저 주소창에서</b> 불러 볼 때만 이 PC를 거칩니다. 승인된 에어코리아 서비스 키(Decoding)를 넣고 버튼을 누르면 새 탭에서 결과가 열립니다. 키는 이 페이지 밖으로 보내지 않습니다.</p>
+      <p class="muted">공공데이터 API는 서버(Vercel 함수)가 부르므로 수업에서는 행정망 영향을 받지 않습니다. 사전 학습 연구 B처럼 <b>내 브라우저 주소창에서</b> 불러 볼 때만 이 PC를 거칩니다. 승인된 에어코리아 서비스 키(Decoding)를 넣고 버튼을 누르면 새 탭에서 결과가 열립니다. 키는 이 페이지 밖으로 보내지 않습니다.</p>
       <label for="key">서비스 키 (일반 인증키 Decoding)</label>
       <input id="key" type="password" autocomplete="off">
       <button type="button" id="apitest">새 탭에서 서울 대기질 불러오기</button>
@@ -98,17 +98,18 @@
   <script type="module">
     const FB = "10.12.2";
     const TARGETS = [
-      { g: "공통", use: "교안 공모 · 투표 서버", url: "/api/fire-contest/board", json: true, key: "contest" },
+      { g: "공통", use: "교안 공모 · 투표 서버", url: "/api/fire-contest/act", json: true, key: "contest" },
       { g: "공통", use: "GitHub (저장소 · 결재)", url: "https://github.com/", key: "github" },
       { g: "공통", use: "Claude Code (웹)", url: "https://claude.ai/code", manual: true },
-      { g: "공통", use: "Netlify (배포 관리)", url: "https://app.netlify.com/", key: "netlify" },
-      { g: "공통", use: "내 화면 주소 (*.netlify.app)", url: "https://netlify.app/", key: "netlifyapp" },
+      { g: "공통", use: "Vercel (배포 관리)", url: "https://vercel.com/", key: "vercel" },
+      { g: "공통", use: "내 화면 주소 (*.vercel.app)", url: "https://fire-ai-classroom.vercel.app/", key: "vercelapp" },
       { g: "DB", use: "Firebase 콘솔", url: "https://console.firebase.google.com/", key: "console" },
       { g: "DB", use: "Firebase 프로그램 (gstatic)", url: `https://www.gstatic.com/firebasejs/${FB}/firebase-firestore.js`, sdk: true, key: "sdk" },
       { g: "DB", use: "Firestore 서버 (공용 장부)", url: "https://firestore.googleapis.com/v1/projects/jg-sobang-netcheck/databases/(default)/documents/x/y", firestore: true, key: "firestore" },
       { g: "API", use: "공공데이터포털 (가입 · 활용신청)", url: "https://www.data.go.kr/", key: "datagokr" },
       { g: "API", use: "공공데이터 API 서버", url: "https://apis.data.go.kr/", key: "apis" },
       { g: "API", use: "에어코리아 (값 대조)", url: "https://www.airkorea.or.kr/", key: "airkorea" },
+      { g: "API", use: "강사 공용 대기질 주소", url: "/api/air?sido=서울", json: true, key: "air" },
     ];
     const LABEL = { wait: "확인 중…", open: "열림", ok: "응답 확인", blocked: "막힘", slow: "응답 없음", manual: "직접 확인" };
     const results = {};
@@ -161,12 +162,12 @@
     function summarize() {
       const box = $("summary"); box.textContent = "";
       const line = (text, cls) => { const p = document.createElement("p"); p.textContent = text; if (cls) p.className = cls; box.append(p); };
-      const common = ["contest", "github", "netlify", "netlifyapp"].filter((k) => !good(k));
+      const common = ["contest", "github", "vercel", "vercelapp"].filter((k) => !good(k));
       const db = ["console", "sdk", "firestore"].filter((k) => !good(k));
       const api = ["datagokr", "apis"].filter((k) => !good(k));
       const name = (k) => TARGETS.find((t) => t.key === k).use;
 
-      if (!common.length) line("공통: 공모 · 투표, GitHub, Netlify, 내 화면 주소 모두 됩니다.", "open");
+      if (!common.length) line("공통: 공모 · 투표, GitHub, Vercel, 내 화면 주소 모두 됩니다.", "open");
       else line("공통: 막힌 곳 — " + common.map(name).join(", ") + ". 수업 진행에 꼭 필요하니 전산 담당자에게 강의 시간 동안 허용을 요청하세요.", "blocked");
 
       if (!db.length) {
@@ -175,9 +176,10 @@
         else line("DB 트랙: Firebase 서버와 통신이 됩니다. 실시간 목록까지 확실히 하려면 2단계를 해 보세요.", "open");
       } else line("DB 트랙: 막힌 곳 — " + db.map(name).join(", ") + ". 강의장 PC에서는 Firebase 연결이 안 됩니다. 콘솔 작업은 휴대폰이나 집 PC, 검증은 휴대폰 LTE로 하거나 전산 담당자에게 허용을 요청하세요(firebase.google.com, gstatic.com, firestore.googleapis.com).", "blocked");
 
-      if (!api.length) line("API 트랙: 공공데이터포털과 API 서버에 닿습니다. 수업 방식(Netlify 서버 함수가 부름)은 행정망과 관계없이 됩니다.", "open");
-      else line("API 트랙: 막힌 곳 — " + api.map(name).join(", ") + ". 수업 방식(Netlify 서버 함수)은 서버끼리 부르므로 그래도 됩니다. 다만 활용신청 · 주소창 시험은 다른 망에서 해야 합니다.", "blocked");
+      if (!api.length) line("API 트랙: 공공데이터포털과 API 서버에 닿습니다. 수업 방식(Vercel 서버 함수가 부름)은 행정망과 관계없이 됩니다.", "open");
+      else line("API 트랙: 막힌 곳 — " + api.map(name).join(", ") + ". 수업 방식(Vercel 서버 함수)은 서버끼리 부르므로 그래도 됩니다. 다만 활용신청 · 주소창 시험은 다른 망에서 해야 합니다.", "blocked");
 
+      if (results.air && !good("air")) line("강사 공용 대기질 주소(/api/air)가 답하지 않습니다. 강사가 Vercel 환경 변수 DATA_GO_KR_KEY 를 넣고 다시 배포했는지, 서비스 키 승인이 반영됐는지 확인하세요.", "blocked");
       line("Claude Code는 자동 확인이 안 됩니다. 표의 주소를 눌러 화면이 열리는지 직접 보세요.");
     }
 
