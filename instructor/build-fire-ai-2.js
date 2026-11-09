@@ -39,6 +39,8 @@ const CONTENT = PAGES.filter(p => p.file !== 'index.html');
 // ── 마크다운 → 1차와 같은 본문 HTML
 function render(md) {
   // "## 단계 …(N분)" 과 "## 🛠 …" 절은 "✋ 실습" 상자로 감싼다 (1차의 section.do)
+  // 인용 상자 안의 줄(> 🎯 목표 / > 📌 복습 / > ⏭ 끝나면 …)이 한 문단으로 붙지 않게 줄마다 나눈다
+  md = md.replace(/^(>[ \t]*\S[^\n]*)\n(?=>[ \t]*\S)/gm, '$1\n>\n');
   const chunks = md.split(/\n(?=## )/);
   return chunks.map(c => {
     let h = marked.parse(c, { gfm: true });
@@ -48,7 +50,7 @@ function render(md) {
     // 실습 절: 교안의 "단계 N", "🛠 다듬기", 사전 학습의 "⑤ 실습 A", "⑥ 실습 B". 제목 끝 "(…N분)"의 N을 시간으로
     const head = (c.match(/^## [^\n]*/) || [''])[0];
     const min = (head.match(/(\d+)분\)\s*$/) || [])[1];
-    if (min && /^## (단계 \d+\.|🛠|[⑤⑥] 실습)/.test(head)) h = `<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 ${min}분 · 혼자 해 보는 부분</p>${h}</section>`;
+    if (min && /^## (단계 \d+\.|🛠|[①④⑤] )/.test(head)) h = `<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 ${min}분 · 혼자 해 보는 부분</p>${h}</section>`;
     return h;
   }).join('\n');
 }
@@ -109,7 +111,7 @@ const home = `
   <p class="note"><b>11. 18.(수) 13:00~17:00</b> · 교육훈련관 2층 정보화교육장 · 1차 교육생 대상 (별도 신청 없음)</p>
   <h2>수업 전 · 사전 학습</h2>
   <ol class="mods">${mod('prework.html', '11. 16.~17.')}</ol>
-  <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 점검, 웹 서비스의 뿌리 읽기, 1차 화면에 데이터베이스 · 공공데이터 API 붙여 보기(필수)를 한 장에 정리했습니다. 약 3시간.</p>
+  <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 준비, 웹 서비스의 뿌리 핵심 읽기, 1차 화면에 데이터베이스 · 공공데이터 API 붙여 보기(필수)를 한 장에 정리했습니다. 약 2시간 40분.</p>
   <h2>수업 (4교시) · 혼자 해 보는 날</h2>
   <ol class="mods">${mod('flow.html', '시작 전 10분')}${mod('s1.html', '13:00')}${mod('s2.html', '14:00')}${mod('s3.html', '15:00')}${mod('s4.html', '16:00')}</ol>
   <p class="note">오늘은 강사가 시범을 보이지 않습니다. <b>이 교안이 교재</b>입니다. 막히면 ① 각 단계의 "막히면" 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>

@@ -25,69 +25,119 @@
   <main>
     <article><header class="hero"><span class="hero-no">1</span><div class="hero-body"><p class="eyebrow">1교시 · 13:00~13:50</p><h1>PRD 쓰기</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 3번째"><span style="width:42.9%"></span></div><span class="prog-t">3 / 7</span></div></div></header>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 5분 · 혼자 해 보는 부분</p><h2>단계 0. 준비 (5분)</h2>
-<ul>
-<li><input type="checkbox"> 업무 Chrome 프로필에서 <strong>github.com</strong>, <strong>claude.ai/code</strong>, <strong>vercel.com</strong> 세 곳에 로그인돼 있다 (Vercel은 1차처럼 [Continue with GitHub])</li>
-<li><input type="checkbox"> 교안 <strong><a href="contest.html">공모 · 투표</a></strong> 페이지 1번에서 <strong>참가 등록</strong>을 했다 (이름 · 소속 · 비밀번호 숫자 4자리. 제출과 투표에 다시 씁니다)</li>
-<li><input type="checkbox"> 오늘 만들 <strong>주제 한 가지</strong>와 <strong>트랙(DB / API / 다듬기)</strong> 을 정했다 (아래 표 참고)</li>
-<li><input type="checkbox"> (API 트랙) 공공데이터포털 활용신청이 <strong>승인</strong>됐는지 확인했다. 승인 안 됐어도 괜찮습니다. 강사 공용 주소를 씁니다(단계 5)</li>
-</ul>
+<blockquote>
+<p>🎯 <strong>목표</strong>: 오늘 쓸 곳에 모두 로그인하고, 공모에 참가 등록한다.</p>
+<p>⏭ <strong>끝나면</strong>: 단계 1 PRD 쓰기</p>
+</blockquote>
+<h3>0-1. 탭 다섯 개 열어 두기</h3>
+<p>업무 Chrome 프로필에서 아래를 <strong>각각 새 탭</strong>으로 엽니다. 오늘 내내 이 탭들을 오가며 작업합니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
-<th>주제 예</th>
-<th>트랙</th>
-<th>화면</th>
+<th>탭</th>
+<th>주소</th>
+<th>이렇게 보이면 됨</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>교육 장비 점검표</td>
-<td>DB</td>
-<td>교관 여럿이 같은 목록에 점검 체크, 미점검 장비 강조</td>
+<td>① 교안</td>
+<td><a target="_blank" rel="noopener" href="http://www.jg-sobang.com/fire-ai-2">www.jg-sobang.com/fire-ai-2</a></td>
+<td>지금 보는 이 화면</td>
 </tr>
 <tr>
-<td>교육생 질문 모음</td>
-<td>DB</td>
-<td>질문을 남기고, 답한 질문은 &quot;답변함&quot; 표시</td>
+<td>② Claude (일반 대화)</td>
+<td>claude.ai</td>
+<td>새 대화 입력창 (1교시 PRD 인터뷰용)</td>
 </tr>
 <tr>
-<td>강의실 사용 현황</td>
-<td>DB</td>
-<td>오늘 누가 어느 강의실을 쓰는지 함께 적기</td>
+<td>③ Claude Code</td>
+<td>claude.ai/code</td>
+<td>저장소를 고르는 화면 (2교시부터)</td>
 </tr>
 <tr>
-<td>야외 훈련 가능 여부</td>
-<td>API</td>
-<td>오늘 미세먼지로 &quot;훈련 가능 / 주의 / 실내 전환&quot; 표시</td>
+<td>④ GitHub</td>
+<td>github.com</td>
+<td>오른쪽 위 내 프로필 사진</td>
 </tr>
 <tr>
-<td>훈련장 날씨 한눈에</td>
-<td>API</td>
-<td>오늘 기온·강수확률과 준비물 안내</td>
+<td>⑤ Vercel</td>
+<td>vercel.com → [Continue with GitHub]</td>
+<td>대시보드에 1차 프로젝트</td>
 </tr>
 </tbody></table></div>
-<blockquote>
-<p>💡 실제 이름·전화번호·내부 자료는 넣지 않습니다. 배포한 주소는 누구나 열 수 있습니다.</p>
-</blockquote>
+<p>사전 학습에서 만든 <strong><code>공공데이터 메모.txt</code></strong> 도 메모장으로 열어 둡니다(서비스 키 · firebaseConfig).</p>
+<h3>0-2. 공모 참가 등록 (2분)</h3>
+<ol>
+<li>교안 왼쪽 목차 <strong><a href="contest.html">공모 · 투표</a></strong> → <strong>1. 참가 등록 · 이어서 하기</strong></li>
+<li><strong>처음이면: 참가 등록</strong> 칸에 이름 · 소속 · <strong>비밀번호(숫자 4자리)</strong> → [등록하기]</li>
+<li>초록 글씨 &quot;등록했습니다&quot;와 &quot;○○ 님으로 이어서 하는 중입니다&quot;가 보이면 됩니다. 비밀번호는 수첩에 적어 둡니다(제출 · 투표에 다시 씀)</li>
+</ol>
+<h3>0-3. 오늘의 주제와 트랙 정하기 (2분)</h3>
+<p>사전 학습 ⑥에서 정해 온 주제를 한 줄로 적고, 3교시에 붙일 <strong>트랙</strong>을 고릅니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>트랙</th>
+<th>고르면 좋을 때</th>
+<th>3교시에 하는 일</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🗂 <strong>DB</strong></td>
+<td>여러 사람이 같은 목록을 보고 채우는 주제</td>
+<td>공용 장부(Firebase) 붙이기 · 가점</td>
+</tr>
+<tr>
+<td>🌤 <strong>API</strong></td>
+<td>매일 바뀌는 공공 자료가 쓸모 있는 주제, <strong>또는 주제와 관련 없어도 대기질을 한쪽에 띄워 보고 싶을 때</strong></td>
+<td>공공데이터 붙이기 · 가점</td>
+</tr>
+<tr>
+<td>🛠 <strong>다듬기</strong></td>
+<td>연동보다 완성도에 집중하고 싶을 때</td>
+<td>짝 의견으로 고치기</td>
+</tr>
+</tbody></table></div>
+<p><strong>✅ 다음으로</strong>: 탭 다섯 개가 열려 있고, 공모 페이지에 내 이름이 보이고, 주제 · 트랙을 한 줄로 말할 수 있다.</p>
 <hr>
 </section>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 30분 · 혼자 해 보는 부분</p><h2>단계 1. PRD 쓰기 (30분)</h2>
 <blockquote>
-<p>1차 복습: PRD는 &quot;무엇을, 누구를 위해, 어디까지 만들지&quot; 정한 설계 요청서. <strong>범위 밖</strong>이 없으면 AI도 사람도 일을 끝없이 키웁니다.</p>
+<p>🎯 <strong>목표</strong>: 새 저장소를 만들고, AI 인터뷰로 PRD 한 장을 완성한다.</p>
+<p>📌 1차 복습: PRD는 &quot;무엇을, 누구를 위해, 어디까지 만들지&quot; 정한 설계 요청서. <strong>범위 밖</strong>이 없으면 AI도 사람도 일을 끝없이 키웁니다.</p>
+<p>⏭ <strong>끝나면</strong>: ✅ 점검 1 (짝과 PRD 점검표 확인) → 2교시 단계 2</p>
 </blockquote>
-<p><strong>1-1. 저장소 만들기 (5분)</strong></p>
+<h3>1-1. 새 저장소 만들기 (3분) · ④ GitHub 탭</h3>
 <ol>
-<li>github.com → 오른쪽 위 [+] → [New repository]</li>
-<li>이름 <code>team-tool</code>, <strong>Private</strong>, <strong>Add a README file ✅</strong> → [Create repository]</li>
-<li>Claude에게 이 저장소 출입 권한 주기: github.com/settings/installations → Claude 옆 [Configure] → Repository access 에 <code>team-tool</code> 추가 → [Save]</li>
+<li>오른쪽 위 <strong>[+]</strong> → <strong>[New repository]</strong></li>
+<li><strong>Repository name</strong>: <code>team-tool</code></li>
+<li><strong>Private</strong> 선택</li>
+<li><strong>Add a README file</strong> ✅ 체크 (빈 저장소면 Claude Code가 작업을 시작하지 못합니다)</li>
+<li>맨 아래 <strong>[Create repository]</strong> → <code>team-tool</code> 저장소 화면에 README가 보이면 됩니다</li>
 </ol>
-<p><strong>1-2. 인터뷰 (20분)</strong>: Claude 일반 대화(claude.ai)에 아래를 붙여넣고 질문에 답합니다. 모르면 &quot;추천해 줘&quot;.</p>
+<h3>1-2. Claude에게 이 저장소 출입 권한 주기 (2분) · ④ GitHub 탭</h3>
+<ol>
+<li>주소창에 <strong>github.com/settings/installations</strong> 를 넣고 엽니다</li>
+<li>목록의 <strong>Claude</strong> 옆 <strong>[Configure]</strong></li>
+<li>아래 <strong>Repository access</strong> 에서 <strong>Select repositories</strong> → <code>team-tool</code> 을 추가 → <strong>[Save]</strong></li>
+</ol>
+<blockquote>
+<p>💡 1차 때 &quot;All repositories&quot;로 했다면 이 단계는 이미 된 것입니다.</p>
+</blockquote>
+<h3>1-3. AI 인터뷰로 PRD 쓰기 (20분) · ② Claude 탭</h3>
+<ol>
+<li>claude.ai 에서 <strong>새 대화</strong>를 엽니다 (Claude Code가 아닌 일반 대화)</li>
+<li>아래를 복사해 <code>[만들고 싶은 것]</code> 과 트랙을 내 것으로 바꿔 보냅니다</li>
+<li>질문에 하나씩 답합니다. 모르면 <strong>&quot;추천해 줘&quot;</strong></li>
+<li>다 답하면 Claude가 PRD 한 장을 정리해 줍니다</li>
+</ol>
 <pre><code>너는 경험 많은 기획자야. 나는 소방학교 교직원이고 &quot;[만들고 싶은 것]&quot;을 기획하려고 해.
 PRD를 쓰기 위해 나를 인터뷰해 줘.
 - 한 번에 질문 1~2개만 해.
 - 배경·목표·사용자·핵심 기능·화면 흐름·데이터·범위 밖·성공 기준 순서로 물어봐.
 - 데이터 방식은 [DB 트랙: 여러 사람이 함께 쓰는 공용 장부(Firebase)] / [API 트랙: 공공데이터포털 자료 읽어 오기] / [다듬기 트랙: 이 브라우저에만 저장] 중 내가 고른 것으로 해.
   DB라면 &quot;어떤 칸(이름·종류)을 저장하고, 누가 무엇을 쓰고 고칠 수 있는지&quot;를 물어봐.
-  API라면 &quot;어떤 API의 어떤 값을, 어떤 기준으로 보여 줄지&quot;를 물어봐.
+  API라면 &quot;어떤 API의 어떤 값을, 어떤 기준으로 보여 줄지&quot;를 물어봐. 주제와 관련이 적으면 화면 한쪽에 작게 보여 줘도 돼.
 - 크기는 화면 1장, 핵심 기능 3개로 줄여 줘.
 - 범위 밖에는 &quot;로그인, 실제 개인정보&quot;를 꼭 넣어 줘.
 - 성공 기준 3개는 휴대폰에서 직접 눌러 확인할 수 있는 문장으로 써 줘.
@@ -95,7 +145,12 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 - 내가 다 답하면 Markdown 형식의 PRD 한 장으로 정리해 줘.
 - 내가 말하지 않은 내용은 [확인 필요]로 표시해.
 </code></pre>
-<p><strong>1-3. 점검 (5분)</strong>: 하나라도 ❌면 Claude에게 &quot;○○를 고쳐 줘&quot;. 끝나면 짝과 서로 확인합니다.</p>
+<h3>1-4. 점검하고 저장하기 (5분)</h3>
+<ol>
+<li>아래 표로 PRD를 점검합니다. 하나라도 ❌면 Claude에게 &quot;○○를 고쳐 줘&quot;</li>
+<li>PRD 전체를 복사해 메모장에 붙여 <strong><code>PRD.md</code></strong> 로 저장합니다 (단계 2에서 통째로 붙여넣음)</li>
+<li>짝과 서로 표를 확인합니다</li>
+</ol>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -124,7 +179,7 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>□</td>
 </tr>
 </tbody></table></div>
-<p>PRD를 메모장이나 옵시디언에 저장해 둡니다. 다음 단계에서 통째로 복사합니다.</p>
+<p><strong>✅ 다음으로</strong>: <code>team-tool</code> 저장소가 있고, 점검표가 모두 □→✅ 인 PRD가 메모장에 저장돼 있다. <strong>✅ 점검 1 (1교시 끝)</strong></p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -140,8 +195,11 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <td>트랙을 못 고르겠음</td>
 <td>&quot;내 주제에는 DB와 API 중 무엇이 더 쓸모 있을지 한 줄씩 비교해 줘&quot;</td>
 </tr>
+<tr>
+<td>installations 화면에 Claude가 없음</td>
+<td>1차와 다른 GitHub 계정으로 로그인한 것. 오른쪽 위 프로필에서 계정 확인</td>
+</tr>
 </tbody></table></div>
-<p>✅ <strong>점검 1 (1교시 끝)</strong></p>
 <hr>
 </section></article>
     <div class="pager"><a class="prev" href="flow.html"><span>← 이전</span>오늘 만드는 것: 흐름도와 식당 지도</a><a class="next" href="s2.html"><span>다음 →</span>화면 시안 v0.1 만들고 배포하기</a></div>

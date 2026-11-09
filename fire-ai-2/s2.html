@@ -26,9 +26,17 @@
     <article><header class="hero"><span class="hero-no">2</span><div class="hero-body"><p class="eyebrow">2교시 · 14:00~14:50</p><h1>화면 시안 v0.1 만들고 배포하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 4번째"><span style="width:57.1%"></span></div><span class="prog-t">4 / 7</span></div></div></header>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 혼자 해 보는 부분</p><h2>단계 2. 계획 받기 (10분)</h2>
 <blockquote>
-<p>1차 복습: 바로 만들게 하지 않고 <strong>계획부터</strong> 받습니다. 계획 단계에서 잘못을 찾으면 1분, 다 만든 뒤면 10분.</p>
+<p>🎯 <strong>목표</strong>: PRD를 저장소에 저장하고, AI에게 <strong>만들기 전에 계획부터</strong> 받는다.</p>
+<p>📌 1차 복습: 계획 단계에서 잘못을 찾으면 1분, 다 만든 뒤면 10분.</p>
+<p>⏭ <strong>끝나면</strong>: 단계 3 (계획 승인 → 만들기)</p>
 </blockquote>
-<p>claude.ai/code → 저장소 <strong><code>team-tool</code></strong> 선택 → 아래 칸에 PRD를 붙여넣어 보냅니다.</p>
+<h3>2-1. Claude Code에서 저장소 고르기 · ③ Claude Code 탭</h3>
+<ol>
+<li><strong>claude.ai/code</strong> 화면의 입력창 근처에서 저장소를 고르는 칸을 눌러 <strong><code>team-tool</code></strong> 을 고릅니다 (1차의 <code>my-tool</code> 이 아닌지 꼭 확인)</li>
+<li>새 대화(세션)가 <code>team-tool</code> 로 시작되면 됩니다</li>
+</ol>
+<h3>2-2. PRD 붙여 계획 요청하기</h3>
+<p>아래를 복사해 맨 아래 <code>[여기에 PRD 붙여넣기]</code> 자리에 메모장의 PRD를 통째로 붙여 보냅니다.</p>
 <pre><code>아래 PRD를 저장소에 PRD.md 로 저장하고 커밋해 줘. 그다음 바로 만들지 말고 계획만 알려 줘.
 
 이번 v0.1의 약속:
@@ -52,7 +60,14 @@
 <blockquote>
 <p>💡 <strong>왜 가짜 자료로, 함수 한곳에?</strong> 홀(화면)이 주문서를 내는 창구를 한곳으로 모아 두면, 3교시에는 그 창구의 주문 받을 곳만 수첩 → 장부(또는 우리 주방)로 바꾸면 됩니다. 화면 전체를 다시 만들지 않아 고장이 적습니다.</p>
 </blockquote>
-<p>계획을 PRD와 비교합니다. PRD에 없는 기능이 끼어 있으면 &quot;○○는 빼 줘&quot;. 답한 내용 중 중요한 것은 &quot;이 답을 PRD.md에도 반영해 줘&quot;.</p>
+<h3>2-3. 계획 확인하기</h3>
+<p>Claude가 PRD를 저장하고 계획을 보여 주면(1~3분) 아래를 봅니다.</p>
+<ul>
+<li><input type="checkbox"> 화면 그림과 핵심 기능 3줄이 PRD와 같다 (PRD에 없는 기능이 있으면 &quot;○○는 빼 줘&quot;)</li>
+<li><input type="checkbox"> 저장할 칸(또는 받아 올 값) 표가 PRD &quot;데이터&quot; 항목과 같다</li>
+<li><input type="checkbox"> Claude의 질문에 답했다 (중요한 답은 &quot;이 답을 PRD.md에도 반영해 줘&quot;)</li>
+</ul>
+<p><strong>✅ 다음으로</strong>: 계획이 PRD와 맞다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -62,7 +77,7 @@
 </thead>
 <tbody><tr>
 <td>저장소 목록에 <code>team-tool</code> 이 없음</td>
-<td>1-1의 3번(출입 권한)을 안 한 것</td>
+<td>1-2(출입 권한)를 안 한 것. 한 뒤 Claude Code 화면을 새로고침</td>
 </tr>
 <tr>
 <td>&quot;Claude Code isn&#39;t available&quot;</td>
@@ -72,13 +87,47 @@
 <td>PRD.md를 저장하지 않고 계획만 씀</td>
 <td>&quot;아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘&quot;</td>
 </tr>
+<tr>
+<td>붙여넣은 PRD가 잘림</td>
+<td>두 번에 나눠 보내기</td>
+</tr>
 </tbody></table></div>
 <hr>
 </section>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 20분 · 혼자 해 보는 부분</p><h2>단계 3. v0.1 만들기와 검토 (20분)</h2>
-<p>계획이 마음에 들면 <strong>&quot;계획대로 만들어 줘&quot;</strong>. 이것이 첫 번째 승인입니다.</p>
-<p>⏳ <strong>기다리는 동안(3~10분) 할 일</strong>: 단계 5의 &quot;준비&quot; 부분을 미리 해 둡니다. DB 트랙은 Firebase 프로젝트 만들기, API 트랙은 서비스 키 확인. 3교시가 훨씬 여유로워집니다.</p>
-<p>다 만들면 결재 전에 검토합니다. 아래를 그대로 보냅니다.</p>
+<blockquote>
+<p>🎯 <strong>목표</strong>: 계획을 승인해 v0.1을 만들게 하고, 결재 전에 <strong>검토 4문항</strong>으로 확인한다.</p>
+<p>⏭ <strong>끝나면</strong>: 단계 4 결재 · 배포</p>
+</blockquote>
+<h3>3-1. 승인하고 만들게 하기</h3>
+<ol>
+<li>같은 대화에 <strong>&quot;계획대로 만들어 줘&quot;</strong> 를 보냅니다. 이것이 첫 번째 승인입니다.</li>
+<li>화면에 Claude가 하는 일이 차례로 나옵니다: 파일 만들기(초록 줄) → 스스로 시험 → 커밋 · 푸시(연습장 브랜치에 저장)</li>
+<li>중간에 허락을 묻는 화면이 나오면 <strong>무엇을 하려는지 읽고</strong> 승인합니다. 모르는 내용이면 승인하지 말고 손을 듭니다.</li>
+</ol>
+<h3>3-2. 기다리는 동안 (3~10분): 3교시 준비 미리 하기</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>내 트랙</th>
+<th>미리 할 일</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🗂 DB</td>
+<td>단계 5의 <strong>5-DB-1 Firebase 프로젝트 만들기</strong>와 <strong>5-DB-2 장부 만들기</strong>까지</td>
+</tr>
+<tr>
+<td>🌤 API</td>
+<td><code>공공데이터 메모.txt</code> 에서 Decoding 키를 찾아 두기</td>
+</tr>
+<tr>
+<td>🛠 다듬기</td>
+<td>짝을 정하고, 짝의 PRD 성공 기준을 미리 읽어 두기</td>
+</tr>
+</tbody></table></div>
+<h3>3-3. 검토 4문항 보내기</h3>
+<p>Claude가 다 만들었다고 하면, 같은 대화에 아래를 그대로 보냅니다.</p>
 <pre><code>방금 만든 것을 결재하기 전에 확인하려고 해. 코딩을 모르는 사람에게 설명하듯 아래 표로 답해 줘.
 | 확인할 것 | 예/아니요 | 있다면 무엇인지 |
 |---|---|---|
@@ -88,7 +137,12 @@
 | 성공 기준 중 실제로 시험하지 않고 통과라고 한 것이 있나? | | |
 그리고 내가 휴대폰에서 꼭 눌러 봐야 할 곳 3군데를 알려 줘.
 </code></pre>
-<p>&quot;예&quot;가 있으면 그 줄을 옮겨 &quot;○○는 빼 줘 / 고쳐 줘&quot; → 같은 질문을 다시 보내 &quot;예&quot;가 없어질 때까지.</p>
+<h3>3-4. &quot;예&quot;가 있으면 고치기</h3>
+<ol>
+<li>&quot;예&quot;인 줄을 그대로 옮겨 고쳐 달라고 합니다. 예) &quot;카카오톡 공유 버튼은 PRD에 없으니 빼 줘&quot;</li>
+<li>고친 뒤 3-3의 질문을 <strong>한 번 더</strong> 보내 &quot;예&quot;가 없어졌는지 봅니다</li>
+</ol>
+<p><strong>✅ 다음으로</strong>: 검토표가 모두 &quot;아니요&quot;이고, 휴대폰에서 눌러 볼 곳 3군데를 메모했다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -108,36 +162,66 @@
 <td>여러 파일을 만들었음</td>
 <td>&quot;index.html 하나로 다시 만들어 줘&quot;</td>
 </tr>
+<tr>
+<td>계획 없이 바로 만들어 버림</td>
+<td>괜찮습니다. 3-3 검토를 똑같이 합니다</td>
+</tr>
 </tbody></table></div>
 <hr>
 </section>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 4. v0.1 결재하고 배포 (15분)</h2>
 <blockquote>
-<p>1차 복습: <strong>PR = 결재 요청서</strong>. Claude Code에서 [Create PR] 로 올리고, GitHub에서 [Merge] 로 결재합니다.</p>
+<p>🎯 <strong>목표</strong>: v0.1을 원본(main)에 합치고(결재), Vercel로 웹 주소를 만들어 공모에 낸다.</p>
+<p>📌 1차 복습: <strong>PR = 결재 요청서</strong>. Claude Code에서 [Create PR] 로 올리고, GitHub에서 [Merge] 로 결재합니다.</p>
+<p>⏭ <strong>끝나면</strong>: ✅ 점검 2 (공모 페이지에 v0.1 주소) → 3교시</p>
 </blockquote>
-<p><strong>4-1. 결재 (5분)</strong></p>
+<h3>4-1. 결재 올리고 결재하기 (5분) · ③ Claude Code → ④ GitHub</h3>
 <ol>
-<li>Claude Code 채팅 옆 패널의 <strong>Changes</strong> 카드 → <strong>[Create PR]</strong> (패널이 안 보이면 세션 제목 줄의 패널 아이콘 또는 ⋮)</li>
-<li>카드에 생긴 결재 요청서를 눌러 GitHub 화면 → <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong> → 보라색 Merged</li>
+<li>Claude Code 채팅 옆 패널의 <strong>Changes</strong> 카드(<code>+120 -0</code> 처럼 바뀐 줄 수가 적힌 카드)에서 <strong>[Create PR]</strong><ul>
+<li>패널이 안 보이면 화면 맨 위 세션 제목 줄의 패널 아이콘 또는 ⋮ 메뉴에서 켭니다</li>
+</ul>
+</li>
+<li>카드에 생긴 결재 요청서(PR) 제목을 누르면 GitHub 화면이 열립니다</li>
+<li>아래로 내려 초록 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong></li>
+<li>보라색 <strong>Merged</strong> 가 보이면 결재 끝</li>
 </ol>
-<p><strong>4-2. Vercel 연결 (10분, 이 저장소는 처음 한 번)</strong></p>
+<h3>4-2. Vercel에 연결해 웹 주소 만들기 (7분, 이 저장소는 처음 한 번) · ⑤ Vercel</h3>
 <ol>
-<li><strong>vercel.com</strong> → 로그인(1차처럼 [Continue with GitHub]) → 오른쪽 위 <strong>[Add New…] → [Project]</strong></li>
+<li>vercel.com 오른쪽 위 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
 <li><strong>Import Git Repository</strong> 목록에서 <code>team-tool</code> 옆 <strong>[Import]</strong><ul>
-<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → 돌아와서 다시</li>
+<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → Vercel 화면으로 돌아와 다시</li>
 </ul>
 </li>
-<li><strong>Project Name</strong> 칸을 주소로 쓸 이름으로 바꿉니다. 예) <code>gear-check-hong</code> → 주소가 <code>https://gear-check-hong.vercel.app</code> 이 됩니다<ul>
-<li>Framework Preset 은 <strong>Other</strong>, 나머지 설정은 그대로</li>
+<li><strong>Configure Project</strong> 화면에서<ul>
+<li><strong>Project Name</strong>: 주소로 쓸 이름. 예) <code>gear-check-hong</code> → 주소가 <code>https://gear-check-hong.vercel.app</code></li>
+<li><strong>Framework Preset</strong>: <strong>Other</strong></li>
+<li>나머지(Root Directory, Build 설정)는 그대로</li>
 </ul>
 </li>
-<li><strong>[Deploy]</strong> → 1분쯤 뒤 축하 화면이 나오면 <strong>[Continue to Dashboard]</strong> → <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 주소를 엽니다</li>
-<li>휴대폰으로 주소를 열어 봅니다 (PC Chrome에서 오른쪽 클릭 → QR 코드 생성)</li>
+<li><strong>[Deploy]</strong> → 1분쯤 뒤 축하 화면 → <strong>[Continue to Dashboard]</strong></li>
+<li>대시보드의 <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 을 눌러 PC에서 화면이 열리는지 봅니다</li>
 </ol>
 <blockquote>
 <p>💡 이제 GitHub에서 결재(Merge)할 때마다 Vercel이 저절로 다시 배포합니다. 결재 요청서(PR)를 올리면 결재 전 <strong>미리보기(Preview) 주소</strong>도 저절로 생깁니다.</p>
 </blockquote>
-<p><strong>4-3. 교안 <a href="contest.html">공모 · 투표</a> 페이지 2번에 v0.1 주소를 제출합니다.</strong> 나중에 고친 뒤 다시 내면 덮어씁니다. ✅ <strong>점검 2 (2교시 끝)</strong></p>
+<h3>4-3. 미리보기를 휴대폰 · 짝도 볼 수 있게 열기 (1분, 권장)</h3>
+<p>Vercel의 미리보기 주소는 처음에 <strong>Vercel 로그인을 요구</strong>합니다(나만 보는 시안이라서). 3교시에 휴대폰으로 미리보기를 보려면 지금 열어 둡니다.</p>
+<ol>
+<li>프로젝트 위쪽 <strong>Settings</strong> → 왼쪽 <strong>Deployment Protection</strong></li>
+<li><strong>Vercel Authentication</strong> 을 끄고 <strong>[Save]</strong></li>
+</ol>
+<h3>4-4. 휴대폰으로 열어 보기 (1분)</h3>
+<ol>
+<li>PC Chrome에서 내 주소 화면의 빈 곳을 오른쪽 클릭 → <strong>이 페이지의 QR 코드 생성</strong></li>
+<li>휴대폰 카메라로 찍어 엽니다. 3-3에서 메모한 &quot;눌러 봐야 할 곳 3군데&quot;를 눌러 봅니다</li>
+</ol>
+<h3>4-5. 공모 페이지에 v0.1 제출 (1분) · ① 교안 탭</h3>
+<ol>
+<li><strong><a href="contest.html">공모 · 투표</a></strong> → 1번 <strong>등록했으면: 이어서 하기</strong> 에 이름 · 비밀번호 → [이어서 하기]</li>
+<li><strong>2. 산출물 제출</strong>: 도구 이름 · 배포 주소(<code>https://○○.vercel.app</code>) · 한 줄 소개 · 트랙 → <strong>[제출하기]</strong></li>
+<li>&quot;제출했습니다&quot;가 나오고 3번 <strong>함께 보기</strong>에 내 카드가 생기면 됩니다. 고친 뒤 다시 내면 덮어씁니다</li>
+</ol>
+<p><strong>✅ 다음으로</strong>: 휴대폰에서 내 주소가 열리고, 공모 페이지에 내 카드가 있다. <strong>✅ 점검 2 (2교시 끝)</strong></p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -146,7 +230,11 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>배포 주소가 Page not found</td>
+<td>[Create PR] 이 안 보임</td>
+<td>채팅 옆 패널을 켭니다. 그래도 없으면 &quot;결재 요청서(PR)를 만들어 주고 주소를 알려 줘&quot;</td>
+</tr>
+<tr>
+<td>배포 주소가 404 / Page not found</td>
 <td>&quot;index.html을 저장소 맨 위로 옮겨 줘&quot; → 결재</td>
 </tr>
 <tr>
@@ -155,11 +243,15 @@
 </tr>
 <tr>
 <td>결재했는데 화면이 그대로</td>
-<td>1~2분 뒤 새로고침. Vercel 프로젝트의 <strong>Deployments</strong> 에서 맨 위가 초록 <strong>Ready</strong> 인지 확인</td>
+<td>1~2분 뒤 새로고침. 프로젝트 <strong>Deployments</strong> 맨 위가 초록 <strong>Ready</strong> 인지 확인</td>
 </tr>
 <tr>
-<td>배포 화면에 Build Failed</td>
+<td>Build Failed</td>
 <td>Framework Preset 이 Other 인지 확인. Claude Code에 &quot;Vercel 배포가 실패했어, 빌드 없이 index.html만 배포되게 고쳐 줘&quot;</td>
+</tr>
+<tr>
+<td>공모 제출에 &quot;https:// 로 시작하는 전체 주소&quot; 오류</td>
+<td>주소창의 주소를 통째로 복사해 붙여넣기</td>
 </tr>
 </tbody></table></div>
 <hr>
