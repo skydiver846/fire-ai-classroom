@@ -97,7 +97,7 @@ function page(p, body) {
   </main>
 </div>
 <script src="assets/site.js"></script>
-<script src="assets/draw.js"></script>
+<script src="../pen/pen-core.js" data-launcher></script>
 ${p.script ? `<script src="${p.script}"></script>\n` : ''}</body>
 </html>
 `;
