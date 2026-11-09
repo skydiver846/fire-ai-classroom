@@ -469,7 +469,7 @@ main{max-width:880px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px
 <li>7단계: 두 휴대폰으로 같은 주소를 열고 한쪽에서 넣은 기록이 다른 쪽에 바로 생기는지 확인합니다.</li>
 </ol>
 <blockquote>
-<p>⚠️ 연습용 자료만 넣습니다. 결제 정보·Blaze 업그레이드 안내는 누르지 않습니다. 행정망 PC에서 저장이 안 되면 휴대폰 LTE나 집 PC로 확인합니다.</p>
+<p>⚠️ 연습용 자료만 넣습니다. 결제 정보·Blaze 업그레이드 안내는 누르지 않습니다. 강의장(행정망) PC에서도 Firebase 저장과 실시간 목록이 되는 것을 확인했습니다(11. 9.).</p>
 </blockquote>
 <p><strong>연구 메모 3줄</strong> (⑤ 폼에 붙여넣기)</p>
 <pre tabindex="0"><code>1. 내 장부 규칙을 PRD 말로 바꾸면:
@@ -941,9 +941,13 @@ PRD를 쓰기 위해 나를 인터뷰해 줘.
 <h3>🗂 DB 트랙</h3>
 <p><strong>5-1. Firebase 프로젝트와 장부 만들기 (10분)</strong></p>
 <ol>
-<li>업무 Chrome 프로필에서 <strong>console.firebase.google.com</strong> → [프로젝트 만들기] → 이름 <code>team-tool</code> → Google 애널리틱스 <strong>사용 안 함</strong> → [프로젝트 만들기]</li>
-<li>왼쪽 빌드(Build) → <strong>Firestore Database</strong> → [데이터베이스 만들기] → Standard → 위치 <strong>asia-northeast3 (서울)</strong> (나중에 못 바꿈) → <strong>프로덕션 모드</strong> → [만들기]</li>
-<li>프로젝트 개요 → <strong>&lt;/&gt;</strong> (웹) → 앱 닉네임 <code>team-tool</code> → Firebase Hosting 체크 <strong>안 함</strong> → [앱 등록]</li>
+<li>업무 Chrome 프로필에서 <strong>console.firebase.google.com</strong> → [프로젝트 만들기] → 이름 <code>team-tool</code> → &quot;Google 애널리틱스 사용 설정&quot; 스위치 <strong>끄기</strong> → [프로젝트 만들기] → [계속]
+(애널리틱스 계정을 고르는 화면이 나오면 [이전]으로 돌아가 스위치를 끕니다)</li>
+<li>왼쪽 <strong>제품 카테고리 → 데이터베이스 및 스토리지 → Firestore</strong> → [데이터베이스 만들기]<ul>
+<li>① 버전 선택: <strong>Standard</strong> → ② 위치: <strong>asia-northeast3 (Seoul)</strong> (나중에 못 바꿈) → ③ 구성: <strong>프로덕션 모드</strong> → ④ 예약된 백업: 하지 않음 → 만들기</li>
+</ul>
+</li>
+<li><strong>프로젝트 개요</strong>(집 모양) → 위쪽 <strong>[+ 앱 추가]</strong> → <strong>웹(<code>&lt;/&gt;</code>)</strong> → 앱 닉네임 <code>team-tool</code> → Firebase Hosting 체크 <strong>안 함</strong> → [앱 등록]</li>
 <li><code>const firebaseConfig = { ... };</code> 부분만 복사해 메모장에 둡니다</li>
 </ol>
 <blockquote>
@@ -1139,8 +1143,12 @@ API 정보 (활용신청 상세 화면에서 복사):
 <td>F12 → Console 에 <code>permission-denied</code> 면 규칙과 코드의 칸이 다른 것 → &quot;firestore.rules와 index.html의 칸 이름·종류가 같은지 표로 비교하고 맞춰 줘&quot;. 규칙을 고쳤으면 콘솔에 다시 붙여넣고 [게시]</td>
 </tr>
 <tr>
-<td>(DB) 강의장 PC에서만 저장 안 됨</td>
-<td>행정망이 Firebase를 막은 것. 휴대폰 LTE로 확인</td>
+<td>(DB) 위치 칸이 비어 있고 눌리지 않음</td>
+<td>① 버전 선택의 연필을 눌러 Standard를 다시 고르고 [다음], 그래도 안 되면 창을 닫고 F5 후 처음부터. 10초쯤 기다리면 켜지기도 함</td>
+</tr>
+<tr>
+<td>(DB) 오른쪽에 Gemini 창이 열림</td>
+<td>쓰지 않으니 닫아도 됨</td>
 </tr>
 <tr>
 <td>(DB) &quot;The query requires an index&quot;</td>
