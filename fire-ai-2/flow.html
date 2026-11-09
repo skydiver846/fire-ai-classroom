@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>오늘 만드는 것: 흐름도와 식당 지도 · 생성형 AI 활용능력 향상교육 2차</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="masthead">
+  <button type="button" id="menu" aria-label="목차 열기">☰</button>
+  <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육 · 과정 마무리</small><strong>생성형 AI 활용능력 향상교육 2차</strong></span></a>
+  <span class="when">11. 18.(수) 13:00~17:00 · 교육훈련관 2층 정보화교육장</span>
+</header>
+<div class="app">
+  <aside class="side" id="side">
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html" aria-current="page"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
+    <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
+  </nav>
+  </aside>
+  <main>
+    <article><header class="hero"><span class="hero-no">▶</span><div class="hero-body"><p class="eyebrow">1교시 시작 전 · 설명 ①</p><h1>오늘 만드는 것: 흐름도와 식당 지도</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 2번째"><span style="width:28.6%"></span></div><span class="prog-t">2 / 7</span></div></div></header>
+<blockquote>
+<p>오늘은 강사가 시범을 보이지 않습니다. <strong>이 실습지가 교재입니다.</strong> 위에서부터 혼자 따라가세요.
+막히면 ① 각 단계의 &quot;막히면&quot; 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>
+</blockquote>
+
+<h2>오늘 만드는 것</h2>
+<p>오늘은 1차 교육생이 함께 <strong>과정을 마무리하는 날</strong>입니다. 1차에서 따라 해 본 흐름을 혼자 끝까지 해 보고, 각자 만든 도구를 나누고 시상하며 마칩니다.</p>
+<p>1차에서는 화면을 만들었지만, 기록이 <strong>내 휴대폰에만</strong> 남았습니다. 오늘은 거기서 한 걸음 더 갑니다.</p>
+<h3>오늘의 흐름도</h3>
+<pre><code class="language-그림"> 📢 설명 ① 식당 지도 (1교시 시작)
+   │
+ ① PRD ─ 데이터 항목에서 트랙 고르기 (DB / API / 다듬기)                ← 1교시 · 단계 0~1
+   │
+ ② 계획·승인 ─▶ ③ 화면 v0.1 (가짜 자료) ─▶ ④ 검토·결재 ─▶ ⑤ 자동 배포·휴대폰   ← 2교시 · 단계 2~4 (1차와 같은 길)
+   │
+ 📢 설명 ② 열쇠와 규칙 (3교시 시작)
+   │
+ ⑥ 준비(사람) ─┬─ DB : Firebase 장부 만들기                              ← 3교시 · 단계 5
+               ├─ API: 서비스 키를 Vercel 금고(환경 변수)에
+               └─ 다듬기: 짝에게 v0.1을 써 보게 하고 고칠 점 3가지 (가점 없음)
+ ⑦ 연결(AI)  ─┬─ DB : 장부 규칙 → 내가 읽고 게시, 화면이 장부에 기록      ← 단계 6
+               └─ API: 우리 주방(서버 함수)이 공공데이터포털에 주문
+ ⑧ 미리보기 검증 ──✕──▶ ⑦로                                              ← 단계 7
+   │ ○
+ ⑨ 결재·자동 배포 (v0.2) ─▶ ⑩ 짝 검증·정리 (v0.3) ─▶ 🏆 투표·시상          ← 4교시 · 단계 8~9
+</code></pre>
+<h3>식당 지도: 오늘 만드는 것은 어디인가</h3>
+<p>사전 학습에서 본 것처럼 웹 서비스를 식당 하나로 봅니다. 홀 = 화면, 주문서 = API, 주방 = 백엔드, 장부 = 데이터베이스, 개업 = 배포.</p>
+<pre><code class="language-그림"> 1차     [홀: index.html] ── 손님이 각자 [수첩: localStorage] 에 적음 → 짝 휴대폰엔 안 보임
+
+ DB 트랙  [홀] ══주문서══▶ [공용 장부: Firebase] + [장부 규칙: 누가 보고·쓰고·고치나]
+                            우리가 함께 쓰는 &quot;우리 장부&quot;
+
+ API 트랙 [홀] ══주문서══▶ [우리 주방: 서버 함수] ══주문서══▶ [거래처: 공공데이터포털]
+                            [금고: 환경 변수] 에 거래처 출입증(서비스 키)
+                            기관이 관리하는 &quot;남의 장부&quot;를 읽기만
+</code></pre>
+<blockquote>
+<p>💡 두 트랙 모두 화면이 주문서(API)를 보냅니다. 차이는 <strong>누구의 장부냐</strong>입니다.</p>
+</blockquote>
+<p>v0.2에서 둘 중 하나를 붙이면 <strong>가점(최대 +15)</strong> 이 있습니다. 사전 학습의 &quot;선택 연구&quot;를 해 왔다면 도전해 보세요.
+붙이지 않고 <strong>🛠 다듬기 트랙</strong>(기록은 1차처럼 이 휴대폰에만, 대신 짝 의견으로 완성도 높이기)으로 가도 됩니다. 기본 100점은 세 트랙 모두 같습니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>🗂 DB 트랙: 함께 쓰는 장부</th>
+<th>🌤 API 트랙: 살아 있는 자료</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>무엇</td>
+<td>여러 사람이 같은 기록을 보고 채움</td>
+<td>공공데이터포털의 최신 자료를 화면에 보여 줌</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>Firebase (구글 계정으로 바로)</td>
+<td>공공데이터포털 + Vercel 서버 함수</td>
+</tr>
+<tr>
+<td>이런 주제에</td>
+<td>장비 점검표, 질문 모음, 행사 신청 현황</td>
+<td>야외 훈련 가능 여부(대기질·날씨), 화재 통계 현황</td>
+</tr>
+<tr>
+<td>지키는 것</td>
+<td><strong>장부 규칙</strong>: 누가 무엇을 쓸 수 있나</td>
+<td><strong>서비스 키</strong>: 비밀번호처럼 숨김</td>
+</tr>
+<tr>
+<td>식당으로 치면</td>
+<td>우리 장부</td>
+<td>거래처(남의 장부)에 우리 주방이 주문</td>
+</tr>
+</tbody></table></div>
+<blockquote>
+<p>🛠 <strong>다듬기 트랙</strong>: 데이터 연동 없이, 3교시에 짝에게 v0.1을 써 보게 하고 고칠 점 3가지를 반영합니다. 단계 5·6 대신 &quot;다듬기 v0.2&quot;를 합니다.</p>
+</blockquote>
+
+<h2>시간표</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>시각</th>
+<th>단계</th>
+<th>✅ 점검 (다 같이 확인)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1교시</td>
+<td>(설명 ① 10분) · 0 준비 · 1 PRD 쓰기</td>
+<td>1교시 끝: PRD 점검표 짝 확인</td>
+</tr>
+<tr>
+<td>2교시</td>
+<td>2 계획 받기 · 3 v0.1 만들기 · 4 v0.1 배포</td>
+<td>2교시 끝: [공모 · 투표] 페이지에 v0.1 주소 제출</td>
+</tr>
+<tr>
+<td>3교시</td>
+<td>(설명 ② 5분) · 5 자료 붙일 준비 · 6 v0.2 만들기 · 7 v0.2 검증</td>
+<td>3교시 끝: v0.2 결재</td>
+</tr>
+<tr>
+<td>4교시</td>
+<td>8 짝 검증 · 9 마무리 · 투표</td>
+<td><strong>4교시 20분: 제출 마감</strong></td>
+</tr>
+</tbody></table></div>
+<p><strong>최소 목표</strong>: 시간이 모자라면 v0.1 배포 주소만 있어도 투표에 참여할 수 있습니다. 점검 시각에 늦었으면 그 단계는 &quot;최소&quot;만 하고 다음으로 갑니다.</p>
+<hr>
+</article>
+    <div class="pager"><a class="prev" href="prework.html"><span>← 이전</span>2차 교육 사전 학습</a><a class="next" href="s1.html"><span>다음 →</span>PRD 쓰기</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

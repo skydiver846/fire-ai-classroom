@@ -184,6 +184,6 @@
   loadBoard();
   // 탭이 보이는 동안 20초마다 새로 고침 (다른 사람 제출·투표 현황)
   setInterval(function () {
-    if (document.visibilityState === 'visible' && location.hash === '#contest') loadBoard();
+    if (document.visibilityState === 'visible') loadBoard();
   }, 20000);
 })();

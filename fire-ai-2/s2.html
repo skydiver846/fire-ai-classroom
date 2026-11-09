@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>화면 시안 v0.1 만들고 배포하기 · 생성형 AI 활용능력 향상교육 2차</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="masthead">
+  <button type="button" id="menu" aria-label="목차 열기">☰</button>
+  <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육 · 과정 마무리</small><strong>생성형 AI 활용능력 향상교육 2차</strong></span></a>
+  <span class="when">11. 18.(수) 13:00~17:00 · 교육훈련관 2층 정보화교육장</span>
+</header>
+<div class="app">
+  <aside class="side" id="side">
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html" aria-current="page"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
+    <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
+  </nav>
+  </aside>
+  <main>
+    <article><header class="hero"><span class="hero-no">2</span><div class="hero-body"><p class="eyebrow">2교시 · 14:00~14:50</p><h1>화면 시안 v0.1 만들고 배포하기</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 4번째"><span style="width:57.1%"></span></div><span class="prog-t">4 / 7</span></div></div></header>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 혼자 해 보는 부분</p><h2>단계 2. 계획 받기 (10분)</h2>
+<blockquote>
+<p>1차 복습: 바로 만들게 하지 않고 <strong>계획부터</strong> 받습니다. 계획 단계에서 잘못을 찾으면 1분, 다 만든 뒤면 10분.</p>
+</blockquote>
+<p>claude.ai/code → 저장소 <strong><code>team-tool</code></strong> 선택 → 아래 칸에 PRD를 붙여넣어 보냅니다.</p>
+<pre><code>아래 PRD를 저장소에 PRD.md 로 저장하고 커밋해 줘. 그다음 바로 만들지 말고 계획만 알려 줘.
+
+이번 v0.1의 약속:
+- 화면은 index.html 하나로 만들어 줘. 휴대폰에서 잘 보이게.
+- 데이터는 아직 진짜로 연결하지 않아.
+  · DB 트랙이면: 기록을 이 브라우저(localStorage)에 저장하되, 저장·불러오기 코드를 함수 몇 개로 한곳에 모아 줘.
+    다음 단계에서 그 부분만 공용 장부(Firestore)로 바꿀 거야.
+  · 다듬기 트랙이면: 기록을 이 브라우저(localStorage)에만 저장해 줘.
+  · API 트랙이면: 진짜 자료 대신 &quot;예시 자료&quot;를 넣고 화면에 &quot;예시 자료&quot;라고 표시해 줘.
+    자료를 받아 오는 코드는 함수 하나로 모아 줘. 다음 단계에서 그 함수만 진짜 주소로 바꿀 거야.
+- 외부 사이트에서 무언가를 불러오지 마.
+
+계획에는 이것만 알려 줘:
+1. 화면 그림 (글자로 대충)
+2. 핵심 기능 3줄
+3. 저장할 칸(또는 받아 올 값)의 이름과 종류 표
+4. 나에게 확인할 질문
+
+[여기에 PRD 붙여넣기]
+</code></pre>
+<blockquote>
+<p>💡 <strong>왜 가짜 자료로, 함수 한곳에?</strong> 홀(화면)이 주문서를 내는 창구를 한곳으로 모아 두면, 3교시에는 그 창구의 주문 받을 곳만 수첩 → 장부(또는 우리 주방)로 바꾸면 됩니다. 화면 전체를 다시 만들지 않아 고장이 적습니다.</p>
+</blockquote>
+<p>계획을 PRD와 비교합니다. PRD에 없는 기능이 끼어 있으면 &quot;○○는 빼 줘&quot;. 답한 내용 중 중요한 것은 &quot;이 답을 PRD.md에도 반영해 줘&quot;.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>막히면</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>저장소 목록에 <code>team-tool</code> 이 없음</td>
+<td>1-1의 3번(출입 권한)을 안 한 것</td>
+</tr>
+<tr>
+<td>&quot;Claude Code isn&#39;t available&quot;</td>
+<td>왼쪽 아래가 Team 계정인지 확인 → Switch organization</td>
+</tr>
+<tr>
+<td>PRD.md를 저장하지 않고 계획만 씀</td>
+<td>&quot;아까 붙여넣은 PRD를 PRD.md로 저장하고 커밋해 줘&quot;</td>
+</tr>
+</tbody></table></div>
+<hr>
+</section>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 20분 · 혼자 해 보는 부분</p><h2>단계 3. v0.1 만들기와 검토 (20분)</h2>
+<p>계획이 마음에 들면 <strong>&quot;계획대로 만들어 줘&quot;</strong>. 이것이 첫 번째 승인입니다.</p>
+<p>⏳ <strong>기다리는 동안(3~10분) 할 일</strong>: 단계 5의 &quot;준비&quot; 부분을 미리 해 둡니다. DB 트랙은 Firebase 프로젝트 만들기, API 트랙은 서비스 키 확인. 3교시가 훨씬 여유로워집니다.</p>
+<p>다 만들면 결재 전에 검토합니다. 아래를 그대로 보냅니다.</p>
+<pre><code>방금 만든 것을 결재하기 전에 확인하려고 해. 코딩을 모르는 사람에게 설명하듯 아래 표로 답해 줘.
+| 확인할 것 | 예/아니요 | 있다면 무엇인지 |
+|---|---|---|
+| PRD에 없는 기능을 넣은 것이 있나? | | |
+| 다른 사이트(외부 주소)에서 불러오거나 보내는 것이 있나? | | |
+| 실제 사람 이름·전화번호·주소처럼 보이는 것이 있나? | | |
+| 성공 기준 중 실제로 시험하지 않고 통과라고 한 것이 있나? | | |
+그리고 내가 휴대폰에서 꼭 눌러 봐야 할 곳 3군데를 알려 줘.
+</code></pre>
+<p>&quot;예&quot;가 있으면 그 줄을 옮겨 &quot;○○는 빼 줘 / 고쳐 줘&quot; → 같은 질문을 다시 보내 &quot;예&quot;가 없어질 때까지.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>막히면</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>오래 멈춘 것 같음</td>
+<td>5분은 기다림 → &quot;어디까지 했는지 알려 주고 계속해 줘&quot;</td>
+</tr>
+<tr>
+<td>사용량 한도 안내</td>
+<td>안내된 시간만큼 쉬었다가 &quot;계속해 줘&quot;</td>
+</tr>
+<tr>
+<td>여러 파일을 만들었음</td>
+<td>&quot;index.html 하나로 다시 만들어 줘&quot;</td>
+</tr>
+</tbody></table></div>
+<hr>
+</section>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 4. v0.1 결재하고 배포 (15분)</h2>
+<blockquote>
+<p>1차 복습: <strong>PR = 결재 요청서</strong>. Claude Code에서 [Create PR] 로 올리고, GitHub에서 [Merge] 로 결재합니다.</p>
+</blockquote>
+<p><strong>4-1. 결재 (5분)</strong></p>
+<ol>
+<li>Claude Code 채팅 옆 패널의 <strong>Changes</strong> 카드 → <strong>[Create PR]</strong> (패널이 안 보이면 세션 제목 줄의 패널 아이콘 또는 ⋮)</li>
+<li>카드에 생긴 결재 요청서를 눌러 GitHub 화면 → <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong> → 보라색 Merged</li>
+</ol>
+<p><strong>4-2. Vercel 연결 (10분, 이 저장소는 처음 한 번)</strong></p>
+<ol>
+<li><strong>vercel.com</strong> → 로그인(1차처럼 [Continue with GitHub]) → 오른쪽 위 <strong>[Add New…] → [Project]</strong></li>
+<li><strong>Import Git Repository</strong> 목록에서 <code>team-tool</code> 옆 <strong>[Import]</strong><ul>
+<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → 돌아와서 다시</li>
+</ul>
+</li>
+<li><strong>Project Name</strong> 칸을 주소로 쓸 이름으로 바꿉니다. 예) <code>gear-check-hong</code> → 주소가 <code>https://gear-check-hong.vercel.app</code> 이 됩니다<ul>
+<li>Framework Preset 은 <strong>Other</strong>, 나머지 설정은 그대로</li>
+</ul>
+</li>
+<li><strong>[Deploy]</strong> → 1분쯤 뒤 축하 화면이 나오면 <strong>[Continue to Dashboard]</strong> → <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 주소를 엽니다</li>
+<li>휴대폰으로 주소를 열어 봅니다 (PC Chrome에서 오른쪽 클릭 → QR 코드 생성)</li>
+</ol>
+<blockquote>
+<p>💡 이제 GitHub에서 결재(Merge)할 때마다 Vercel이 저절로 다시 배포합니다. 결재 요청서(PR)를 올리면 결재 전 <strong>미리보기(Preview) 주소</strong>도 저절로 생깁니다.</p>
+</blockquote>
+<p><strong>4-3. 교안 <a href="contest.html">공모 · 투표</a> 페이지 2번에 v0.1 주소를 제출합니다.</strong> 나중에 고친 뒤 다시 내면 덮어씁니다. ✅ <strong>점검 2 (2교시 끝)</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>막히면</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>배포 주소가 Page not found</td>
+<td>&quot;index.html을 저장소 맨 위로 옮겨 줘&quot; → 결재</td>
+</tr>
+<tr>
+<td>주소 이름이 이미 있다고 함</td>
+<td>뒤에 숫자나 이니셜. 이미 만들었으면 Settings → Domains 에서 <code>○○.vercel.app</code> 옆 [Edit]</td>
+</tr>
+<tr>
+<td>결재했는데 화면이 그대로</td>
+<td>1~2분 뒤 새로고침. Vercel 프로젝트의 <strong>Deployments</strong> 에서 맨 위가 초록 <strong>Ready</strong> 인지 확인</td>
+</tr>
+<tr>
+<td>배포 화면에 Build Failed</td>
+<td>Framework Preset 이 Other 인지 확인. Claude Code에 &quot;Vercel 배포가 실패했어, 빌드 없이 index.html만 배포되게 고쳐 줘&quot;</td>
+</tr>
+</tbody></table></div>
+<hr>
+</section></article>
+    <div class="pager"><a class="prev" href="s1.html"><span>← 이전</span>PRD 쓰기</a><a class="next" href="s3.html"><span>다음 →</span>v0.2 자료 붙이기와 검증</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

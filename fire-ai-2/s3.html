@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>v0.2 자료 붙이기와 검증 · 생성형 AI 활용능력 향상교육 2차</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="masthead">
+  <button type="button" id="menu" aria-label="목차 열기">☰</button>
+  <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육 · 과정 마무리</small><strong>생성형 AI 활용능력 향상교육 2차</strong></span></a>
+  <span class="when">11. 18.(수) 13:00~17:00 · 교육훈련관 2층 정보화교육장</span>
+</header>
+<div class="app">
+  <aside class="side" id="side">
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html" aria-current="page"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>공모</h3><a href="contest.html"><span class="n">★</span>공모 · 투표</a></div>
+    <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
+  </nav>
+  </aside>
+  <main>
+    <article><header class="hero"><span class="hero-no">3</span><div class="hero-body"><p class="eyebrow">3교시 · 15:00~15:50 · 설명 ② 열쇠와 규칙</p><h1>v0.2 자료 붙이기와 검증</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 5번째"><span style="width:71.4%"></span></div><span class="prog-t">5 / 7</span></div></div></header>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 25분 · 혼자 해 보는 부분</p><h2>🛠 다듬기 트랙: 단계 5·6 대신 (25분)</h2>
+<ol>
+<li>짝에게 v0.1 운영 주소를 휴대폰으로 <strong>설명 없이</strong> 3분 써 보게 하고, 헷갈린 곳·안 되는 곳을 받습니다. 나도 짝의 것을 써 줍니다.</li>
+<li>고칠 점 3가지를 골라 <strong>같은 Claude Code 대화</strong>에 보냅니다.</li>
+</ol>
+<pre><code>PRD.md의 성공 기준을 다시 보고, 아래 고칠 점 3가지를 고쳐 줘.
+1. (고칠 점)
+2. (고칠 점)
+3. (고칠 점)
+- 이미 저장된 기록이 지워지지 않게 저장 이름은 바꾸지 마.
+- PRD.md 맨 아래 변경 기록에 v0.2로 무엇을 고쳤는지 적어 줘.
+- 고친 뒤 성공 기준을 하나씩 시험하고 결과를 표로 알려 줘. 시험하지 못한 것은 못 했다고 적어 줘.
+</code></pre>
+<ol start="3">
+<li>단계 7로 갑니다.</li>
+</ol>
+<hr>
+</section>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 혼자 해 보는 부분</p><h2>단계 5. 자료 붙일 준비 (사람이 직접, 10분)</h2>
+<p>여기는 AI에게 맡기지 않고 <strong>내 손으로</strong> 합니다. 열쇠와 규칙은 사람이 관리합니다.</p>
+<h3>🗂 DB 트랙</h3>
+<p><strong>5-1. Firebase 프로젝트와 장부 만들기 (10분)</strong></p>
+<ol>
+<li>업무 Chrome 프로필에서 <strong>console.firebase.google.com</strong> → [프로젝트 만들기] → 이름 <code>team-tool</code> → &quot;Google 애널리틱스 사용 설정&quot; 스위치 <strong>끄기</strong> → [프로젝트 만들기] → [계속]
+(애널리틱스 계정을 고르는 화면이 나오면 [이전]으로 돌아가 스위치를 끕니다)</li>
+<li>왼쪽 <strong>제품 카테고리 → 데이터베이스 및 스토리지 → Firestore</strong> → [데이터베이스 만들기]<ul>
+<li>① 버전 선택: <strong>Standard</strong> → ② 위치: <strong>asia-northeast3 (Seoul)</strong> (나중에 못 바꿈) → ③ 구성: <strong>프로덕션 모드</strong> → ④ 예약된 백업: 하지 않음 → 만들기</li>
+</ul>
+</li>
+<li><strong>프로젝트 개요</strong>(집 모양) → 위쪽 <strong>[+ 앱 추가]</strong> → <strong>웹(<code>&lt;/&gt;</code>)</strong> → 앱 닉네임 <code>team-tool</code> → Firebase Hosting 체크 <strong>안 함</strong> → [앱 등록]</li>
+<li><code>const firebaseConfig = { ... };</code> 부분만 복사해 메모장에 둡니다</li>
+</ol>
+<blockquote>
+<p>⚠️ 결제 정보 입력·Blaze 업그레이드 안내는 누르지 않습니다. 무료(Spark)로 충분합니다.
+💡 <code>apiKey</code> 라는 이름이지만 <strong>비밀이 아닙니다</strong>. 화면 코드에 그대로 들어가는 설정값입니다. 장부를 지키는 것은 다음 단계의 <strong>규칙</strong>입니다.</p>
+</blockquote>
+<h3>🌤 API 트랙</h3>
+<p>둘 중 하나를 고릅니다.</p>
+<p><strong>(가) 내 서비스 키가 승인됨 → 우리 주방(서버 함수) 만들기</strong></p>
+<ol>
+<li>data.go.kr → 마이페이지 → 활용신청 현황 → 내 API → <strong>일반 인증키(Decoding)</strong> 복사</li>
+<li>같은 화면의 <strong>End Point</strong>와 <strong>상세기능 이름</strong>, <strong>요청 변수 표</strong>를 메모장에 복사해 둡니다</li>
+<li>vercel.com → 내 프로젝트 → <strong>Settings → Environment Variables</strong>
+Key: <code>DATA_GO_KR_KEY</code> / Value: 복사한 키 / Environments: 모두 체크(Production, Preview, Development) → <strong>[Save]</strong></li>
+</ol>
+<blockquote>
+<p>⚠️ 서비스 키는 <strong>진짜 비밀</strong>입니다. Claude Code 채팅, GitHub, 화면 코드 어디에도 붙여넣지 않습니다. Vercel 설정 화면에만 넣습니다.</p>
+</blockquote>
+<p><strong>(나) 승인이 안 됨 → 강사 공용 주소 쓰기</strong></p>
+<p>강사가 칠판에 적은 주소를 메모합니다. 예) <code>https://www.jg-sobang.com/api/air?sido=서울</code> (서울 대신 내 시도: 경기, 부산 등)
+브라우저 주소창에 열어서 자료(글자 덩어리)가 보이는지 확인합니다. 키는 강사 쪽에만 있어 내가 관리할 것이 없습니다.</p>
+<hr>
+</section>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 6. v0.2 만들기: 자료 붙이기 (15분)</h2>
+<p>먼저 PRD를 고칩니다(기준 문서는 언제나 PRD). 그다음 <strong>같은 Claude Code 대화</strong>에 내 트랙의 지시문을 보냅니다.</p>
+<h3>🗂 DB 트랙</h3>
+<pre><code>이제 v0.2로, 기록을 이 브라우저 대신 Firebase Firestore 공용 장부에 저장하게 바꿔 줘.
+
+1. 먼저 PRD.md의 &quot;데이터&quot; 항목대로 Firestore 보안 규칙을 써서 firestore.rules 파일로 저장해 줘.
+   - 컬렉션 이름과 칸(필드) 이름·종류를 표로 정리하고, 표에 있는 칸만 쓸 수 있게 해 줘.
+   - 글자 칸에는 길이 제한을 넣어 줘.
+   - 나중에 고칠 수 있는 칸은 PRD에서 정한 것만 고칠 수 있게 해 줘.
+   - 규칙의 각 줄을 PRD 말로 바꾸면 무엇인지 표로 설명해 줘.
+2. index.html에서 v0.1 때 모아 둔 저장·불러오기 함수만 Firestore로 바꿔 줘.
+   - 내 Firebase 설정값은 아래와 같아 (웹 앱 설정값이라 비밀이 아닌 것은 알고 있어):
+     [여기에 firebaseConfig 붙여넣기]
+   - Firebase는 공식 CDN(gstatic.com)의 모듈 방식으로 불러와 줘. HTML 파일 하나로 유지해 줘.
+   - 목록은 실시간으로 받아 와서, 다른 사람이 바꾸면 새로고침 없이 보이게 해 줘.
+   - 문서 ID는 Firestore가 자동으로 만들게 해 줘(addDoc). 합계·정렬 같은 계산은 화면에서 해 줘.
+   - 칸 이름·종류는 firestore.rules와 정확히 같게 써 줘.
+3. PRD.md 맨 아래 변경 기록에 v0.2를 적어 줘.
+</code></pre>
+<p>규칙 설명 표가 PRD와 맞는지 읽고 → Firebase 콘솔 Firestore → <strong>규칙(Rules)</strong> 탭 → 내용을 지우고 <code>firestore.rules</code> 내용을 붙여넣기 → <strong>[게시]</strong>
+(<code>firestore.rules</code> 내용은 Claude Code 화면의 Changes 카드에서 보거나, &quot;firestore.rules 내용을 채팅에 그대로 보여 줘&quot;라고 합니다)</p>
+<blockquote>
+<p>💡 화면(JavaScript)의 검사는 누구나 고칠 수 있습니다. <strong>마지막 문지기는 장부 규칙</strong>입니다.</p>
+</blockquote>
+<h3>🌤 API 트랙 (가) 우리 주방(서버 함수)</h3>
+<pre><code>이제 v0.2로, 예시 자료 대신 공공데이터포털의 진짜 자료를 보여 주게 바꿔 줘.
+API 정보 (활용신청 상세 화면에서 복사):
+[End Point, 상세기능 이름, 요청 변수 표 붙여넣기]
+보여 줄 값: [예: 서울의 PM10·PM2.5와 측정 시각]
+
+- 서비스 키는 Vercel 환경 변수 DATA_GO_KR_KEY 에 이미 넣어 두었어. 키 값은 묻지 마.
+- 브라우저가 공공데이터포털을 직접 부르지 말고, Vercel 서버 함수 api/data.js 가 대신 불러서
+  필요한 값만 JSON으로 돌려주게 해 줘. 함수는 module.exports = async (req, res) =&gt; { … } 모양(Node.js)으로,
+  package.json 없이 동작하게 해 줘. 키는 함수 안에서 process.env.DATA_GO_KR_KEY 로만 읽고 응답에 넣지 마.
+- 결과는 JSON 형식으로 요청해 줘. 함수 응답에 Cache-Control: s-maxage=600 을 붙여 10분 동안 캐시해서 호출 횟수를 아껴 줘.
+- index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /api/data 를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
+- 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
+- 화면 아래에 출처(공공데이터포털, 제공기관, 기준 시각)를 적어 줘.
+- 추가 라이브러리는 쓰지 마. PRD.md 변경 기록에 v0.2를 적어 줘.
+- 네 환경에는 키가 없어서 실제 호출 시험은 못 할 거야. 시험하지 못한 것은 못 했다고 알려 줘.
+</code></pre>
+<h3>🌤 API 트랙 (나) 강사 공용 주소</h3>
+<pre><code>이제 v0.2로, 예시 자료 대신 아래 주소의 진짜 자료를 보여 주게 바꿔 줘.
+주소: [강사가 알려 준 주소]
+이 주소를 열면 나오는 자료 모양: [브라우저에서 열어 본 글자 덩어리를 앞부분만 붙여넣기]
+
+- index.html에서 v0.1 때 모아 둔 자료 받기 함수만 이 주소를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
+- 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
+- 화면 아래에 출처(공공데이터포털, 한국환경공단, 측정 시각)를 적어 줘.
+- PRD.md 변경 기록에 v0.2를 적어 줘.
+</code></pre>
+<hr>
+</section>
+<section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 20분 · 혼자 해 보는 부분</p><h2>단계 7. v0.2 검증: 미리보기로 확인하고 결재 (20분)</h2>
+<blockquote>
+<p>1차 복습: 결재하기 전에 <strong>미리보기 주소</strong>로 먼저 봅니다. 운영 주소는 결재 전까지 그대로입니다.</p>
+</blockquote>
+<ol>
+<li>Changes 카드 <strong>[Create PR]</strong> → 결재 요청서를 눌러 GitHub 화면 → 1~2분 뒤 <strong>Vercel 봇의 댓글</strong> 표에서 <strong>Preview</strong> 의 [Visit Preview] 링크를 엽니다<ul>
+<li>미리보기 주소는 처음에 <strong>Vercel 로그인을 요구</strong>할 수 있습니다(나만 보는 시안이라서). PC에서는 이미 로그인돼 있어 바로 열립니다. 휴대폰이나 짝에게도 보여 주려면: 프로젝트 <strong>Settings → Deployment Protection → Vercel Authentication</strong> 을 끄고 [Save]</li>
+</ul>
+</li>
+<li>미리보기 주소에서 내 트랙의 검증을 합니다.</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>🛠 다듬기 트랙 검증</th>
+<th>○/✕</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>고친 점 3가지가 미리보기 주소에서 됐다</td>
+<td></td>
+</tr>
+<tr>
+<td>운영 주소는 아직 예전 그대로다 (결재 전이라 맞음)</td>
+<td></td>
+</tr>
+<tr>
+<td>결재 후 운영 주소에서 v0.1 때 넣은 기록이 그대로 남아 있다</td>
+<td></td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>🗂 DB 트랙 검증</th>
+<th>○/✕</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>내 휴대폰과 <strong>짝 휴대폰</strong>으로 미리보기 주소를 동시에 연다</td>
+<td></td>
+</tr>
+<tr>
+<td>내가 추가한 기록이 짝 화면에 <strong>새로고침 없이</strong> 생긴다</td>
+<td></td>
+</tr>
+<tr>
+<td>Firebase 콘솔 → Firestore → <strong>데이터</strong> 탭에 기록이 보인다</td>
+<td></td>
+</tr>
+<tr>
+<td>PRD에서 &quot;고칠 수 없다&quot;고 정한 칸은 정말 안 바뀐다 (Claude에게 &quot;규칙이 막는지 확인할 방법을 알려 줘&quot;)</td>
+<td></td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>🌤 API 트랙 검증</th>
+<th>○/✕</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>진짜 값과 <strong>측정·기준 시각</strong>이 보인다 (&quot;예시 자료&quot; 표시가 없다)</td>
+<td></td>
+</tr>
+<tr>
+<td>화면 아래에 출처가 있다</td>
+<td></td>
+</tr>
+<tr>
+<td>값 하나를 공공데이터포털 또는 에어코리아·기상청 누리집의 같은 값과 대조했다</td>
+<td></td>
+</tr>
+<tr>
+<td>(가만) PC Chrome <strong>F12 → Network</strong> → <code>data</code> 를 눌러 응답을 봐도 <strong>서비스 키가 없다</strong></td>
+<td></td>
+</tr>
+</tbody></table></div>
+<ol start="3">
+<li>모두 ○이면 GitHub에서 <strong>[Merge pull request] → [Confirm merge]</strong> → 1~2분 뒤 운영 주소에서도 확인. ✕가 있으면 결재하지 말고 Claude Code에 &quot;○○가 아직 안 돼, 고쳐 줘&quot; → 같은 결재 요청서에 자동으로 더해집니다.</li>
+</ol>
+<p><strong>오류 번호 읽기</strong> (F12 → Network 에서 빨간 줄을 눌러 보면 번호가 보입니다. 뿌리 강의의 &quot;자주 보는 HTTP 응답 번호&quot;)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>번호</th>
+<th>식당으로 치면</th>
+<th>오늘 흔한 원인</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>403 / <code>permission-denied</code></td>
+<td>장부 규칙이 막음</td>
+<td>(DB) 규칙과 화면의 칸이 다름, 규칙 [게시] 안 함</td>
+</tr>
+<tr>
+<td>404</td>
+<td>그런 메뉴(주소) 없음</td>
+<td>(API) 함수 파일 위치, 또는 PC에서 index.html 을 더블클릭해 열었음</td>
+</tr>
+<tr>
+<td>500</td>
+<td>우리 주방 사고</td>
+<td>(API) 금고에 키가 없음(환경 변수 이름·재배포)</td>
+</tr>
+<tr>
+<td>502</td>
+<td>거래처 응답이 이상함</td>
+<td>(API) 서비스 키 미등록, XML로 옴, 요청 변수 이름</td>
+</tr>
+</tbody></table></div>
+<p>✅ <strong>점검 3 (3교시 끝)</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>막히면</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(DB) [추가]를 눌러도 아무 일 없음</td>
+<td>F12 → Console 에 <code>permission-denied</code> 면 규칙과 코드의 칸이 다른 것 → &quot;firestore.rules와 index.html의 칸 이름·종류가 같은지 표로 비교하고 맞춰 줘&quot;. 규칙을 고쳤으면 콘솔에 다시 붙여넣고 [게시]</td>
+</tr>
+<tr>
+<td>(DB) 위치 칸이 비어 있고 눌리지 않음</td>
+<td>① 버전 선택의 연필을 눌러 Standard를 다시 고르고 [다음], 그래도 안 되면 창을 닫고 F5 후 처음부터. 10초쯤 기다리면 켜지기도 함</td>
+</tr>
+<tr>
+<td>(DB) 오른쪽에 Gemini 창이 열림</td>
+<td>쓰지 않으니 닫아도 됨</td>
+</tr>
+<tr>
+<td>(DB) &quot;The query requires an index&quot;</td>
+<td>&quot;정렬·계산은 화면에서 하게 고쳐 줘&quot;</td>
+</tr>
+<tr>
+<td>(API) &quot;서비스 키가 설정되지 않았습니다&quot;</td>
+<td>환경 변수 이름이 <code>DATA_GO_KR_KEY</code> 인지, Preview에도 체크했는지 확인. 넣은 <strong>뒤에</strong> 배포가 다시 돼야 함 → Vercel <strong>Deployments</strong> → 맨 위 배포의 ⋯ → <strong>[Redeploy]</strong></td>
+</tr>
+<tr>
+<td>(API) <code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code></td>
+<td>승인 직후라 반영 전이거나 Encoding/Decoding 키를 바꿔 넣은 것. 바로 안 되면 (나) 강사 공용 주소로 바꾸기</td>
+</tr>
+<tr>
+<td>(API) 결과가 XML로 옴 / 읽기 오류</td>
+<td>&quot;요청 변수 표대로 JSON 형식 요청 이름(type 또는 returnType)을 고쳐 줘&quot;</td>
+</tr>
+<tr>
+<td>(API) 함수 주소가 404</td>
+<td>함수 파일이 저장소 맨 위 <code>api/</code> 폴더에 있는지(<code>api/data.js</code>). PC에서 index.html 더블클릭으로는 동작하지 않고 미리보기·운영 주소에서만 됨</td>
+</tr>
+<tr>
+<td>미리보기 주소가 안 보임</td>
+<td>결재 요청서 아래 확인 목록이 끝날 때까지 1~2분. Vercel <strong>Deployments</strong> 에도 &quot;Preview&quot;로 보임</td>
+</tr>
+<tr>
+<td>미리보기를 열면 Vercel 로그인 화면</td>
+<td>나만 보는 시안이라 그렇습니다. PC에서 로그인한 Chrome으로 열거나, Settings → Deployment Protection → Vercel Authentication 끄기</td>
+</tr>
+<tr>
+<td>잘못 결재했음</td>
+<td>Vercel <strong>Deployments</strong> → 이전 배포의 ⋯ → <strong>[Promote to Production]</strong>(또는 Instant Rollback) 으로 즉시 되돌리기</td>
+</tr>
+</tbody></table></div>
+<hr>
+</section></article>
+    <div class="pager"><a class="prev" href="s2.html"><span>← 이전</span>화면 시안 v0.1 만들고 배포하기</a><a class="next" href="s4.html"><span>다음 →</span>짝 검증, 최종 제출, 과정 마무리</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

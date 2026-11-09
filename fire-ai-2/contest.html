@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>공모 · 투표 · 생성형 AI 활용능력 향상교육 2차</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="masthead">
+  <button type="button" id="menu" aria-label="목차 열기">☰</button>
+  <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육 · 과정 마무리</small><strong>생성형 AI 활용능력 향상교육 2차</strong></span></a>
+  <span class="when">11. 18.(수) 13:00~17:00 · 교육훈련관 2층 정보화교육장</span>
+</header>
+<div class="app">
+  <aside class="side" id="side">
+    <nav aria-label="목차">
+    <div class="group"><a href="index.html">처음 화면</a><a href="prework.html"><span class="n">사전</span>사전 학습</a></div>
+    <div class="group"><h3>수업 (11. 18.)</h3><a href="flow.html"><span class="n">▶</span>오늘의 흐름도 · 식당 지도</a><a href="s1.html"><span class="n">1</span>1교시 · PRD 쓰기</a><a href="s2.html"><span class="n">2</span>2교시 · v0.1 만들기 · 배포</a><a href="s3.html"><span class="n">3</span>3교시 · v0.2 자료 붙이기 · 검증</a><a href="s4.html"><span class="n">4</span>4교시 · 짝 검증 · 제출 · 마무리</a></div>
+    <div class="group"><h3>공모</h3><a href="contest.html" aria-current="page"><span class="n">★</span>공모 · 투표</a></div>
+    <div class="group"><h3>자료</h3><a href="check.html">2차 접속 점검</a><a href="../fire-ai/">1차 교안</a><a href="../ai-literacy/">웹 서비스의 뿌리</a></div>
+  </nav>
+  </aside>
+  <main>
+    <article><header class="hero"><span class="hero-no">★</span><div class="hero-body"><p class="eyebrow">1교시 등록 · 16:20 제출 마감 · 투표 · 결과 공개</p><h1>공모 · 투표</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 7번째"><span style="width:100.0%"></span></div><span class="prog-t">7 / 7</span></div></div></header>
+<div class="contest">
+<p>각자 만든 업무 도구를 여기에 제출하면 모두가 함께 보고, 동료 투표로 1등을 뽑습니다. 결과는 강사가 공개하면 이 화면에 모두에게 보입니다.</p>
+
+<div class="status" id="c-status" aria-live="polite">불러오는 중…</div>
+
+<section class="c-step" id="c-login-box">
+  <h2>1. 참가 등록 · 이어서 하기</h2>
+  <p class="hint">1교시 시작할 때 <b>한 번만 등록</b>합니다. 비밀번호(숫자 4자리)는 제출과 투표에 다시 쓰니 기억해 두세요.</p>
+  <div class="c-forms">
+    <form id="c-register" class="c-form">
+      <h3>처음이면: 참가 등록</h3>
+      <label for="r-name">이름</label><input id="r-name" maxlength="20" autocomplete="off" required>
+      <label for="r-dept">소속</label><input id="r-dept" maxlength="30" autocomplete="off" required>
+      <label for="r-pin">비밀번호 (숫자 4자리)</label><input id="r-pin" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="off" required>
+      <button type="submit">등록하기</button>
+      <p class="msg" id="r-msg" role="status"></p>
+    </form>
+    <form id="c-login" class="c-form">
+      <h3>등록했으면: 이어서 하기</h3>
+      <label for="l-name">이름</label><input id="l-name" maxlength="20" autocomplete="off" required>
+      <label for="l-pin">비밀번호</label><input id="l-pin" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="off" required>
+      <button type="submit">이어서 하기</button>
+      <p class="msg" id="l-msg" role="status"></p>
+    </form>
+  </div>
+  <p class="me" id="c-me" hidden></p>
+</section>
+
+<section class="c-step" id="c-submit-box">
+  <h2>2. 산출물 제출</h2>
+  <p class="hint">2교시 끝에 v0.1 주소부터 내고, 고칠 때마다 다시 내면 덮어씁니다. 마감은 4교시 20분(16:20)입니다. 배포 주소는 누구나 열 수 있으니 실제 개인정보가 없는지 한 번 더 보세요.</p>
+  <form id="c-submit" class="c-form wide">
+    <label for="s-title">도구 이름</label><input id="s-title" maxlength="40" placeholder="예) 교육 장비 점검표" required>
+    <label for="s-url">배포 주소</label><input id="s-url" type="url" maxlength="200" placeholder="https://gear-check-hong.vercel.app" required>
+    <label for="s-intro">한 줄 소개</label><input id="s-intro" maxlength="120" placeholder="나는 (무엇)을 만들어 (누가) (어디에) 쓴다." required>
+    <fieldset><legend>트랙</legend>
+      <label class="inline"><input type="radio" name="track" value="db" id="s-db"> DB (공용 장부)</label>
+      <label class="inline"><input type="radio" name="track" value="api" id="s-api"> API (공공데이터)</label>
+      <label class="inline"><input type="radio" name="track" value="polish" id="s-polish"> 다듬기</label>
+    </fieldset>
+    <button type="submit">제출하기</button>
+    <p class="msg" id="s-msg" role="status"></p>
+  </form>
+</section>
+
+<section class="c-step">
+  <h2>3. 함께 보기 · 투표</h2>
+  <p class="hint">작품을 눌러 휴대폰으로 써 보세요. 투표가 열리면 <b>내 작품을 뺀 3개</b>를 골라 [투표하기]를 누릅니다. 투표는 닫히기 전까지 다시 고를 수 있습니다. 보는 기준: 쓸모 · 완성도 · 검증과 개선 · 안전과 문서, 데이터 연동은 가점.</p>
+  <div class="vote-bar" id="c-vote-bar" hidden>
+    <span id="c-vote-count">0 / 3 골랐습니다</span>
+    <button type="button" id="c-vote-btn" disabled>투표하기</button>
+    <span class="msg" id="v-msg" role="status"></span>
+  </div>
+  <ol class="works" id="c-works"></ol>
+</section>
+
+<section class="c-step" id="c-result-box" hidden>
+  <h2>4. 결과</h2>
+  <p class="hint">동료 투표 득표순입니다. 득표가 같거나 1표 차이면 심사 기준표 점수를 보고 교수부장님이 정합니다.</p>
+  <div class="table-wrap"><table><thead><tr><th>순위</th><th>도구 이름</th><th>만든 사람</th><th>득표</th></tr></thead><tbody id="c-results"></tbody></table></div>
+</section>
+</div>
+</article>
+    <div class="pager"><a class="prev" href="s4.html"><span>← 이전</span>짝 검증, 최종 제출, 과정 마무리</a></div>
+  </main>
+</div>
+<script src="assets/site.js"></script>
+<script src="contest.js"></script>
+</body>
+</html>
