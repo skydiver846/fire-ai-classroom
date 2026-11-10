@@ -142,8 +142,8 @@
 </li>
 <li><strong>[마이페이지] → 데이터 활용 → Open API → 활용신청 현황</strong> 에서 방금 신청한 줄이 <strong>승인</strong> 인지 봅니다 (개발계정은 대개 바로 승인)</li>
 </ol>
-<h3>1-5. 서비스 키와 요청 정보 메모하기 (5분)</h3>
-<p>활용신청 현황에서 <strong>소방청_화재정보서비스</strong> 이름을 눌러 상세 화면을 엽니다. <strong>&quot;서비스 정보&quot;</strong> 칸에 참고문서 · 데이터포맷 · End Point · 일반 인증키가 보입니다. 아래 네 가지를 <strong>메모장에 복사해 <code>공공데이터 메모.txt</code> 로 저장</strong>합니다. 당일 3교시에 그대로 씁니다.</p>
+<h3>1-5. 인증키와 End Point 메모하기 (5분)</h3>
+<p>활용신청 현황에서 <strong>소방청_화재정보서비스</strong> 이름을 눌러 상세 화면을 엽니다. <strong>&quot;서비스 정보&quot;</strong> 칸에 참고문서 · 데이터포맷 · End Point · 일반 인증키가 보입니다. 아래 <strong>두 가지만</strong> <strong>메모장에 복사해 <code>공공데이터 메모.txt</code> 로 저장</strong>합니다. 당일 3교시에 그대로 씁니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -162,24 +162,16 @@
 <td>&quot;서비스 정보&quot;의 <strong>End Point</strong> 줄</td>
 <td><code>https://apis.data.go.kr/1661000/FireInformationService</code></td>
 </tr>
-<tr>
-<td><strong>상세기능 이름</strong></td>
-<td>상세기능 목록</td>
-<td>시도단위 화재발생현황 목록조회 (<code>getOcBysidoFireSmrzPcnd</code>)</td>
-</tr>
-<tr>
-<td><strong>요청 변수 표</strong></td>
-<td>&quot;서비스 정보&quot;의 <strong>참고문서</strong> <code>공공데이터 오픈API 활용가이드(소방청 국가화재정보).docx</code> → <strong>[다운로드]</strong> 해서 시도단위 화재발생현황 쪽</td>
-<td><code>ocrn_ymd</code>(날짜 8자리), <code>resultType</code>, <code>numOfRows</code> …</td>
-</tr>
 </tbody></table></div>
+<blockquote>
+<p>💡 <strong>상세기능 이름 · 요청 변수는 메모하지 않아도 됩니다.</strong> 당일 교안의 시험 주소와 Claude Code 지시문에 이미 다 들어 있습니다. 궁금하면 &quot;서비스 정보&quot;의 <strong>참고문서</strong>(활용가이드 .docx, 한글 프로그램으로도 열림)에서 볼 수 있습니다.</p>
+</blockquote>
 <blockquote>
 <p>⚠️ <strong>서비스 키는 비밀번호와 같습니다.</strong> 메신저 · 메일 · Claude 채팅 · GitHub에 붙여넣지 않습니다. 메모장 파일은 내 PC에만 두고, 당일 <strong>Vercel 설정 화면에만</strong> 직접 넣습니다.</p>
 <p>💡 <strong>인증키가 한 줄</strong>입니다. 그대로 복사해 씁니다(앞뒤 빈칸이 딸려 오지 않게). 다른 API에서 <strong>Encoding / Decoding 두 줄</strong>이 보이면 같은 키를 두 가지로 적은 것이니 <strong>Decoding</strong> 쪽을 씁니다.</p>
 <p>💡 화면의 &quot;참고 1&quot;(API 환경에 따라 인증키 적용 방식이 다를 수 있음)은 두 줄짜리 키에 대한 안내입니다. 한 줄 키는 신경 쓰지 않아도 됩니다.</p>
-<p>💡 참고문서(.docx)는 한글 프로그램으로도 열립니다. 당일 Claude Code에 요청 변수를 알려 줄 때 이 문서의 표를 씁니다.</p>
 </blockquote>
-<p><strong>✅ ①이 끝나면</strong>: 다섯 곳에 로그인되고, <code>공공데이터 메모.txt</code> 에 키 · End Point · 상세기능 · 요청 변수가 적혀 있습니다.</p>
+<p><strong>✅ ①이 끝나면</strong>: 다섯 곳에 로그인되고, <code>공공데이터 메모.txt</code> 에 일반 인증키와 End Point가 적혀 있습니다.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -453,7 +445,7 @@
 <ul>
 <li><input type="checkbox"> GitHub · Vercel · Claude Code · Firebase · 공공데이터포털에 로그인된다</li>
 <li><input type="checkbox"> 공공데이터포털 활용신청 현황이 <strong>승인</strong>이다</li>
-<li><input type="checkbox"> <code>공공데이터 메모.txt</code> 에 일반 인증키 · End Point · 상세기능 · 요청 변수가 있다</li>
+<li><input type="checkbox"> <code>공공데이터 메모.txt</code> 에 일반 인증키와 End Point가 있다</li>
 <li><input type="checkbox"> ④의 질문 세 개에 답할 수 있다</li>
 <li><input type="checkbox"> 당일 만들 주제와, 붙일 연동(DB / API)을 한 줄로 말할 수 있다</li>
 </ul>
