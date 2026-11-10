@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>오늘 만드는 것: 흐름도와 식당 지도 · 생성형 AI 활용능력 향상교육 2차</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=bc49b13a">
+<link rel="stylesheet" href="assets/site.css?v=06005d44">
 </head>
 <body>
 <header class="masthead">
@@ -62,22 +62,8 @@
 <p>오늘은 1차 교육생이 함께 <strong>과정을 마무리하는 날</strong>입니다. 1차에서 따라 해 본 흐름을 혼자 끝까지 해 보고, 각자 만든 도구를 나누고 시상하며 마칩니다.</p>
 <p>1차에서는 화면을 만들었지만, 기록이 <strong>내 휴대폰에만</strong> 남았습니다. 오늘은 거기서 한 걸음 더 갑니다.</p>
 <h3>오늘의 흐름도</h3>
-<pre><code class="language-그림"> 📢 설명 ① 식당 지도 (1교시 시작)
-   │
- ① PRD ─ 데이터 항목에서 트랙 고르기 (DB / API, 하나 이상 필수)          ← 1교시 · 단계 0~1
-   │
- ② 계획·승인 ─▶ ③ 화면 v0.1 (가짜 자료) ─▶ ④ 검토·결재 ─▶ ⑤ 자동 배포·휴대폰   ← 2교시 · 단계 2~4 (1차와 같은 길)
-   │
- 📢 설명 ② 열쇠와 규칙 + 설치 · 연결 시연 (3교시 시작 10분)
-   │
- ⑥ 준비(사람) ─┬─ DB : Firebase 장부 만들기                              ← 3교시 · 단계 5
-               └─ API: 서비스 키를 Vercel 금고(환경 변수)에 (또는 강사 공용 주소)
- ⑦ 연결(AI)  ─┬─ DB : 장부 규칙 → 내가 읽고 게시, 화면이 장부에 기록      ← 단계 6
-               └─ API: 우리 주방(서버 함수)이 공공데이터포털에 주문
- ⑧ 미리보기 검증 ──✕──▶ ⑦로                                              ← 단계 7
-   │ ○
- ⑨ 결재·자동 배포 (v0.2) ─▶ ⑩ 짝 검증·정리 (v0.3) ─▶ 🏆 투표·시상          ← 4교시 · 단계 8~9
-</code></pre>
+<div class="flow2"><div class="fl-talk">📢 설명 ① 식당 지도 <span>1교시 시작 · 10분</span></div><div class="fl-band fl-b1"><div class="fl-when"><b>1교시</b><span>단계 0~1</span></div><div class="fl-steps"><div class="fl-step"><span class="fl-no">①</span><div class="fl-t"><b>PRD 쓰기</b><small>데이터 항목에서 DB / API 고르기 (하나 이상 필수)</small><span class="fl-who fl-p">👤 사람</span></div></div></div></div><div class="fl-band fl-b2"><div class="fl-when"><b>2교시</b><span>단계 2~4 · 1차와 같은 길</span></div><div class="fl-steps"><div class="fl-step"><span class="fl-no">②</span><div class="fl-t"><b>계획 · 승인</b><small>Claude의 계획을 읽고 승인</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step"><span class="fl-no">③</span><div class="fl-t"><b>화면 v0.1</b><small>가짜 자료로 먼저</small><span class="fl-who fl-a">🤖 AI</span></div></div><div class="fl-step"><span class="fl-no">④</span><div class="fl-t"><b>검토 · 결재</b><small>미리보기 확인 → Merge</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step"><span class="fl-no">⑤</span><div class="fl-t"><b>자동 배포</b><small>휴대폰으로 열어 보기</small><span class="fl-who fl-auto">⚙️ 자동</span></div></div></div></div><div class="fl-talk">📢 설명 ② 열쇠와 규칙 + 설치 시연 <span>3교시 시작 · 10분</span></div><div class="fl-band fl-b3"><div class="fl-when"><b>3교시</b><span>단계 5~7 · 오늘의 핵심</span></div><div class="fl-body"><div class="fl-lanes"><div class="fl-lane"><p class="fl-lh">🗂 DB 트랙 · 우리 장부</p><div class="fl-steps"><div class="fl-step"><span class="fl-no">⑥</span><div class="fl-t"><b>Firebase 장부 만들기</b><small>프로젝트 · 장부 · 설정값 복사</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step"><span class="fl-no">⑦</span><div class="fl-t"><b>장부에 연결</b><small>AI가 규칙 · 코드 작성 → 내가 규칙 게시</small><span class="fl-who fl-a">🤖 AI</span></div></div></div></div><div class="fl-lane"><p class="fl-lh">🌤 API 트랙 · 남의 장부</p><div class="fl-steps"><div class="fl-step"><span class="fl-no">⑥</span><div class="fl-t"><b>키를 금고에</b><small>서비스 키 → Vercel 환경 변수 (또는 강사 공용 주소)</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step"><span class="fl-no">⑦</span><div class="fl-t"><b>주방이 주문</b><small>AI가 서버 함수 작성 → 공공데이터포털</small><span class="fl-who fl-a">🤖 AI</span></div></div></div></div></div><div class="fl-steps"><div class="fl-step"><span class="fl-no">⑧</span><div class="fl-t"><b>미리보기 검증</b><small>두 휴대폰 · 실제 값 · 키 숨김 확인</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-loop">✕ 안 되면 ⑦로 돌아가<br>Claude에게 "고쳐 줘"</div></div></div></div><div class="fl-band fl-b4"><div class="fl-when"><b>4교시</b><span>단계 8~9</span></div><div class="fl-steps"><div class="fl-step"><span class="fl-no">⑨</span><div class="fl-t"><b>결재 · 배포 v0.2</b><small>운영 주소에 반영</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step"><span class="fl-no">⑩</span><div class="fl-t"><b>짝 검증 · 정리 v0.3</b><small>짝이 써 보고 고치기</small><span class="fl-who fl-p">👤 사람</span></div></div><div class="fl-step fl-goal"><span class="fl-no">🏆</span><div class="fl-t"><b>제출 · 투표 · 시상</b><small>16:20 마감 · 1인 3표</small></div></div></div></div><p class="fl-legend"><span class="fl-who fl-p">👤 사람</span> 내가 직접 · <span class="fl-who fl-a">🤖 AI</span> Claude Code에 맡김 · <span class="fl-who fl-auto">⚙️ 자동</span> 결재하면 저절로</p></div>
+
 <h3>식당 지도: 오늘 만드는 것은 어디인가</h3>
 <p>사전 학습에서 본 것처럼 웹 서비스를 식당 하나로 봅니다. 홀 = 화면, 주문서 = API, 주방 = 백엔드, 장부 = 데이터베이스, 개업 = 배포.</p>
 <pre><code class="language-그림"> 1차     [홀: index.html] ── 손님이 각자 [수첩: localStorage] 에 적음 → 짝 휴대폰엔 안 보임

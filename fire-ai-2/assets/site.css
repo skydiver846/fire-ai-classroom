@@ -503,3 +503,54 @@ html.big-cursor input:not([type]), html.big-cursor input[inputmode], html.big-cu
 .cursor-toggle { flex: none; font: 700 15px var(--font-body); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; white-space: nowrap; }
 .cursor-toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
 @media (max-width: 900px) { .cursor-toggle { display: none; } }
+
+/* ───────── 2차 추가: 오늘의 흐름도 (교시 띠 + 단계 카드) ───────── */
+.flow2 { display: grid; gap: 10px; margin: 14px 0 22px; }
+.flow2 .fl-talk { justify-self: start; display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 7px 14px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; }
+.flow2 .fl-talk span { font-weight: 400; font-size: 13px; color: #c9d2e3; }
+.flow2 .fl-band { --c: #2f6fd0; display: grid; grid-template-columns: 116px 1fr; border: 1px solid var(--line); border-left: 6px solid var(--c); border-radius: 12px; background: var(--paper); overflow: hidden; }
+.flow2 .fl-b1 { --c: #2f6fd0; } .flow2 .fl-b2 { --c: #13897a; } .flow2 .fl-b3 { --c: #c8321e; } .flow2 .fl-b4 { --c: #7a52c7; }
+.flow2 .fl-b3 { box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 35%, transparent); }
+.flow2 .fl-when { display: grid; align-content: center; gap: 2px; padding: 12px 14px; background: var(--soft); background: color-mix(in srgb, var(--c) 10%, var(--paper)); }
+.flow2 .fl-when b { font-size: 19px; color: var(--c); }
+.flow2 .fl-when span { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.flow2 .fl-body { display: grid; gap: 10px; padding: 12px 14px; min-width: 0; }
+.flow2 .fl-band > .fl-steps { padding: 12px 14px; }
+.flow2 .fl-steps { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 10px 30px; min-width: 0; }
+.flow2 .fl-step { position: relative; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); min-width: 0; flex: 1 1 0; max-width: 300px; }
+.flow2 .fl-step + .fl-step::before, .flow2 .fl-step + .fl-loop::before { content: "▶"; position: absolute; left: -22px; top: 50%; transform: translateY(-50%); color: var(--c); font-size: 14px; }
+.flow2 .fl-no { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--c); color: #fff; font-weight: 800; font-size: 17px; }
+.flow2 .fl-t { display: grid; min-width: 0; }
+.flow2 .fl-t b { font-size: 15.5px; line-height: 1.35; }
+.flow2 .fl-t small { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.flow2 .fl-who { justify-self: start; margin-top: 4px; font-size: 11.5px; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.flow2 .fl-p { background: #e6eefb; color: #1f4f9c; }
+.flow2 .fl-a { background: #fdeee6; color: #a3401a; }
+.flow2 .fl-auto { background: #eaeef3; color: #4b5563; }
+.flow2 .fl-lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+.flow2 .fl-lane { padding: 10px 12px; border: 1px dashed var(--line); border-radius: 10px; background: var(--soft); min-width: 0; }
+.flow2 .fl-lh { margin: 0 0 8px; font-weight: 800; font-size: 15px; }
+.flow2 .fl-lane .fl-steps { flex-direction: column; gap: 22px; }
+.flow2 .fl-lane .fl-step { max-width: none; flex: none; }
+.flow2 .fl-lane .fl-step + .fl-step::before { content: "▼"; left: 50%; top: -19px; transform: translateX(-50%); }
+.flow2 .fl-loop { position: relative; align-self: center; flex: none; padding: 6px 12px; border: 2px dashed var(--c); border-radius: 10px; color: var(--c); font-weight: 700; font-size: 13.5px; line-height: 1.4; }
+.flow2 .fl-loop::before { content: "↩" !important; }
+.flow2 .fl-goal { border-color: var(--c); background: color-mix(in srgb, var(--c) 8%, var(--paper)); }
+.flow2 .fl-goal .fl-no { background: none; font-size: 24px; }
+.flow2 .fl-legend { margin: 2px 0 0; font-size: 13.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.flow2 .fl-legend .fl-who { margin: 0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .flow2 .fl-p { background: #1d2c44; color: #a9c6f5; } :root:not([data-theme="light"]) .flow2 .fl-a { background: #3a2620; color: #f3b49a; } :root:not([data-theme="light"]) .flow2 .fl-auto { background: #262d38; color: #b4bcc8; } }
+:root[data-theme="dark"] .flow2 .fl-p { background: #1d2c44; color: #a9c6f5; }
+:root[data-theme="dark"] .flow2 .fl-a { background: #3a2620; color: #f3b49a; }
+:root[data-theme="dark"] .flow2 .fl-auto { background: #262d38; color: #b4bcc8; }
+@media (max-width: 900px) {
+  .flow2 .fl-band > .fl-steps, .flow2 .fl-body > .fl-steps { flex-wrap: wrap; }
+}
+@media (max-width: 640px) {
+  .flow2 .fl-band { grid-template-columns: 1fr; }
+  .flow2 .fl-when { grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 8px; padding: 8px 12px; }
+  .flow2 .fl-steps { flex-direction: column; gap: 22px; }
+  .flow2 .fl-step { max-width: none; flex-basis: auto; }
+  .flow2 .fl-step + .fl-step::before, .flow2 .fl-step + .fl-loop::before { content: "▼"; left: 50%; top: -19px; transform: translateX(-50%); }
+  .flow2 .fl-loop::before { content: "↩" !important; }
+}
