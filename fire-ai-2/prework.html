@@ -129,14 +129,14 @@
 <li>아이디 · 비밀번호 · 이메일을 넣고 가입을 마칩니다. 비밀번호는 수첩에 적어 둡니다.</li>
 <li>로그인해서 오른쪽 위에 <strong>[마이페이지]</strong> 가 보이면 됩니다.</li>
 </ol>
-<h3>1-4. 에어코리아 대기오염정보 활용신청 (10분)</h3>
+<h3>1-4. 소방청 화재정보서비스 활용신청 (10분)</h3>
 <ol>
-<li>데이터포털 첫 화면 검색창에 <strong>에어코리아 대기오염정보</strong> 를 넣고 검색</li>
-<li>검색 결과에서 <strong>[오픈 API]</strong> 탭 → <strong>한국환경공단_에어코리아_대기오염정보</strong> 를 누릅니다</li>
+<li>데이터포털 첫 화면 검색창에 <strong>소방청 화재정보서비스</strong> 를 넣고 검색</li>
+<li>검색 결과에서 <strong>[오픈 API]</strong> 탭 → <strong>소방청_화재정보서비스</strong> 를 누릅니다 (주소: <code>www.data.go.kr/data/15077644/openapi.do</code>)</li>
 <li>상세 화면 오른쪽(또는 아래)의 <strong>[활용신청]</strong></li>
 <li>신청 화면에서<ul>
-<li><strong>활용목적</strong>: 웹 사이트 개발(또는 기타) → 내용 칸에 <code>교육 실습: 대기질 화면 만들기</code></li>
-<li><strong>상세기능</strong>: 모두 체크 (적어도 <strong>시도별 실시간 측정정보 조회</strong>)</li>
+<li><strong>활용목적</strong>: 웹 사이트 개발(또는 기타) → 내용 칸에 <code>교육 실습: 화재 현황 화면 만들기</code></li>
+<li><strong>상세기능</strong>: 모두 체크 (적어도 <strong>시도단위 화재발생현황 목록조회</strong>)</li>
 <li>라이선스 표시 <strong>동의</strong> → <strong>[활용신청]</strong></li>
 </ul>
 </li>
@@ -160,17 +160,17 @@
 <tr>
 <td><strong>End Point</strong></td>
 <td>&quot;End Point&quot; 줄</td>
-<td><code>https://apis.data.go.kr/B552584/ArpltnInforInqireSvc</code></td>
+<td><code>https://apis.data.go.kr/1661000/FireInformationService</code></td>
 </tr>
 <tr>
 <td><strong>상세기능 이름</strong></td>
 <td>상세기능 목록</td>
-<td>시도별 실시간 측정정보 조회 (<code>getCtprvnRltmMesureDnsty</code>)</td>
+<td>시도단위 화재발생현황 목록조회 (<code>getOcBysidoFireSmrzPcnd</code>)</td>
 </tr>
 <tr>
 <td><strong>요청 변수 표</strong></td>
 <td>상세기능의 [확인] 또는 참고문서</td>
-<td><code>sidoName</code>, <code>returnType</code>, <code>numOfRows</code> …</td>
+<td><code>ocrn_ymd</code>(날짜 8자리), <code>resultType</code>, <code>numOfRows</code> …</td>
 </tr>
 </tbody></table></div>
 <blockquote>
@@ -360,12 +360,12 @@
 <tr>
 <td>무엇이 달라지나</td>
 <td>내가 넣은 기록이 <strong>다른 사람 휴대폰에도 바로</strong> 보임</td>
-<td>화면에 <strong>매일 바뀌는 실제 자료</strong>(대기질 등)가 보임</td>
+<td>화면에 <strong>매일 바뀌는 실제 자료</strong>(오늘 화재 접수 건수 등)가 보임</td>
 </tr>
 <tr>
 <td>어울리는 주제</td>
 <td>장비 점검표, 질문 모음, 강의실 사용 현황</td>
-<td>야외 훈련 가능 여부, 훈련장 날씨. <strong>주제와 관련 없어도</strong> 한쪽에 띄우면 됨</td>
+<td>오늘 우리 시도 화재 현황, 출동 대비 상황판. <strong>주제와 관련 없어도</strong> 한쪽에 띄우면 됨</td>
 </tr>
 <tr>
 <td>손에 쥐는 것</td>
@@ -398,10 +398,10 @@
 <li><strong>강사 설명 · 시연</strong> (10분): 위 그림과 열쇠 · 규칙 이야기, Firebase 만들기와 API 연결을 화면으로 보여 줌</li>
 <li><strong>사람이 직접 준비</strong> (10분): DB는 Firebase 프로젝트 · 장부 만들기, API는 ①에서 받은 서비스 키를 Vercel 금고에 넣기</li>
 <li><strong>AI에게 연결 맡기기</strong> (15분): 교안의 지시문을 Claude Code에 보내기</li>
-<li><strong>미리보기로 확인하고 결재</strong> (15분): DB는 두 휴대폰에 같은 기록, API는 실제 값과 측정 시각</li>
+<li><strong>미리보기로 확인하고 결재</strong> (15분): DB는 두 휴대폰에 같은 기록, API는 실제 값과 기준 날짜</li>
 </ol>
 <blockquote>
-<p>✅ <strong>필수 제출</strong>: 당일 산출물에는 둘 중 <strong>하나 이상</strong>을 반드시 연동합니다. 둘 다 해도 됩니다. 시간이 모자라면 키 없이 쓰는 <strong>강사 공용 주소</strong>(<code>www.jg-sobang.com/api/air</code>)로 API를 연결하는 가장 쉬운 길도 있습니다.</p>
+<p>✅ <strong>필수 제출</strong>: 당일 산출물에는 둘 중 <strong>하나 이상</strong>을 반드시 연동합니다. 둘 다 해도 됩니다. 시간이 모자라면 키 없이 쓰는 <strong>강사 공용 주소</strong>(<code>www.jg-sobang.com/api/fire</code>)로 API를 연결하는 가장 쉬운 길도 있습니다.</p>
 </blockquote>
 <h3>스스로 답해 보기</h3>
 <ol>
@@ -433,16 +433,16 @@
 <td>데이터베이스</td>
 </tr>
 <tr>
-<td>야외 훈련 가능 여부 (미세먼지로 가능 / 주의 / 실내 전환)</td>
+<td>오늘 화재 현황판 (우리 시도 화재 접수 · 진행 · 종료 건수)</td>
 <td>공공데이터 API</td>
 </tr>
 <tr>
-<td>훈련장 날씨 한눈에 (기온·강수확률과 준비물 안내)</td>
+<td>시도별 화재 비교 (오늘 전국 시도 접수 건수 순위 막대)</td>
 <td>공공데이터 API</td>
 </tr>
 </tbody></table></div>
 <blockquote>
-<p>💡 공공데이터가 주제와 이어지지 않으면 주제는 그대로 두고 화면 한쪽에 대기질을 띄우면 됩니다.</p>
+<p>💡 공공데이터가 주제와 이어지지 않으면 주제는 그대로 두고 화면 한쪽에 &quot;오늘 우리 시도 화재 접수 건수&quot;를 띄우면 됩니다.</p>
 </blockquote>
 <hr>
 

@@ -93,10 +93,13 @@
 <ol>
 <li>아래 주소의 <code>여기에키</code> 자리에 <code>공공데이터 메모.txt</code> 의 <strong>Decoding 키</strong>를 붙여 <strong>내 Chrome 주소창</strong>에서 엽니다 (이 주소는 어디에도 공유하지 않습니다)</li>
 </ol>
-<pre><code>https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=여기에키&amp;returnType=json&amp;sidoName=서울&amp;numOfRows=3&amp;ver=1.0
+<pre><code>https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd?serviceKey=여기에키&amp;pageNo=1&amp;numOfRows=20&amp;resultType=json&amp;ocrn_ymd=20261118
 </code></pre>
+<ul>
+<li>끝의 <code>20261118</code> 은 날짜(년월일 8자리)입니다. 오늘 날짜로 넣습니다</li>
+</ul>
 <ol start="2">
-<li><code>&quot;resultCode&quot;:&quot;00&quot;</code> 과 <code>stationName</code>(측정소), <code>pm10Value</code>, <code>pm25Value</code>, <code>dataTime</code>(측정 시각)이 보이면 키가 됩니다</li>
+<li><code>&quot;resultCode&quot;:&quot;00&quot;</code> 과 <code>SIDO_NM</code>(시도), <code>FIRE_RCPT_MNB</code>(화재 접수), <code>FIRE_PROG_MNB</code>(진행 중), <code>STN_END_MNB</code>(상황 종료)가 보이면 키가 됩니다</li>
 <li><code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code> 가 나오면 승인 반영 전입니다 → <strong>(나)</strong> 로 갑니다</li>
 </ol>
 <p><strong>5-API-2. Vercel 금고(환경 변수)에 키 넣기 (2분)</strong></p>
@@ -109,8 +112,8 @@
 </blockquote>
 <p><strong>(나) 강사 공용 주소로 (키 승인이 아직 안 됐거나, 가장 빨리 연동하고 싶을 때)</strong></p>
 <ol>
-<li>브라우저에서 <code>https://www.jg-sobang.com/api/air?sido=서울</code> (서울 대신 내 시도: 경기, 부산 …)을 엽니다</li>
-<li><code>&quot;items&quot;:[{&quot;station&quot;:…</code> 같은 글자 덩어리가 보이면 됩니다. 앞부분을 복사해 둡니다</li>
+<li>브라우저에서 <code>https://www.jg-sobang.com/api/fire?sido=서울</code> (서울 대신 내 시도: 경기, 충북 … 전국은 <code>전체</code>)을 엽니다</li>
+<li><code>&quot;items&quot;:[{&quot;sido&quot;:&quot;서울특별시&quot;,&quot;received&quot;:…</code> 같은 글자 덩어리가 보이면 됩니다. 앞부분을 복사해 둡니다</li>
 <li>키 · 서버 함수 없이 바로 연결됩니다. 키는 강사 쪽 금고에만 있습니다</li>
 </ol>
 <p><strong>✅ 다음으로</strong>: (DB) firebaseConfig를 복사해 두었다 / (API 가) 주소창 시험이 되고 Vercel에 키를 넣었다 / (API 나) 공용 주소에서 자료가 보인다.</p>
@@ -151,10 +154,12 @@
 </blockquote>
 <h3>🌤 API 트랙 (가) 우리 주방(서버 함수)</h3>
 <pre><code>이제 v0.2로, 예시 자료 대신 공공데이터포털의 진짜 자료를 보여 주게 바꿔 줘.
-API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간 측정정보 조회 (다른 API면 이름과 요청 변수 표를 붙여넣기)
-요청 주소: https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty
-요청 변수: serviceKey, returnType=json, sidoName=[우리 시도], numOfRows=100, ver=1.0
-보여 줄 값: [예: 측정소 이름, PM10, PM2.5, 측정 시각]
+API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조회 (다른 API면 이름과 요청 변수 표를 붙여넣기)
+요청 주소: https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd
+요청 변수: serviceKey, pageNo=1, numOfRows=100, resultType=json, ocrn_ymd=오늘 날짜(YYYYMMDD, 한국 시각)
+응답 칸: SIDO_NM(시도), OCRN_YMD(발생 일자), FIRE_RCPT_MNB(화재 접수), FIRE_PROG_MNB(진행 중), STN_END_MNB(상황 종료),
+        SLF_EXTSH_MNB(자체 진화), FALS_DCLR_MNB(허위 신고), FLSRP_PRCS_MNB(오보 처리)
+보여 줄 값: [예: 우리 시도의 화재 접수 · 진행 중 · 상황 종료 건수와 기준 날짜]
 
 - 서비스 키는 Vercel 환경 변수 DATA_GO_KR_KEY 에 이미 넣어 두었어. 키 값은 묻지 마.
 - 브라우저가 공공데이터포털을 직접 부르지 말고, Vercel 서버 함수 api/data.js 가 대신 불러서
@@ -163,18 +168,19 @@ API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간
 - 함수 응답에 Cache-Control: s-maxage=600 을 붙여 10분 동안 캐시해서 호출 횟수를 아껴 줘.
 - index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /api/data 를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
 - 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
-- 화면 아래에 출처(공공데이터포털, 제공기관, 기준 시각)를 적어 줘.
+- 오늘 자료가 비어 있으면 어제 날짜로 한 번 더 불러 줘. 응답의 items 는 배열이거나 {item: [...]} 일 수 있으니 둘 다 처리해 줘.
+- 화면 아래에 출처(공공데이터포털, 소방청, 기준 날짜)를 적어 줘.
 - 추가 라이브러리는 쓰지 마. PRD.md 변경 기록에 v0.2를 적어 줘.
 - 네 환경에는 키가 없어서 실제 호출 시험은 못 할 거야. 시험하지 못한 것은 못 했다고 알려 줘.
 </code></pre>
 <h3>🌤 API 트랙 (나) 강사 공용 주소</h3>
 <pre><code>이제 v0.2로, 예시 자료 대신 아래 주소의 진짜 자료를 보여 주게 바꿔 줘.
-주소: https://www.jg-sobang.com/api/air?sido=[우리 시도]
+주소: https://www.jg-sobang.com/api/fire?sido=[우리 시도]
 이 주소를 열면 나오는 자료 모양: [단계 5에서 복사한 글자 덩어리 앞부분 붙여넣기]
 
 - index.html에서 v0.1 때 모아 둔 자료 받기 함수만 이 주소를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
 - 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
-- 화면 아래에 출처(공공데이터포털, 한국환경공단, 측정 시각)를 적어 줘.
+- 화면 아래에 출처(공공데이터포털, 소방청, 기준 날짜)를 적어 줘.
 - PRD.md 변경 기록에 v0.2를 적어 줘.
 </code></pre>
 <p><strong>✅ 다음으로</strong>: Claude가 다 고쳤다고 하고, (DB) 규칙을 게시했다.</p>
@@ -225,7 +231,7 @@ API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간
 </tr>
 </thead>
 <tbody><tr>
-<td>진짜 값과 <strong>측정·기준 시각</strong>이 보인다 (&quot;예시 자료&quot; 표시가 없다)</td>
+<td>진짜 값과 <strong>기준 날짜</strong>가 보인다 (&quot;예시 자료&quot; 표시가 없다)</td>
 <td></td>
 </tr>
 <tr>
@@ -233,7 +239,7 @@ API: 한국환경공단_에어코리아_대기오염정보 / 시도별 실시간
 <td></td>
 </tr>
 <tr>
-<td>값 하나를 에어코리아 누리집(airkorea.or.kr)의 같은 측정소 값과 대조했다</td>
+<td>값 하나를 주소창 시험(5-API-1) 또는 강사 공용 주소의 같은 시도 · 같은 날짜 값과 대조했다</td>
 <td></td>
 </tr>
 <tr>

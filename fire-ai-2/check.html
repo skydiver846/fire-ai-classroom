@@ -82,11 +82,11 @@
 
     <section aria-labelledby="s3">
       <h2 id="s3">3단계 (선택): 공공데이터 API 직접 불러 보기</h2>
-      <p class="muted">공공데이터 API는 서버(Vercel 함수)가 부르므로 수업에서는 행정망 영향을 받지 않습니다. 사전 학습 연구 B처럼 <b>내 브라우저 주소창에서</b> 불러 볼 때만 이 PC를 거칩니다. 승인된 에어코리아 서비스 키(Decoding)를 넣고 버튼을 누르면 새 탭에서 결과가 열립니다. 키는 이 페이지 밖으로 보내지 않습니다.</p>
+      <p class="muted">공공데이터 API는 서버(Vercel 함수)가 부르므로 수업에서는 행정망 영향을 받지 않습니다. 사전 학습 연구 B처럼 <b>내 브라우저 주소창에서</b> 불러 볼 때만 이 PC를 거칩니다. 승인된 소방청_화재정보서비스 서비스 키(Decoding)를 넣고 버튼을 누르면 새 탭에서 결과가 열립니다. 키는 이 페이지 밖으로 보내지 않습니다.</p>
       <label for="key">서비스 키 (일반 인증키 Decoding)</label>
       <input id="key" type="password" autocomplete="off">
-      <button type="button" id="apitest">새 탭에서 서울 대기질 불러오기</button>
-      <p class="muted">새 탭에 <code>"resultCode":"00"</code> 과 측정값이 보이면 성공입니다. <code>SERVICE_KEY_IS_NOT_REGISTERED</code> 는 키 문제(승인 반영 전)이고 행정망과는 관계없습니다. 탭이 아예 열리지 않거나 차단 화면이 나오면 행정망이 막은 것입니다.</p>
+      <button type="button" id="apitest">새 탭에서 오늘 시도별 화재 현황 불러오기</button>
+      <p class="muted">새 탭에 <code>"resultCode":"00"</code> 과 시도별 화재 건수(<code>SIDO_NM</code>, <code>FIRE_RCPT_MNB</code> …)가 보이면 성공입니다. <code>SERVICE_KEY_IS_NOT_REGISTERED</code> 는 키 문제(승인 반영 전)이고 행정망과는 관계없습니다. 탭이 아예 열리지 않거나 차단 화면이 나오면 행정망이 막은 것입니다.</p>
     </section>
 
     <section aria-labelledby="s4">
@@ -108,8 +108,7 @@
       { g: "DB", use: "Firestore 서버 (공용 장부)", url: "https://firestore.googleapis.com/v1/projects/jg-sobang-netcheck/databases/(default)/documents/x/y", firestore: true, key: "firestore" },
       { g: "API", use: "공공데이터포털 (가입 · 활용신청)", url: "https://www.data.go.kr/", key: "datagokr" },
       { g: "API", use: "공공데이터 API 서버", url: "https://apis.data.go.kr/", key: "apis" },
-      { g: "API", use: "에어코리아 (값 대조)", url: "https://www.airkorea.or.kr/", key: "airkorea" },
-      { g: "API", use: "강사 공용 대기질 주소", url: "/api/air?sido=서울", json: true, key: "air" },
+      { g: "API", use: "강사 공용 화재 현황 주소", url: "/api/fire?sido=서울", json: true, key: "fire" },
     ];
     const LABEL = { wait: "확인 중…", open: "열림", ok: "응답 확인", blocked: "막힘", slow: "응답 없음", manual: "직접 확인" };
     const results = {};
@@ -179,7 +178,7 @@
       if (!api.length) line("API 트랙: 공공데이터포털과 API 서버에 닿습니다. 수업 방식(Vercel 서버 함수가 부름)은 행정망과 관계없이 됩니다.", "open");
       else line("API 트랙: 막힌 곳 — " + api.map(name).join(", ") + ". 수업 방식(Vercel 서버 함수)은 서버끼리 부르므로 그래도 됩니다. 다만 활용신청 · 주소창 시험은 다른 망에서 해야 합니다.", "blocked");
 
-      if (results.air && !good("air")) line("강사 공용 대기질 주소(/api/air)가 답하지 않습니다. 강사가 Vercel 환경 변수 DATA_GO_KR_KEY 를 넣고 다시 배포했는지, 서비스 키 승인이 반영됐는지 확인하세요.", "blocked");
+      if (results.fire && !good("fire")) line("강사 공용 화재 현황 주소(/api/fire)가 답하지 않습니다. 강사가 Vercel 환경 변수 DATA_GO_KR_KEY 를 넣고 다시 배포했는지, 서비스 키 승인이 반영됐는지 확인하세요.", "blocked");
       line("Claude Code는 자동 확인이 안 됩니다. 표의 주소를 눌러 화면이 열리는지 직접 보세요.");
     }
 
@@ -229,16 +228,17 @@
       }
     });
 
-    // 3단계: 서비스 키로 에어코리아 시도별 실시간 측정정보를 새 탭에서 연다 (키는 주소에만 들어감)
+    // 3단계: 서비스 키로 소방청 시도단위 화재발생현황(오늘)을 새 탭에서 연다 (키는 주소에만 들어감)
     $("apitest").addEventListener("click", () => {
       const key = $("key").value.trim();
       if (!key) { $("key").focus(); return; }
-      const u = new URL("https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty");
+      const u = new URL("https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd");
+      const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10).replace(/-/g, "");
       u.searchParams.set("serviceKey", key);
-      u.searchParams.set("returnType", "json");
-      u.searchParams.set("sidoName", "서울");
-      u.searchParams.set("numOfRows", "3");
-      u.searchParams.set("ver", "1.0");
+      u.searchParams.set("pageNo", "1");
+      u.searchParams.set("numOfRows", "20");
+      u.searchParams.set("resultType", "json");
+      u.searchParams.set("ocrn_ymd", today);
       const a = document.createElement("a"); a.href = u.toString(); a.target = "_blank"; a.rel = "noopener noreferrer";
       document.body.append(a); a.click(); a.remove();
     });
