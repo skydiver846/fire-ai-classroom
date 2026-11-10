@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "강사 판서 도구",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "줌잇처럼 어느 웹 화면 위에나 펜·형광펜·사각형·원·화살표로 표시합니다. 아이콘을 누르거나 Alt+Shift+D 로 켜고 끕니다.",
   "icons": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" },
   "action": {
