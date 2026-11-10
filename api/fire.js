@@ -1,7 +1,7 @@
 // GET /api/fire?sido=서울[&date=YYYYMMDD]  강사 공용 화재 현황 주소 (2차 교육 API 트랙 예비 경로)
 // 공공데이터포털 서비스 키를 받지 못한 교육생이, 키 없이 이 주소에서 소방청 화재정보서비스의
 // "시도단위 화재발생현황"(그날 시도별 화재 접수 · 진행 · 상황종료 건수)을 받아 씁니다.
-// 키는 Vercel 환경 변수 DATA_GO_KR_KEY(소방청_화재정보서비스 일반 인증키, Decoding)에만 있고 응답에 넣지 않습니다.
+// 키는 Vercel 환경 변수 DATA_GO_KR_KEY(소방청_화재정보서비스 일반 인증키)에만 있고 응답에 넣지 않습니다.
 // 교육생 화면(다른 주소, ○○.vercel.app)에서도 부를 수 있게 CORS를 열고, 10분 동안 Vercel CDN에 캐시해 하루 호출 한도를 아낍니다.
 const ENDPOINT = 'https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd';
 // 짧은 이름 → 응답의 시도 이름(SIDO_NM)에 들어 있을 글자들
@@ -19,7 +19,7 @@ function kstDate(daysAgo) {
 
 async function load(key, ymd) {
   const url = new URL(ENDPOINT);
-  url.searchParams.set('serviceKey', key);   // Decoding 키를 넣으면 여기서 알맞게 인코딩됨
+  url.searchParams.set('serviceKey', key);   // 키를 그대로 넣으면 여기서 알맞게 인코딩됨 (두 줄 키라면 Decoding 쪽)
   url.searchParams.set('pageNo', '1');
   url.searchParams.set('numOfRows', '100');
   url.searchParams.set('resultType', 'json');

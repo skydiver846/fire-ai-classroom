@@ -91,7 +91,7 @@
 <p><strong>(가) 내 서비스 키로 (권장)</strong></p>
 <p><strong>5-API-1. 주소창에서 키가 되는지 시험 (3분)</strong></p>
 <ol>
-<li>아래 주소의 <code>여기에키</code> 자리에 <code>공공데이터 메모.txt</code> 의 <strong>Decoding 키</strong>를 붙여 <strong>내 Chrome 주소창</strong>에서 엽니다 (이 주소는 어디에도 공유하지 않습니다)</li>
+<li>아래 주소의 <code>여기에키</code> 자리에 <code>공공데이터 메모.txt</code> 의 <strong>일반 인증키</strong>(64자리 한 줄)를 붙여 <strong>내 Chrome 주소창</strong>에서 엽니다 (이 주소는 어디에도 공유하지 않습니다)</li>
 </ol>
 <pre><code>https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd?serviceKey=여기에키&amp;pageNo=1&amp;numOfRows=20&amp;resultType=json&amp;ocrn_ymd=20261118
 </code></pre>
@@ -105,7 +105,7 @@
 <p><strong>5-API-2. Vercel 금고(환경 변수)에 키 넣기 (2분)</strong></p>
 <ol>
 <li>⑤ Vercel 탭 → <strong><code>team-tool</code> 프로젝트</strong> → 위쪽 <strong>Settings</strong> → 왼쪽 <strong>Environment Variables</strong></li>
-<li><strong>Key</strong> <code>DATA_GO_KR_KEY</code> / <strong>Value</strong>: Decoding 키 / <strong>Environments</strong>: Production · Preview · Development <strong>모두 체크</strong> → <strong>[Save]</strong></li>
+<li><strong>Key</strong> <code>DATA_GO_KR_KEY</code> / <strong>Value</strong>: 일반 인증키 / <strong>Environments</strong>: Production · Preview · Development <strong>모두 체크</strong> → <strong>[Save]</strong></li>
 </ol>
 <blockquote>
 <p>⚠️ <strong>서비스 키는 진짜 비밀</strong>입니다. 이 Vercel 화면에만 넣고, Claude Code 채팅 · GitHub · 화면 코드에는 붙이지 않습니다. 화면은 키를 모르고, <strong>우리 주방(서버 함수)</strong> 만 금고에서 꺼내 씁니다.</p>
@@ -305,7 +305,7 @@ API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조
 </tr>
 <tr>
 <td>(API) <code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code></td>
-<td>승인 뒤 반영 전이거나 Encoding/Decoding을 바꿔 넣은 것. 바로 안 되면 (나) 강사 공용 주소로 바꾸기</td>
+<td>승인 뒤 반영 전(승인 직후엔 1시간쯤 걸리기도 함)이거나 키를 잘못 붙여넣은 것(앞뒤 빈칸, 일부만 복사). 바로 안 되면 (나) 강사 공용 주소로 바꾸기</td>
 </tr>
 <tr>
 <td>(API) 결과가 XML로 옴</td>
