@@ -45,7 +45,7 @@
 // 모듈 안 "지금 여기": 큰 절(h2)마다 칩을 만들고, 스크롤하면 지금 읽는 절을 빨갛게 표시한다
 (function () {
   var hero = document.querySelector("article .hero");
-  if (!hero) return;
+  if (!hero || hero.dataset.chips === "off") return;
   var heads = Array.prototype.filter.call(document.querySelectorAll("article h2"), function (h) {
     var t = h.textContent.trim();
     return !h.closest("details") && h.offsetParent !== null && !/^(자주 막히는 곳|✅)/.test(t);

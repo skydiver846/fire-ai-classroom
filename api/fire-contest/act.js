@@ -6,6 +6,7 @@
 //   { action: 'submit',   name, pin, title, url, intro, track } 산출물 제출·고치기 (제출이 열려 있을 때)
 //   { action: 'vote',     name, pin, picks: [id, id, id] }       동료 투표·고치기 (투표가 열려 있을 때, 자기 작품 제외 3개)
 //   { action: 'mine',     name, pin }                            내 제출과 내 투표 다시 보기
+//   { action: 'enter',    name, pin }                            처음이면 등록, 아니면 로그인 (교안 화면은 이것만 씀)
 const { redis, toObject, readBody, send, fail } = require('../_lib/store');
 const R = require('./_rules');
 
@@ -65,6 +66,20 @@ module.exports = async (req, res) => {
     const b = readBody(req);
     const action = String(b.action || '');
 
+    // 이름 + 비밀번호 하나로 시작: 처음 보는 이름이면 등록하고, 있는 이름이면 비밀번호를 확인합니다.
+    if (action === 'enter') {
+      const name = R.clean(b.name, 20), id = R.keyOf(b.name);
+      if (!name) return send(res, 400, { error: '이름을 적어 주세요.' });
+      if (!R.validPin(b.pin)) return send(res, 400, { error: '비밀번호는 숫자 4자리입니다.' });
+      const [old, count] = await redis([['HGET', R.PEOPLE, id], ['HLEN', R.PEOPLE]]);
+      if (!old) {
+        if (count >= R.MAX_PEOPLE) return send(res, 429, { error: '등록이 너무 많습니다. 강사에게 알려 주세요.' });
+        const [made] = await redis([['HSETNX', R.PEOPLE, id, JSON.stringify({ name, dept: '', pin: R.hashPin(name, b.pin), at: Date.now() })]]);
+        if (Number(made) === 1) return send(res, 200, { ok: true, id, name, dept: '', work: null, picks: [], created: true });
+        // 같은 순간 같은 이름이 먼저 등록됐으면 아래 로그인으로 확인
+      }
+    }
+
     if (action === 'register') {
       const name = R.clean(b.name, 20), dept = R.clean(b.dept, 30), id = R.keyOf(b.name);
       if (!name || !dept) return send(res, 400, { error: '이름과 소속을 모두 적어 주세요.' });
@@ -80,7 +95,7 @@ module.exports = async (req, res) => {
     if (who.error) return send(res, 401, { error: who.error });
     const flags = toObject((await redis([['HGETALL', R.FLAGS]]))[0]);
 
-    if (action === 'mine') {
+    if (action === 'mine' || action === 'enter') {
       const [work, vote] = await redis([['HGET', R.WORKS, who.id], ['HGET', R.VOTES, who.id]]);
       return send(res, 200, { ok: true, id: who.id, name: who.person.name, dept: who.person.dept,
         work: work ? JSON.parse(work) : null, picks: vote ? JSON.parse(vote).picks : [] });

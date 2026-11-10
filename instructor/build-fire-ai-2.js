@@ -33,7 +33,7 @@ const PAGES = [
     md: join(sec('단계 5')) + '\n' + join(sec('단계 6')) + '\n' + join(sec('단계 7')) },
   { file: 's4.html', no: '4', nav: '4교시 · 짝 검증 · 제출 · 마무리', eyebrow: '4교시 · 16:00~16:50', title: '짝 검증, 최종 제출, 과정 마무리',
     md: join(sec('단계 8')) + '\n' + join(sec('단계 9')) + '\n' + join(sec('심사 기준')) + '\n' + join(sec('과정을 마치며')) },
-  { file: 'contest.html', no: '★', nav: '공모 · 투표', eyebrow: '1교시 등록 · 16:20 제출 마감 · 투표 · 결과 공개', title: '공모 · 투표',
+  { file: 'contest.html', no: '★', nav: '공모 · 투표', eyebrow: '16:20 제출 마감', title: '공모 · 투표', simple: true,
     html: read('contest.part.html'), script: 'contest.js' },
 ];
 const CONTENT = PAGES.filter(p => p.file !== 'index.html');
@@ -72,7 +72,7 @@ function nav(current) {
 function page(p, body) {
   const i = PAGES.indexOf(p), prev = PAGES[i - 1], next = PAGES[i + 1];
   const k = CONTENT.indexOf(p) + 1;
-  const hero = p.no ? `<header class="hero"><span class="hero-no">${esc(p.no)}</span><div class="hero-body"><p class="eyebrow">${esc(p.eyebrow)}</p><h1>${esc(p.title)}</h1><div class="hero-prog"><div class="prog" aria-label="전체 ${CONTENT.length}개 중 ${k}번째"><span style="width:${(k / CONTENT.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k} / ${CONTENT.length}</span></div></div></header>\n` : '';
+  const hero = p.no ? `<header class="hero"${p.simple ? ' data-chips="off"' : ''}><span class="hero-no">${esc(p.no)}</span><div class="hero-body"><p class="eyebrow">${esc(p.eyebrow)}</p><h1>${esc(p.title)}</h1>${p.simple ? '' : `<div class="hero-prog"><div class="prog" aria-label="전체 ${CONTENT.length}개 중 ${k}번째"><span style="width:${(k / CONTENT.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k} / ${CONTENT.length}</span></div>`}</div></header>\n` : '';
   const pager = p.file === 'index.html' ? '' : `<div class="pager">${prev ? `<a class="prev" href="${prev.file}"><span>← 이전</span>${esc(prev.title || prev.nav)}</a>` : ''}${next ? `<a class="next" href="${next.file}"><span>다음 →</span>${esc(next.title || next.nav)}</a>` : ''}</div>`;
   return `<!doctype html>
 <html lang="ko">
@@ -119,11 +119,11 @@ const home = `
   <p class="note">오늘은 강사가 시범을 보이지 않습니다. <b>이 교안이 교재</b>입니다. 막히면 ① 각 단계의 "막히면" 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>
   <h2>공모 · 투표</h2>
   <ol class="mods">${mod('contest.html', '16:20 마감')}</ol>
-  <p class="note">1교시 시작할 때 참가 등록, 2교시 끝에 v0.1 주소 제출, 16:20까지 최종 제출 → 모두의 작품을 함께 보고 1인 3표 → 결과 공개.</p>
+  <p class="note">1교시 시작할 때 이름 · 비밀번호로 시작하기, 2교시 끝에 v0.1 주소 제출, 16:20까지 최종 제출 → 모두의 작품을 함께 보고 1인 3표 → 결과 공개.</p>
   <h2>바로가기</h2>
   <div class="tiles">${tile('Claude Code', 'https://claude.ai/code', '단계 2~9')}${tile('GitHub', 'https://github.com/', '저장소 · 결재')}${tile('Vercel', 'https://vercel.com/', '배포 · 미리보기')}${tile('Firebase 콘솔', 'https://console.firebase.google.com/', 'DB 트랙')}${tile('공공데이터포털', 'https://www.data.go.kr/', 'API 트랙')}${tile('웹 서비스의 뿌리', 'https://www.jg-sobang.com/ai-literacy/', '사전 학습')}</div>
   <h2>준비물</h2>
-  <ul><li><b>사전 학습</b>: 11. 16.(월)~17.(화) — <a href="prework.html">사전 학습</a></li><li>본인 휴대폰 (문자 인증, 만든 화면 시험)</li><li>비밀번호 수첩</li><li><code>공공데이터 메모.txt</code> (서비스 키 · End Point · 요청 변수)</li><li>당일 만들 주제 한 줄</li></ul>
+  <ul><li><b>사전 학습</b>: 11. 16.(월)~17.(화) — <a href="prework.html">사전 학습</a></li><li>본인 휴대폰 (문자 인증, 만든 화면 시험)</li><li>비밀번호 수첩</li><li><code>공공데이터 메모.txt</code> (일반 인증키 · End Point)</li><li>당일 만들 주제 한 줄</li></ul>
   <p class="note">체크박스 표시는 이 PC의 브라우저에만 저장됩니다.</p>
   <script>
     // 예전 한 장짜리 교안 주소(#contest 등)로 들어오면 새 페이지로 보냅니다

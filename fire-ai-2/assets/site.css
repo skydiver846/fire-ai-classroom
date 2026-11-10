@@ -433,6 +433,16 @@ article pre.figure code { white-space: pre; word-break: normal; }
 .contest .status .on { color: var(--ok); font-weight: 700; }
 .contest .status .off { color: var(--muted); }
 .contest .hint { color: var(--muted); font-size: 15px; }
+.contest .c-now { margin: 0 0 18px; padding: 14px 18px; border-radius: 12px; background: var(--accent-soft); font-size: 18px; font-weight: 700; }
+.contest .c-form { max-width: 520px; }
+.contest .c-form.wide { max-width: 640px; }
+.contest .c-form h2 { margin: 0 0 6px; font-size: 20px; }
+.contest .c-form .hint { margin: 2px 0 0; font-size: 14px; }
+.contest .c-me { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0 0 18px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); font-weight: 700; }
+.contest button.link { background: none; color: var(--accent); padding: 0; font-weight: 600; text-decoration: underline; }
+.contest button.link:hover { box-shadow: none; transform: none; filter: none; }
+.contest .c-step { margin-bottom: 22px; }
+.contest [hidden] { display: none !important; }
 .c-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .c-form { display: grid; align-content: start; gap: 6px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); min-width: 0; }
 .c-form h3 { margin: 0 0 4px; font-size: 16.5px; }
