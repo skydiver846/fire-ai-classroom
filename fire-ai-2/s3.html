@@ -24,6 +24,78 @@
   </aside>
   <main>
     <article><header class="hero"><span class="hero-no">3</span><div class="hero-body"><p class="eyebrow">3교시 · 15:00~15:50 · 설명 ② 열쇠와 규칙 + 설치 시연</p><h1>v0.2 데이터 연동(필수)과 검증</h1><div class="hero-prog"><div class="prog" aria-label="전체 7개 중 5번째"><span style="width:71.4%"></span></div><span class="prog-t">5 / 7</span></div></div></header>
+<h2>들어가기 전에: 저장하는 곳 세 군데</h2>
+<blockquote>
+<p>🎯 <strong>목표</strong>: 내 화면의 기록이 <strong>어디에</strong> 저장되는지 알고, 왜 데이터베이스를 붙이는지 한 장으로 이해한다.</p>
+<p>📌 3교시 설명 ②에서 함께 보는 표입니다. 읽기만 하면 됩니다(2분).</p>
+</blockquote>
+<p>웹 화면이 무언가를 &quot;저장&quot;하는 곳은 세 군데입니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>🖥 브라우저</th>
+<th>☁️ Vercel</th>
+<th>🗂 데이터베이스 (Firebase)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>식당으로 치면</td>
+<td>내 메뉴판에 한 <strong>연필 표시</strong></td>
+<td>식당 <strong>건물과 메뉴판</strong></td>
+<td>카운터의 <strong>공용 장부</strong></td>
+</tr>
+<tr>
+<td>무엇을 저장</td>
+<td>나만의 작은 기록 (체크 표시, 설정)</td>
+<td><strong>화면 파일</strong> (HTML · 그림 · 서버 함수 코드)</td>
+<td><strong>모두의 기록</strong> (점검 기록, 투표, 신청)</td>
+</tr>
+<tr>
+<td>누가 보나</td>
+<td><strong>나만</strong> (그 PC, 그 브라우저)</td>
+<td>주소를 아는 모두 (읽기만)</td>
+<td><strong>모두</strong> (장부 규칙에 따라 읽고 쓰기)</td>
+</tr>
+<tr>
+<td>무료 용량</td>
+<td>약 <strong>5 MB</strong></td>
+<td>화면 파일은 넉넉</td>
+<td><strong>1 GiB</strong></td>
+</tr>
+<tr>
+<td>무료 한도</td>
+<td>없음</td>
+<td>전송량 한 달 약 100 GB, 서버 함수 <strong>12개</strong></td>
+<td>하루 읽기 5만 · 쓰기 2만 건</td>
+</tr>
+<tr>
+<td>사라지는 때</td>
+<td>사이트 데이터 지우기, 시크릿 창, 다른 PC</td>
+<td>내가 지울 때</td>
+<td>내가 지울 때</td>
+</tr>
+</tbody></table></div>
+<p><strong>v0.1 과 v0.2 의 차이가 바로 이것입니다.</strong></p>
+<ul>
+<li><strong>v0.1</strong>(지금까지): 기록이 <strong>브라우저</strong>에만 있습니다. 그래서 짝 휴대폰에는 내가 넣은 기록이 안 보입니다.</li>
+<li><strong>v0.2</strong>(지금부터): 기록을 <strong>데이터베이스</strong>에 둡니다. 누가 넣든 모두의 화면에 바로 보입니다.</li>
+<li><strong>Vercel은 기록을 저장하지 않습니다.</strong> 화면 파일을 올려 두는 곳입니다.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>지금 보는 이 교안도 똑같습니다.</strong> 글과 그림은 Vercel 파일, 체크박스 표시는 내 브라우저(다른 PC에선 사라짐), <a href="contest.html">공모 · 투표</a>는 데이터베이스(모두가 같은 결과를 봄)에 있습니다.</p>
+</blockquote>
+<p><strong>서버 함수 = 주방 창구</strong></p>
+<ul>
+<li>저장소의 <code>api</code> 폴더 안 파일 하나가 창구 하나입니다. 화면이 부르면 Vercel이 그때만 잠깐 실행합니다.</li>
+<li>비밀(서비스 키)은 이 창구 안에만 두고 화면에는 내보내지 않습니다. API 트랙 (가)에서 만드는 <code>api/data.js</code> 가 이것입니다.</li>
+<li>무료는 <strong>창구 12개</strong>까지. 창구 하나가 여러 일을 할 수 있어서(예: 공모 창구 하나가 등록 · 제출 · 투표를 모두 처리) 오늘 만드는 화면은 0~1개면 충분합니다.</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>사진은 저장하지 않습니다.</strong> 휴대폰 사진 한 장(2~5 MB)이면 브라우저 용량이 바로 차고, Firestore 기록 하나는 1 MiB까지입니다. 사진은 <strong>주소(링크)</strong> 만 글자로 저장합니다.</p>
+<p>💡 무료 한도를 넘어도 <strong>요금은 나오지 않습니다.</strong> 결제 수단을 넣지 않았으니 그날(또는 그달) 잠시 멈출 뿐입니다. &quot;Blaze · 업그레이드&quot; 단추는 누르지 않습니다.</p>
+</blockquote>
+
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 10분 · 혼자 해 보는 부분</p><h2>단계 5. 자료 붙일 준비 (사람이 직접, 10분)</h2>
 <blockquote>
 <p>🎯 <strong>목표</strong>: 열쇠와 규칙은 <strong>사람이 직접</strong> 준비한다. AI에게 맡기지 않습니다.</p>
