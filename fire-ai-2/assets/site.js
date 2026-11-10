@@ -90,3 +90,6 @@
   window.addEventListener("scroll", update, { passive: true });
   update();
 })();
+
+// 2차 추가: 큰 커서 (발표 화면에서 잘 보이게, 항상 켬)
+document.documentElement.classList.add("big-cursor");
