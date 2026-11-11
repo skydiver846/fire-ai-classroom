@@ -493,3 +493,24 @@
 .vm-name { margin: 6px 0 0; font-size: 16.5px; font-weight: 800; }
 .vm-how { margin: 0; font-size: 14px; line-height: 1.5; }
 .vm-tip { margin: 4px 0 0; padding-top: 6px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+/* 설문 만들기 */
+.ld-sv td:first-child { width: 1%; text-align: center; }
+.ld-sv td:nth-child(2) { width: 110px; }
+.ld-sv td:nth-child(4) { width: 120px; }
+.ld-sv .ld-opts { margin-top: 6px; font-size: 13.5px; background: var(--code); }
+/* 응답 분석 */
+.ld-ra { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.ld-resp { margin: 0; padding-left: 22px; display: grid; gap: 10px; }
+.ld-resp li { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.ld-resp li p { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+.ld-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ld-tag, .ld-star { font: 600 12.5px var(--font-body, sans-serif); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--code); color: var(--ink); cursor: pointer; }
+.ld-tag.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.ld-star { opacity: .45; } .ld-star.on { opacity: 1; background: #fff3cc; border-color: #ef8a17; }
+.ld-tally-wrap { position: sticky; top: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.ld-tally-row { display: grid; grid-template-columns: 120px 1fr 28px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
+.ld-tally-row i { display: block; height: 14px; border-radius: 7px; background: var(--accent); min-width: 2px; transition: width .2s; }
+.ld-tally-row b { text-align: right; }
+.ld-ra-out { margin-top: 12px; }
+@media (max-width: 760px) { .ld-ra { grid-template-columns: 1fr; } .ld-tally-wrap { position: static; } }

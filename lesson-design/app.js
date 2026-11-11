@@ -21,24 +21,28 @@
   const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
     { id: 'guide', group: '강의 개요', kind: 'lecture', short: '00 강의 안내', file: '강의설계_00_강의안내.md' },
-    { id: 'learner', group: '본 강의', kind: 'lecture', short: '01 교육생 이해', file: '강의설계_01_교육생이해.md' },
-    { id: 'product', group: '본 강의', kind: 'lecture', short: '02 산출물 중심 주제 선정', file: '강의설계_02_산출물중심_주제선정.md' },
-    { id: 'goal', group: '본 강의', kind: 'lecture', short: '03 학습목표', file: '강의설계_03_학습목표.md' },
-    { id: 'design', group: '본 강의', kind: 'lecture', short: '04 내용 구성 · 시간 배분', file: '강의설계_04_내용구성_시간배분.md' },
-    { id: 'method', group: '본 강의', kind: 'lecture', short: '05 방법 · 평가 · 안전', file: '강의설계_05_방법_평가_안전.md' },
-    { id: 'plan', group: '본 강의', kind: 'lecture', short: '06 AI로 강의계획서 완성', file: '강의설계_06_AI로_강의계획서.md' }
+    { id: 'persp', group: '1. 관점 (30분)', kind: 'lecture', short: '01 AI 교육의 관점 변화', file: '강의설계_01_관점변화.md' },
+    { id: 'survey', group: '2. 수요조사 · 분석 (80분)', kind: 'lecture', short: '02 수요조사 설계', file: '강의설계_02_수요조사설계.md' },
+    { id: 'analysis', group: '2. 수요조사 · 분석 (80분)', kind: 'lecture', short: '03 응답 분석', file: '강의설계_03_응답분석.md' },
+    { id: 'goal', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-1 교육 목표', file: '강의설계_04-1_교육목표.md' },
+    { id: 'product', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-2 도구와 결과물', file: '강의설계_04-2_도구와_결과물.md' },
+    { id: 'design', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-3 실습과 시간', file: '강의설계_04-3_실습과_시간.md' },
+    { id: 'method', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-4 평가 · 성과 · 안전', file: '강의설계_04-4_평가_성과_안전.md' },
+    { id: 'plan', group: '4. 계획서 · 발표 (20분)', kind: 'lecture', short: '05 강의계획서 · 발표', file: '강의설계_05_강의계획서_발표.md' }
   ];
-  const ORDER = ['guide', 'learner', 'product', 'goal', 'design', 'method', 'plan'];
-  const GROUPS = ['강의 개요', '본 강의'];
+  const ORDER = DOCS.map(d => d.id);
+  const GROUPS = [...new Set(DOCS.map(d => d.group))];
 
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
   const INLINE_AT = {
-    learner: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card']],
-    product: [['## 3. 유형별 산출물 아이디어', 'product-remix'], ['## 4. 산출물 깔때기', 'product-funnel'], ['## 6. 즉석으로 정하기', 'live-topic']],
+    persp: [['## 4. 같은 도구, 다른 결과물', 'product-remix']],
+    survey: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card'], ['## 6. 실습 1', 'survey-builder']],
+    analysis: [['## 2. 여러 응답 분석하기', 'response-analysis'], ['## 4. 설문을 못 했다면', 'live-topic']],
     goal: [['## 3. 보이는 동사', 'goal-judge'], ['## 4. 목표는 1~3개', 'abcd']],
+    product: [['## 4. 산출물 깔때기', 'product-funnel']],
     design: [['## 3. 세 교육생의 90분', 'time-blocks']],
-    method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 5. 안전 설계 체크리스트', 'safety-check']],
-    plan: [['## 4. AI 초안 검토', 'plan-builder']]
+    method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 6. 안전 설계', 'safety-check']],
+    plan: [['## 5. AI 초안 검토', 'plan-builder']]
   };
   const byId = Object.fromEntries(DOCS.map(d => [d.id, d]));
   const byFile = Object.fromEntries(DOCS.filter(d => d.file).map(d => [d.file.replace(/\.md$/, ''), d]));

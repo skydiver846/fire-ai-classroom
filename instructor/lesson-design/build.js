@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const SRC = __dirname, ROOT = path.join(__dirname, '..', '..'), OUT = path.join(ROOT, 'lesson-design');
 
 
-const files = fs.readdirSync(SRC).filter(f => /^강의설계_\d\d_.+\.md$/.test(f)).sort();
+const files = fs.readdirSync(SRC).filter(f => /^강의설계_[0-9-]+_.+\.md$/.test(f)).sort();
 const content = Object.fromEntries(files.map(f => [f, fs.readFileSync(path.join(SRC, f), 'utf8')]));
 fs.writeFileSync(path.join(OUT, 'content.js'), `// instructor/lesson-design/build.js 가 강의설계_*.md 에서 만든 파일입니다. 직접 고치지 마세요.\nwindow.COURSE_CONTENT = ${JSON.stringify(content)};\n`);
 
