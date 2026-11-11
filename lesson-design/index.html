@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>강의 설계 워크숍 · 주제 선정부터 강의계획서까지</title>
+<meta name="description" content="동료 강사를 위한 강의 주제 선정 · 학습목표 · 내용 구성과 시간 배분 · 교수방법과 평가 · AI로 강의계획서 완성하기 (줌 강의용)">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nanum+Gothic+Coding&display=swap">
+<link rel="stylesheet" href="styles.css?v=cb184680">
+<link rel="stylesheet" href="practice.css?v=474af89e">
+</head>
+<body>
+<div class="app" id="app" data-edition="student">
+  <aside class="side" id="side">
+    <a class="brand" href="#guide">
+      <small>동료 강사 워크숍 · 줌</small>
+      <strong>강의 설계 워크숍</strong>
+    </a>
+    <div class="tools">
+      <input type="search" id="q" placeholder="전체 자료에서 찾기 (예: ABCD)" aria-label="강의자료 검색" autocomplete="off">
+    </div>
+    <nav id="nav" aria-label="강의자료 목차"></nav>
+  </aside>
+
+  <main>
+    <div class="topbar"><button type="button" id="menu" aria-controls="side">☰ 목차</button><span id="topTitle"></span></div>
+    <div class="crumb" id="crumb"></div>
+    <article id="doc"></article>
+    <div class="pager" id="pager"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script src="content.js?v=aef94310"></script>
+<script src="practice.js?v=5121596b"></script>
+<script src="quiz.js?v=fd8888a8"></script>
+<script src="quiz-ui.js?v=2f39f314"></script>
+<script src="app.js?v=d66c628c"></script>
+<script src="/assets/pointer.js?v=856d35f3"></script>
+</body>
+</html>

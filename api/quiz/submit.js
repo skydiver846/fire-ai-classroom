@@ -1,12 +1,15 @@
 // POST /api/quiz/submit  { quiz, name, answers: [원래 선택지 번호, …] }
 // 서버에서 채점하고, 한 사람(이름)당 퀴즈마다 첫 제출만 저장합니다.
-const { redis, readBody, send, fail, PREFIX } = require('../_lib/store');
-const { keys, where } = require('../_lib/quiz-key');
+const { redis, readBody, send, fail } = require('../_lib/store');
+const { courses } = require('../_lib/quiz-key');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return send(res, 405, { error: '제출은 POST로만 받습니다.' });
   try {
-    const { quiz, name, answers } = readBody(req);
+    const { quiz, name, answers, course } = readBody(req);
+    const C = courses[course || 'ail'];
+    if (!C) return send(res, 400, { error: '알 수 없는 과정입니다.' });
+    const { keys, where, prefix: PREFIX } = C;
     const key = keys[quiz];
     if (!key) return send(res, 400, { error: '알 수 없는 퀴즈입니다.' });
 

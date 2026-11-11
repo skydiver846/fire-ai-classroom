@@ -1,0 +1,240 @@
+/* 레이아웃: 왼쪽 고정 목차 + 오른쪽 읽기 칼럼(약 70자 폭). 휴대폰에서는 목차가 왼쪽에서 열리는 서랍.
+   토큰은 「생성형 AI 입문 강의자료」와 같은 체계(소방 적색 + 강사 노트 청색)를 씁니다. */
+:root {
+  --bg: #f4f5f7;
+  --paper: #ffffff;
+  --ink: #1b2230;
+  --muted: #5b6474;
+  --line: #dde1e8;
+  --accent: #c8321e;
+  --accent-ink: #a3281a;
+  --accent-soft: #fbe9e6;
+  --note: #eef3fb;
+  --note-line: #2f5ea8;
+  --code: #f0f2f5;
+  --tip: #16825d;
+  --ask: #6a5acd;
+  --warn: #c0661b;
+  --abbr: #2676aa;
+  --font-display: "Black Han Sans", "IBM Plex Sans KR", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --font-code: "Nanum Gothic Coding", "D2Coding", ui-monospace, monospace;
+
+  /* 실습 화면(practice.css)이 쓰는 이름 */
+  --surface: var(--paper);
+  --surface-2: var(--code);
+  --text: var(--ink);
+  --brand: var(--accent);
+  --brand-2: var(--accent-ink);
+  --shadow: 0 1px 2px rgba(27, 34, 48, .05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151b; --paper: #181d25; --ink: #e6e9ee; --muted: #9aa3b2; --line: #2a313d;
+    --accent: #ff6a52; --accent-ink: #ff8f7c; --accent-soft: #3a2220; --note: #18233a; --note-line: #7aa2e8; --code: #202632;
+    --tip: #5fcf9f; --ask: #a99cf0; --warn: #f0a35e; --abbr: #6fb3e3;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151b; --paper: #181d25; --ink: #e6e9ee; --muted: #9aa3b2; --line: #2a313d;
+  --accent: #ff6a52; --accent-ink: #ff8f7c; --accent-soft: #3a2220; --note: #18233a; --note-line: #7aa2e8; --code: #202632;
+  --tip: #5fcf9f; --ask: #a99cf0; --warn: #f0a35e; --abbr: #6fb3e3;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; }
+/* 흐름도가 늦게 그려져도 브라우저가 화면 위치를 붙잡지 않게 합니다(페이지는 항상 맨 위 또는 지정한 제목에서 시작). */
+html, body { overflow-anchor: none; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.75 var(--font-body); word-break: keep-all; }
+button, input, select, textarea { font: inherit; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100%; }
+
+/* ── 목차 ── */
+.side {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+  padding-block: calc(20px + env(safe-area-inset-top, 0px)) 32px; padding-inline: 16px;
+  background: var(--paper); border-right: 1px solid var(--line);
+}
+.brand { display: grid; gap: 2px; color: var(--ink); text-decoration: none; }
+.brand small { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--accent); }
+.brand strong { font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.edition-chip { display: flex; gap: 6px; align-items: flex-start; margin: 0; padding: 8px 10px; border-radius: 6px; background: var(--note); border-left: 3px solid var(--note-line); font-size: 12px; line-height: 1.5; color: var(--ink); }
+.tools { display: grid; gap: 8px; }
+.tools input[type="search"] { width: 100%; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); font-size: 14px; }
+.toggle { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; cursor: pointer; }
+.toggle input { width: 16px; height: 16px; accent-color: var(--note-line); }
+#nav { display: grid; gap: 12px; }
+.group h3 { margin: 0 0 4px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+.group a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 14px; line-height: 1.45; }
+.group a:hover { background: var(--bg); }
+.group a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.group a.teacher-only::after { content: "강사"; margin-left: 6px; padding: 0 6px; border-radius: 99px; background: var(--note); color: var(--note-line); font-size: 10px; font-weight: 700; vertical-align: 1px; }
+.group a .hit { margin-left: 4px; color: var(--accent); font-size: 11px; }
+.empty-search { margin: 0; color: var(--muted); font-size: 13px; }
+
+/* ── 본문 ── */
+main { min-width: 0; padding-block: 28px 64px; padding-inline: 32px; }
+.topbar { display: none; }
+.crumb { margin-bottom: 6px; color: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+article { max-width: 760px; }
+article h1 { margin: 0 0 14px; font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.25; text-wrap: balance; }
+.docnav { margin: 0 0 26px; color: var(--muted); font-size: 15px; }
+.docnav a { color: var(--accent); }
+.lede { margin: 0 0 8px; font-size: 16px; }
+article h2 { scroll-margin-top: 16px; margin: 40px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 22px; line-height: 1.35; text-wrap: balance; }
+article h3 { scroll-margin-top: 16px; margin: 28px 0 8px; font-size: 17px; }
+article h4 { margin: 20px 0 6px; font-size: 15px; }
+article p, article li { max-width: 68ch; }
+article a { color: var(--accent); }
+article hr { margin: 32px 0; border: 0; border-top: 1px dashed var(--line); }
+article ul, article ol { padding-left: 1.4rem; }
+article li { margin: 4px 0; }
+article code { padding: 1px 5px; border-radius: 4px; background: var(--code); font-family: var(--font-mono); font-size: .9em; }
+
+.code-block { position: relative; margin: 14px 0; }
+.code-block pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--code); font: 14px/1.6 var(--font-code); }
+.code-block pre code { padding: 0; background: none; white-space: pre; font: inherit; }
+.text-figure { margin: 14px 0; }
+.text-figure pre { margin: 0; padding: 12px 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); font: 14px/1.6 var(--font-code); }
+.copy-button { position: absolute; top: 8px; right: 8px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--muted); font: 600 12px var(--font-body); cursor: pointer; }
+.copy-button:hover { color: var(--accent); border-color: var(--accent); }
+
+.diagram { margin: 16px 0; padding: 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); text-align: center; }
+.diagram svg { max-width: 100%; height: auto; }
+.diagram .mermaid-src { margin: 0; text-align: left; white-space: pre; color: var(--muted); font: 13px/1.6 var(--font-code); }
+
+.table-wrap { margin: 14px 0; overflow-x: auto; }
+table { min-width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 7px 10px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { background: var(--bg); font-weight: 700; }
+td { font-variant-numeric: tabular-nums; }
+
+blockquote { margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--line); background: var(--paper); }
+blockquote p { margin: 6px 0; }
+.callout { --c: var(--muted); margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--c); border-radius: 0 6px 6px 0; background: var(--paper); }
+.callout-title { margin: 2px 0 4px; color: var(--c); font-weight: 700; }
+.callout > :last-child { margin-bottom: 4px; }
+.callout.tip, .callout.example, .callout.success { --c: var(--tip); }
+.callout.question { --c: var(--ask); }
+.callout.warning, .callout.danger { --c: var(--warn); }
+.callout.abstract { --c: var(--abbr); }
+.callout.info, .callout.note { --c: var(--accent); }
+
+blockquote.teacher { border-left-color: var(--note-line); background: var(--note); }
+.teacher-label { margin: 2px 0 4px !important; color: var(--note-line); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+body.hide-teacher .teacher { display: none; }
+
+/* 강사용: 이번 수업 진행 카드(초록) · 건너뛸 절(사선 무늬 + 취소선) */
+.cue { margin: 14px 0; padding: 8px 14px 6px; border-left: 4px solid var(--tip); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--tip) 10%, var(--paper)); }
+.cue > p { margin: 4px 0; }
+.cue .cue-cut { margin: 6px 0 2px; padding-top: 6px; border-top: 1px dashed color-mix(in srgb, var(--warn) 40%, transparent); color: var(--warn); font-size: 13px; font-weight: 600; }
+.cue .cue-time { margin: 0 0 2px; color: var(--tip); font: 700 13px/1.4 var(--font-mono); letter-spacing: .02em; }
+.skip-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 99px; background: var(--warn); color: var(--paper); font: 700 12px/1.6 var(--font-body); vertical-align: middle; letter-spacing: 0; }
+body:not(.hide-teacher) .skipped {
+  text-decoration: line-through; text-decoration-color: var(--warn); text-decoration-thickness: 1.5px;
+  background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--warn) 16%, transparent) 10px 11.5px);
+}
+body:not(.hide-teacher) .skipped:not(h1, h2, h3, h4) { opacity: .5; }
+/* 교육생용: 이번 수업에서 건너뛰는 절 제목의 표시(내용은 그대로) */
+.later-fold > summary { list-style: none; cursor: pointer; }
+.later-fold > summary::-webkit-details-marker { display: none; }
+.later-fold > summary .later-badge::after { content: " · 펼치기 ▾"; }
+.later-fold[open] > summary .later-badge::after { content: " · 접기 ▴"; }
+.later-fold > summary:hover .later-badge { border-color: var(--accent); color: var(--accent); }
+.later-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border: 1px dashed var(--line); border-radius: 99px; color: var(--muted); font: 600 12px/1.6 var(--font-body); vertical-align: middle; white-space: nowrap; }
+blockquote.teacher del { color: var(--muted); text-decoration-color: var(--warn); }
+body:not(.hide-teacher) h2.skipped, body:not(.hide-teacher) h3.skipped, body:not(.hide-teacher) h4.skipped { color: var(--muted); }
+
+.pager { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; max-width: 760px; margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); }
+.pager a { flex: 1 1 220px; display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); text-decoration: none; }
+.pager a span { color: var(--muted); font-size: 12px; }
+.pager a.next { text-align: right; }
+.pager a:hover { border-color: var(--accent); }
+
+.error { padding: 16px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .side { position: fixed; inset: 0 auto 0 0; z-index: 10; width: min(300px, 86vw); transform: translateX(-102%); transition: transform .2s; box-shadow: 0 0 0 100vmax transparent; }
+  .side.open { transform: none; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .35); }
+  main { padding-inline: 16px; padding-block: 0 48px; }
+  .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: 10px; margin-bottom: 8px; padding-block: 10px; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .topbar button { padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); font-weight: 600; font-size: 14px; }
+  .topbar span { min-width: 0; overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  article h1 { font-size: 26px; }
+}
+
+/* ── 강의 모드: 목차를 숨기고 본문 칼럼을 가운데에서 통째로 확대 (px · rem이 섞여 있어 zoom으로 한 번에) ── */
+/* 눈에 띄는 버튼: 빨간 바탕 + 아이콘, 올리면 살짝 떠오름. 강의 모드 버튼은 처음 열 때 몇 번 깜빡여 위치를 알립니다. */
+.lecture-toggle { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border: 0; border-radius: 99px; background: var(--accent); color: var(--bg); font-size: 14px; font-weight: 700; box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, opacity .2s; animation: attention 1.6s ease-out 1s 3; }
+.lecture-toggle::before { content: "🖥️"; }
+.lecture-toggle:hover { background: var(--accent-ink); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 45%, transparent); }
+@keyframes attention {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent), 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent, 0 4px 14px color-mix(in srgb, var(--accent) 35%, transparent); }
+}
+.app.lecture { grid-template-columns: minmax(0, 1fr); }
+.app.lecture .side, .app.lecture .topbar { display: none; }
+.app.lecture main { --lz: 1.25; zoom: var(--lz); padding-block: 24px 64px; }
+.app.lecture article, .app.lecture .pager, .app.lecture .crumb { margin-inline: auto; max-width: 760px; }
+/* 강의 모드 중에는 화면을 가리지 않게 차분한 모양으로 (올리면 다시 진하게) */
+.lecture-toggle[aria-pressed="true"] { opacity: .55; background: var(--paper); color: var(--muted); box-shadow: var(--shadow); border: 1px solid var(--line); animation: none; }
+.lecture-toggle[aria-pressed="true"]::before { content: "↩"; }
+.lecture-toggle[aria-pressed="true"]:hover, .lecture-toggle[aria-pressed="true"]:focus-visible { opacity: 1; }
+@media (min-width: 1200px) { .app.lecture main { --lz: 1.4; } }
+@media (min-width: 1500px) { .app.lecture main { --lz: 1.6; } }
+@media (min-width: 2200px) { .app.lecture main { --lz: 2; } }
+/* 긴 흐름도는 한 화면에 들어오게 줄이되, 평소 화면에서 보던 크기보다 작게는 줄이지 않습니다. */
+.app.lecture .diagram svg { max-height: max(calc((100vh - 120px) / var(--lz)), calc(var(--natural-h, 0px) / var(--lz))); }
+@media (max-width: 600px) { .lecture-toggle:not([aria-pressed="true"]) { display: none; } }
+
+/* ── PDF로 저장 · 인쇄 ── */
+.print-button { display: inline-flex; align-items: center; gap: 6px; margin: -14px 0 22px; padding: 7px 14px; border: 1px solid var(--accent); border-radius: 8px; background: var(--accent-soft); color: var(--accent-ink); font-size: 14px; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, color .15s; }
+.print-button::before { content: "📄"; }
+.print-button:hover { background: var(--accent); color: var(--bg); transform: translateY(-2px); box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent); }
+.print-foot { display: none; }
+
+@media print {
+  @page { size: A4; margin: 16mm 14mm; }
+  :root { color-scheme: light; }
+  body { background: #fff; font-size: 10.5pt; line-height: 1.65; }
+  .app, .app.lecture { display: block; }
+  .side, .topbar, .crumb, .docnav, .pager, .print-button, .later-badge, .copy-button, .lecture-toggle, .quiz, .inline-slot > * { display: none !important; }
+  main, .app.lecture main { zoom: 1; padding: 0; }
+  article, .app.lecture article { max-width: none; margin: 0; }
+  article p, article li { max-width: none; }
+  article a { color: inherit; text-decoration: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  article h1 { font-size: 20pt; }
+  article h2 { font-size: 15pt; margin-top: 22px; break-after: avoid; }
+  article h3, article h4 { break-after: avoid; }
+  .diagram, .table-wrap, .callout, blockquote, .code-block, .text-figure, .warmup, tr { break-inside: avoid; }
+  .diagram { overflow: visible; }
+  .diagram svg { max-height: 230mm; }
+  .table-wrap { overflow: visible; }
+  table { font-size: 9pt; }
+  .code-block pre, .text-figure pre { overflow: visible; white-space: pre-wrap; word-break: break-all; font-size: 9pt; }
+  /* 본문 속 실습 자리는 한 줄 안내로 (접힌 선택 활동은 뺌) */
+  .inline-slot[data-print-title]::before { content: "✏️ 바로 해 보기 · " attr(data-print-title) " → 강의 사이트에서 직접 해 보세요"; display: block; margin: 12px 0; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 6px; color: var(--muted); font-size: 9.5pt; }
+  .print-foot { display: block; margin-top: 28px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9pt; }
+  .print-foot p { margin: 2px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lecture-toggle, .print-button { animation: none; transition: none; }
+  .lecture-toggle:hover, .print-button:hover { transform: none; }
+  .side { transition: none; }
+}

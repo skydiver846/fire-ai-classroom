@@ -1,13 +1,15 @@
 // GET /api/quiz/board  결과 공유판: 제출 현황, 문항별 정답률·선택 분포, 강의별 상위 3명(항상),
 // (강사가 공개하면) 정답과 전체 상위 3명
 // 개인 점수는 돌려주지 않습니다.
-const { redis, toObject, send, fail, PREFIX } = require('../_lib/store');
-const { keys } = require('../_lib/quiz-key');
-
-const QUIZ_IDS = Object.keys(keys);
+const { redis, toObject, send, fail } = require('../_lib/store');
+const { courses } = require('../_lib/quiz-key');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') return send(res, 405, { error: 'GET으로만 조회합니다.' });
+  const C = courses[(req.query && req.query.course) || 'ail'];
+  if (!C) return send(res, 400, { error: '알 수 없는 과정입니다.' });
+  const { keys, prefix: PREFIX } = C;
+  const QUIZ_IDS = Object.keys(keys);
   try {
     const results = await redis([...QUIZ_IDS.map(id => ['HGETALL', `${PREFIX}:sub:${id}`]), ['HGETALL', `${PREFIX}:flags`]]);
     const flags = toObject(results.pop());

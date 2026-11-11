@@ -1,14 +1,17 @@
 // POST /api/quiz/admin  { key, action }  강사 전용 (Vercel 환경 변수 QUIZ_ADMIN_KEY 와 같아야 함)
 // action: check | show-answers | hide-answers | show-top | hide-top | reset
-const { redis, readBody, send, fail, PREFIX } = require('../_lib/store');
-const { keys } = require('../_lib/quiz-key');
+const { redis, readBody, send, fail } = require('../_lib/store');
+const { courses } = require('../_lib/quiz-key');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return send(res, 405, { error: 'POST로만 받습니다.' });
   const adminKey = process.env.QUIZ_ADMIN_KEY;
   if (!adminKey) return send(res, 503, { error: '관리 비밀번호(QUIZ_ADMIN_KEY)가 아직 설정되지 않았습니다.' });
   try {
-    const { key, action } = readBody(req);
+    const { key, action, course } = readBody(req);
+    const C = courses[course || 'ail'];
+    if (!C) return send(res, 400, { error: '알 수 없는 과정입니다.' });
+    const { keys, prefix: PREFIX } = C;
     if (String(key || '') !== adminKey) return send(res, 401, { error: '관리 비밀번호가 맞지 않습니다.' });
     const flags = `${PREFIX}:flags`;
     const commands = {

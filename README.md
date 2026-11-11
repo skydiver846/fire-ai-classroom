@@ -10,6 +10,7 @@
 | `fire-ai/` | 생성형 AI 업무 활용 입문 |
 | `fire-ai-2/` | 생성형 AI 2차(과정 마무리) 교안. 1차(`fire-ai/`)와 같은 모양(assets/site.css·site.js 복사)의 여러 장: 처음 화면, 사전 학습, 흐름도, 1~4교시, 공모 · 투표. `instructor/2차-사전학습.md`, `instructor/2차-실습지.md`, `instructor/contest.part.html` 을 고친 뒤 `instructor/build-fire-ai-2.js` 로 다시 만듦 (방법은 파일 맨 위) |
 | `api/fire-contest/` | 2차 공모 서버 함수: `act`(GET 현황·결과 조회, POST 참가 등록·산출물 제출·투표), `admin`(강사: 단계 열고 닫기·자격 미달 빼기). 퀴즈와 같은 저장소(Upstash Redis)와 `QUIZ_ADMIN_KEY` 를 씀. 강사 관리 화면은 `fire-ai-2/admin.html` |
+| `lesson-design/` | 강의 설계 워크숍(동료 강사 · 줌 약 85분): 주제 선정 → 학습목표 → 내용 · 시간 → 방법 · 평가 → AI로 강의계획서. 원문은 `instructor/lesson-design/*.md`, 고친 뒤 `node instructor/lesson-design/build.js` (content.js · quiz.js · 서버 정답 `api/_lib/quiz-key-ld.js` 생성). 퀴즈는 `/api/quiz` 를 함께 쓰되 과정(`course: ld`)별로 기록이 나뉨 |
 | `assets/pointer.js` | 사이트 공통 큰 커서(켜기/끄기 단추, 모든 페이지에 기억) + 누를 수 있는 곳 블록 강조. 새 페이지는 `python3 instructor/add-pointer.py` 로 붙임(2차 교안은 빌드가 붙임) |
 | `api/fire.js` | 2차 API 트랙 강사 공용 화재 현황 주소(`/api/fire?sido=서울`, 소방청 화재정보서비스 시도단위 화재발생현황). Vercel 환경 변수 `DATA_GO_KR_KEY`(소방청_화재정보서비스 일반 인증키) 필요, 10분 CDN 캐시. Vercel 무료 한도 12개 중 서버 함수는 지금 6개(퀴즈 3 · 공모 2 · 화재 현황 1). 1차 수요조사 · 교육 신청 함수는 11. 10. 정리(코드는 git 기록에, 응답 자료는 Upstash에 그대로) |
 | `instructor/` | 강사용 자료(2차 계획안·흐름도·심사 기준)와 2차 원본. `.vercelignore` 로 배포에서 뺌 |
