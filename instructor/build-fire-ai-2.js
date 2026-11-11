@@ -99,6 +99,7 @@ function page(p, body) {
   </main>
 </div>
 <script src="assets/site.js?v=${ver('assets/site.js')}"></script>
+<script src="/assets/pointer.js?v=${require('crypto').createHash('md5').update(fs.readFileSync(path.join(ROOT, 'assets/pointer.js'))).digest('hex').slice(0, 8)}"></script>
 ${p.script ? `<script src="${p.script}?v=${ver(p.script)}"></script>\n` : ''}</body>
 </html>
 `;
