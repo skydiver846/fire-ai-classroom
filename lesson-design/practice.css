@@ -338,3 +338,4 @@
 .ld-note b { color: var(--ink); }
 .ld-hint { margin: 6px 0 0; font-size: 14px; }
 .ld-make { font-weight: 700; color: var(--ink); }
+.ld-presets { flex-wrap: wrap; }
