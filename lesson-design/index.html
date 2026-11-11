@@ -2,18 +2,29 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI 강사를 위한 맞춤형 교육과정 설계</title>
-<meta name="description" content="AI 강사를 위한 수요조사 기반 맞춤형 교육과정 설계: 관점 변화, 수요조사 설계, 응답 분석, 맞춤 교육과정 설계, 강의계획서 · 발표 (줌 3시간)">
+<meta name="description" content="AI 강사 워크숍 (비공개)">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nanum+Gothic+Coding&display=swap">
-<link rel="stylesheet" href="styles.css?v=cb184680">
+<link rel="stylesheet" href="styles.css?v=394a2453">
 <link rel="stylesheet" href="practice.css?v=76638490">
 </head>
 <body>
-<div class="app" id="app" data-edition="student">
+<div class="gate" id="gate" hidden>
+  <form class="gate-box" id="gate-form">
+    <p class="gate-kicker">AI 강사 워크숍</p>
+    <h1>수요조사 기반 맞춤형 교육과정 설계</h1>
+    <p>강의 전까지 비공개 자료입니다. 강사에게 받은 <b>접속 코드</b>를 넣어 주세요.</p>
+    <label for="gate-code">접속 코드</label>
+    <div class="gate-row"><input id="gate-code" type="password" autocomplete="off" required><button type="submit">들어가기</button></div>
+    <p class="gate-msg" id="gate-msg" role="status"></p>
+  </form>
+</div>
+<div class="app" id="app" data-edition="student" hidden>
   <aside class="side" id="side">
     <a class="brand" href="#guide">
-      <small>AI 강사 워크숍 · 줌 3시간</small>
+      <small>AI 강사 워크숍 · 줌 70분</small>
       <strong>수요조사 기반 맞춤형 교육과정 설계</strong>
     </a>
     <div class="tools">
@@ -31,9 +42,32 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
-<script src="content.js?v=c5cde5f3"></script>
-<script src="practice.js?v=6f17ef3a"></script>
-<script src="app.js?v=26792518"></script>
+<script src="practice.js?v=8c8d2f42"></script>
+<link rel="preload" as="script" href="app.js?v=35f27da6" id="ld-app">
+<script>
+  // 강의 전 비공개: 접속 코드를 넣으면 서버에서 본문을 받아 와 화면을 그립니다. 코드는 이 브라우저에 기억합니다.
+  (function () {
+    var KEY = 'ld-access';
+    var gate = document.getElementById('gate'), form = document.getElementById('gate-form'), msg = document.getElementById('gate-msg'), input = document.getElementById('gate-code');
+    function start(content) {
+      window.COURSE_CONTENT = content;
+      gate.hidden = true; document.getElementById('app').hidden = false;
+      var s = document.createElement('script'); s.src = document.getElementById('ld-app').href; document.body.appendChild(s);
+    }
+    function tryCode(code, quiet) {
+      return fetch('/api/lesson?code=' + encodeURIComponent(code), { cache: 'no-store' }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          if (!r.ok) throw new Error(d.error || '본문을 불러오지 못했습니다.');
+          try { localStorage.setItem(KEY, code); } catch (e) {}
+          start(d.content);
+        });
+      }).catch(function (e) { if (!quiet) msg.textContent = e.message; gate.hidden = false; });
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); msg.textContent = '확인하는 중…'; tryCode(input.value.trim(), false); });
+    var saved = ''; try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
+    tryCode(saved, true);
+  })();
+</script>
 <script src="/assets/pointer.js?v=856d35f3"></script>
 </body>
 </html>

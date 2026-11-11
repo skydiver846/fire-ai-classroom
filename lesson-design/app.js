@@ -21,27 +21,27 @@
   const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
     { id: 'guide', group: '강의 개요', kind: 'lecture', short: '00 강의 안내', file: '강의설계_00_강의안내.md' },
-    { id: 'persp', group: '1. 관점 (30분)', kind: 'lecture', short: '01 AI 교육의 관점 변화', file: '강의설계_01_관점변화.md' },
-    { id: 'survey', group: '2. 수요조사 · 분석 (80분)', kind: 'lecture', short: '02 수요조사 설계', file: '강의설계_02_수요조사설계.md' },
-    { id: 'analysis', group: '2. 수요조사 · 분석 (80분)', kind: 'lecture', short: '03 응답 분석', file: '강의설계_03_응답분석.md' },
-    { id: 'goal', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-1 교육 목표', file: '강의설계_04-1_교육목표.md' },
-    { id: 'product', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-2 도구와 결과물', file: '강의설계_04-2_도구와_결과물.md' },
-    { id: 'design', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-3 실습과 시간', file: '강의설계_04-3_실습과_시간.md' },
-    { id: 'method', group: '3. 맞춤 교육과정 설계 (50분)', kind: 'lecture', short: '4-4 평가 · 성과 · 안전', file: '강의설계_04-4_평가_성과_안전.md' },
-    { id: 'plan', group: '4. 계획서 · 발표 (20분)', kind: 'lecture', short: '05 강의계획서 · 발표', file: '강의설계_05_강의계획서_발표.md' }
+    { id: 'persp', group: '1. 관점 (10분)', kind: 'lecture', short: '01 AI 교육의 관점 변화', file: '강의설계_01_관점변화.md' },
+    { id: 'survey', group: '2. 수요조사 · 분석 (30분)', kind: 'lecture', short: '02 수요조사 설계', file: '강의설계_02_수요조사설계.md' },
+    { id: 'analysis', group: '2. 수요조사 · 분석 (30분)', kind: 'lecture', short: '03 응답 분석', file: '강의설계_03_응답분석.md' },
+    { id: 'goal', group: '3. 맞춤 교육과정 설계 (20분)', kind: 'lecture', short: '4-1 교육 목표', file: '강의설계_04-1_교육목표.md' },
+    { id: 'product', group: '3. 맞춤 교육과정 설계 (20분)', kind: 'lecture', short: '4-2 도구와 결과물', file: '강의설계_04-2_도구와_결과물.md' },
+    { id: 'design', group: '3. 맞춤 교육과정 설계 (20분)', kind: 'lecture', short: '4-3 실습과 시간', file: '강의설계_04-3_실습과_시간.md' },
+    { id: 'method', group: '3. 맞춤 교육과정 설계 (20분)', kind: 'lecture', short: '4-4 평가 · 성과 · 안전', file: '강의설계_04-4_평가_성과_안전.md' },
+    { id: 'plan', group: '4. 계획서 · 발표 (10분)', kind: 'lecture', short: '05 강의계획서 · 발표', file: '강의설계_05_강의계획서_발표.md' }
   ];
   const ORDER = DOCS.map(d => d.id);
   const GROUPS = [...new Set(DOCS.map(d => d.group))];
 
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
-  const INLINE_AT = {
-    persp: [['## 4. 같은 도구, 다른 결과물', 'product-remix']],
-    survey: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card'], ['## 6. 실습 1', 'survey-builder']],
-    analysis: [['## 2. 여러 응답 분석하기', 'response-analysis'], ['## 4. 설문을 못 했다면', 'live-topic']],
-    goal: [['## 3. 보이는 동사', 'goal-judge'], ['## 4. 목표는 1~3개', 'abcd']],
-    product: [['## 4. 산출물 깔때기', 'product-funnel']],
-    design: [['## 3. 세 교육생의 90분', 'time-blocks']],
-    method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 6. 안전 설계', 'safety-check']],
+  const INLINE_AT = {   // 수업(70분) 중 바로 해 보기는 4개, 나머지는 { optional: true } 로 접어 둠
+    persp: [['## 4. 같은 도구, 다른 결과물', 'product-remix', { optional: true }]],
+    survey: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card', { optional: true }], ['## 6. 실습 1', 'survey-builder']],
+    analysis: [['## 2. 여러 응답 분석하기', 'response-analysis'], ['## 4. 설문을 못 했다면', 'live-topic', { optional: true }]],
+    goal: [['## 2. ABCD로 쓰기', 'abcd'], ['## 3. 보이는 동사', 'goal-judge', { optional: true }]],
+    product: [['## 4. 산출물 깔때기', 'product-funnel', { optional: true }]],
+    design: [['## 3. 세 교육생의 90분', 'time-blocks', { optional: true }]],
+    method: [['## 2. 교육생에 맞는 방법', 'align-match', { optional: true }], ['## 6. 안전 설계', 'safety-check', { optional: true }]],
     plan: [['## 5. AI 초안 검토', 'plan-builder']]
   };
   const byId = Object.fromEntries(DOCS.map(d => [d.id, d]));
@@ -340,7 +340,18 @@
   /* ───────── 이번 2시간 수업: 건너뛸 절 · 강사용 진행 카드 ───────── */
   // 이번 수업에서 건너뛸 절(그 제목부터 같은 단계의 다음 제목 전까지). 강사용: 사선 무늬 · 취소선 · “⏭ 이번엔 건너뜀”,
   // 교육생용: 제목에 “📖 수업 뒤 읽을거리” 표시만. 진행 카드(⏱)는 강사용 notes.js 의 scenario.
-  const SKIP_THIS_CLASS = {};
+  // 1시간 10분 수업에서는 건너뛰는 절: 교육생 화면에서 "📖 수업 뒤 읽을거리"로 접힘
+  const SKIP_THIS_CLASS = {
+    guide: ['## 이 흐름이 낯설지 않은 이유'],
+    persp: ['## 4. 같은 도구, 다른 결과물'],
+    survey: ['## 2. 교육생을 보는 네 가지 렌즈', '## 3. 필요는 세 종류', '## 5. 설문 말고도'],
+    analysis: ['## 4. 설문을 못 했다면'],
+    goal: ['## 3. 보이는 동사', '## 4. 목표는 1~3개', '## 5. AI로 목표 다듬기'],
+    product: ['## 3. 유형별 산출물 아이디어', '## 4. 산출물 깔때기', '## 5. 민감한 주제'],
+    design: ['## 3. 세 교육생의 90분', '## 4. 설명은 10분 규칙', '## 5. 내용은 산출물에서'],
+    method: ['## 2. 교육생에 맞는 방법', '## 4. 정서 · 관계 활동의', '## 6. 안전 설계'],
+    plan: ['## 3. AI에게 맡길 일', '## 4. 좋은 요청의 여섯 칸', '## 7. 다음 단계']
+  };
 
 
   function markLessonPlan(id) {

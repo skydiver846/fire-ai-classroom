@@ -754,10 +754,16 @@
     'plan-builder': { title: '내 맞춤 강의계획서 한 장', time: '약 8분', goal: '앞 장에서 적은 것을 불러와 빈칸을 채웁니다. 오른쪽 점검이 모두 ✓가 되면 새 창으로 열어 PDF로 저장하세요.', build: planBuilder }
   };
 
-  function inline(kind, host) {
+  function inline(kind, host, ctx = {}) {
     const spec = INLINE[kind];
     if (!host || !spec) return;
     host.dataset.printTitle = spec.title;
+    if (ctx.optional) {   // 수업 시간에는 접어 두고, 펼치면 그때 만듭니다
+      host.innerHTML = `<details class="inline-lab optional"><summary><span class="inline-tag">더 해 보기 · 수업 뒤</span> ${spec.title} <small>${spec.time}</small></summary><p class="lab-goal">${spec.goal}</p><div class="lab-body"></div></details>`;
+      const d = host.querySelector('details');
+      d.addEventListener('toggle', () => { const body = d.querySelector('.lab-body'); if (d.open && !body.dataset.built) { body.dataset.built = '1'; spec.build(body); } });
+      return;
+    }
     host.innerHTML = `<section class="inline-lab"><p class="lab-kind"><span>바로 해 보기</span>${spec.time}</p><h3 class="inline-title">${spec.title}</h3><p class="lab-goal">${spec.goal}</p><div class="lab-body"></div></section>`;
     spec.build(host.querySelector('.lab-body'));
   }
