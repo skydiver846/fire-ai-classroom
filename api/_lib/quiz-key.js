@@ -3,6 +3,6 @@
 const ail = { keys: {"frontend":[1,1,1,1,2],"backend":[1,1,1,1,1],"database":[1,1,1,1,0],"deploy":[1,0,1,1,0]}, where: {"frontend":["3절 · 보기 좋게: CSS의 등장","4절 · 반응하게: JavaScript · 이벤트 · DOM","6절 · 직접 조작에서 상태 중심으로","9절 · MPA → SPA → SSR","9절 · CSR · SSR · Hydration"],"backend":["1절 · 정적 웹에서 동적 웹으로","5절 · HTML 제조에서 데이터 공급으로: API","6절 · 인증과 인가를 구분하기","6절 · “꼭 정확히 알기” 상자","8절 · 반만 성공하면 안 되는 일: 트랜잭션"],"database":["0절 핵심 메시지 · 7절 객체 스토리지","3-3 · 관계형 DB: 표와 관계","3-4 · 정규화: 같은 사실은 한 곳에만","4-2 · 인덱스: 책의 색인","8절 · 저장과 전달은 다르다: CDN"],"deploy":["1-3 · localhost의 진짜 의미","1-2 · IP · 도메인 · DNS · 포트","2절 · 웹 서버와 WAS","5절 · “내 컴퓨터에선 되는데요” → Docker","이 단계에서 쓰는 도구 · 고르는 질문"]} };
 
 // 과정별 퀴즈. 과정마다 Redis 키 앞머리(prefix)가 달라 제출 · 공유판 · 초기화가 섞이지 않습니다.
-//   ail: AI 리터러시(웹 서비스의 뿌리, 원래 퀴즈)   ld: 강의 설계 워크숍(lesson-design/build.js 가 만든 quiz-key-ld.js)
-const courses = { ail: { prefix: 'ail', ...ail }, ld: { prefix: 'ld', ...require('./quiz-key-ld') } };
+//   ail: AI 리터러시(웹 서비스의 뿌리). 새 과정을 붙일 때 { prefix, keys, where } 를 더합니다.
+const courses = { ail: { prefix: 'ail', ...ail } };
 module.exports = { ...ail, courses };

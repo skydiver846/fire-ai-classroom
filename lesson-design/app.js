@@ -16,7 +16,7 @@
   const LAB_NOTE = '모든 실습은 이 브라우저 안에서만 돌아가며, 입력한 내용은 어디에도 전송되지 않습니다.';
   const SITE_URL = 'https://www.jg-sobang.com/lesson-design/';
   // 인쇄 · PDF 마지막에 붙는 안내(화면에는 보이지 않음)
-  const PRINT_FOOT = `<footer class="print-foot"><p>바로 해 보기와 퀴즈는 강의 사이트에서 해 보세요: ${SITE_URL}</p>
+  const PRINT_FOOT = `<footer class="print-foot"><p>바로 해 보기는 강의 사이트에서 해 보세요: ${SITE_URL}</p>
     <p>참고: 학습자 분석 · ADDIE, 프로젝트 기반 학습, Mager의 ABCD 목표 진술, Bloom의 교육목표 분류, Gagné의 수업 사태를 강의용으로 간추렸습니다.</p></footer>`;
   const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
@@ -26,11 +26,10 @@
     { id: 'goal', group: '본 강의', kind: 'lecture', short: '03 학습목표', file: '강의설계_03_학습목표.md' },
     { id: 'design', group: '본 강의', kind: 'lecture', short: '04 내용 구성 · 시간 배분', file: '강의설계_04_내용구성_시간배분.md' },
     { id: 'method', group: '본 강의', kind: 'lecture', short: '05 방법 · 평가 · 안전', file: '강의설계_05_방법_평가_안전.md' },
-    { id: 'plan', group: '본 강의', kind: 'lecture', short: '06 AI로 강의계획서 완성', file: '강의설계_06_AI로_강의계획서.md' },
-    { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' }
+    { id: 'plan', group: '본 강의', kind: 'lecture', short: '06 AI로 강의계획서 완성', file: '강의설계_06_AI로_강의계획서.md' }
   ];
-  const ORDER = ['guide', 'learner', 'product', 'goal', 'design', 'method', 'plan', 'board'];
-  const GROUPS = ['강의 개요', '본 강의', '마무리'];
+  const ORDER = ['guide', 'learner', 'product', 'goal', 'design', 'method', 'plan'];
+  const GROUPS = ['강의 개요', '본 강의'];
 
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
   const INLINE_AT = {
@@ -81,6 +80,21 @@
         return `<span class="vt-${kind || 'other'}" style="flex:${Number(pct) || 1}" title="${escapeHtml(name)}">${escapeHtml(name)}</span>`;
       }).join('')}</div></div>`;
     }).join('')}<p class="vt-legend"><span class="vt-open">열기</span><span class="vt-talk">설명</span><span class="vt-follow">따라 하기</span><span class="vt-make">만들기</span><span class="vt-share">나누기</span></p></figure>`,
+    // compare : "✕ 이렇게 쓰면 | 왜 안 되나 | ✓ 이렇게 고치기"
+    compare: lines => `<figure class="vis vis-compare"><div class="vx-head"><span>✕ 이렇게 쓰면</span><span>✓ 이렇게 고치기</span></div>${lines.map(l => {
+      const [bad, why, good] = cells(l);
+      return `<div class="vx-row"><div class="vx-bad"><p>${inline(bad)}</p><small>${inline(why || '')}</small></div><span class="vx-arrow" aria-hidden="true">➜</span><div class="vx-good"><p>${inline(good || '')}</p></div></div>`;
+    }).join('')}</figure>`,
+    // sentence : "A:대상 | C:조건 | D:기준 | B:행동"  → 글자별 색 띠
+    sentence: lines => `<figure class="vis vis-sentence">${lines.map(l => `<p class="vs-line">${cells(l).map(part => {
+      const m = part.match(/^([ABCD]):\s*(.*)$/);
+      return m ? `<span class="vs-${m[1].toLowerCase()}"><b>${m[1]}</b>${inline(m[2])}</span>` : `<span>${inline(part)}</span>`;
+    }).join('')}</p>`).join('')}</figure>`,
+    // letters : "A | Audience | 대상 | 설명"  → 글자 색이 sentence 와 같은 네 칸
+    letters: lines => `<div class="vis vis-letters">${lines.map(l => {
+      const [k, en, ko, desc] = cells(l);
+      return `<div class="vl-cell vs-${k.toLowerCase()}"><b>${escapeHtml(k)}</b><p class="vl-ko">${inline(ko || '')}</p><p class="vl-en">${inline(en || '')}</p><p class="vl-desc">${inline(desc || '')}</p></div>`;
+    }).join('')}</div>`,
     cards: lines => `<div class="vis vis-cards">${lines.map(l => {
       const [icon, title, main, sub] = cells(l);
       return `<div class="vc-card"><span class="vc-icon">${icon}</span><p class="vc-title">${inline(title)}</p><p class="vc-main">${inline(main || '')}</p>${sub ? `<p class="vc-sub">${inline(sub)}</p>` : ''}</div>`;

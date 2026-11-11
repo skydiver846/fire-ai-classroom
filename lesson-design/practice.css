@@ -423,3 +423,37 @@
 .prompt-block pre { border: 0; border-radius: 0; background: transparent; overflow-x: visible; }
 .prompt-block pre code { white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font-family: var(--font-body); font-size: 15px; line-height: 1.75; }
 .pr-slot { background: color-mix(in srgb, #ef8a17 22%, transparent); color: inherit; border-radius: 4px; padding: 0 2px; font-weight: 600; }
+
+/* 비교: ✕ → ✓ */
+.vis-compare { display: grid; gap: 10px; padding: 14px 16px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vx-head { display: grid; grid-template-columns: 1fr 34px 1fr; font-size: 13px; font-weight: 800; }
+.vx-head span:first-child { color: var(--muted); } .vx-head span:last-child { grid-column: 3; color: #13897a; }
+.vx-row { display: grid; grid-template-columns: 1fr 34px 1fr; align-items: stretch; }
+.vx-bad, .vx-good { padding: 10px 14px; border-radius: 10px; }
+.vx-bad { background: color-mix(in srgb, #8a94a3 12%, var(--paper)); border: 1px dashed color-mix(in srgb, #8a94a3 60%, var(--line)); }
+.vx-bad p { margin: 0; color: var(--muted); font-size: 15px; }
+.vx-bad p::before { content: "✕ "; color: var(--accent); font-weight: 800; }
+.vx-bad small { display: block; margin-top: 4px; font-size: 12.5px; color: var(--accent); }
+.vx-good { background: color-mix(in srgb, #13897a 10%, var(--paper)); border: 1px solid color-mix(in srgb, #13897a 40%, var(--line)); }
+.vx-good p { margin: 0; font-size: 15px; font-weight: 600; }
+.vx-good p::before { content: "✓ "; color: #13897a; font-weight: 800; }
+.vx-arrow { display: grid; place-items: center; color: #13897a; font-size: 18px; }
+/* 색 문장: A · B · C · D */
+.vis-sentence { padding: 16px 18px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vs-line { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 16px; }
+.vs-line span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px 6px 6px; border-radius: 10px; font-weight: 600; }
+.vs-line span b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; color: #fff; font-size: 13px; }
+.vs-a { background: color-mix(in srgb, #2f6fd0 14%, var(--paper)); } .vs-a b { background: #2f6fd0; }
+.vs-b { background: color-mix(in srgb, var(--accent) 14%, var(--paper)); } .vs-b b { background: var(--accent); }
+.vs-c { background: color-mix(in srgb, #13897a 14%, var(--paper)); } .vs-c b { background: #13897a; }
+.vs-d { background: color-mix(in srgb, #ef8a17 16%, var(--paper)); } .vs-d b { background: #ef8a17; }
+@media (max-width: 640px) { .vx-head { display: none; } .vx-row { grid-template-columns: 1fr; gap: 4px; } .vx-arrow { transform: rotate(90deg); } }
+/* ABCD 네 칸 */
+.vis-letters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.vl-cell { padding: 14px 14px 12px; border-radius: 14px; border: 1px solid var(--line); }
+.vl-cell b { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.vl-cell.vs-a b { background: #2f6fd0; } .vl-cell.vs-b b { background: var(--accent); } .vl-cell.vs-c b { background: #13897a; } .vl-cell.vs-d b { background: #ef8a17; }
+.vl-ko { margin: 0; font-size: 18px; font-weight: 800; }
+.vl-en { margin: 0 0 6px; font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
+.vl-desc { margin: 0; font-size: 13.5px; line-height: 1.5; }
+@media (max-width: 760px) { .vis-letters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

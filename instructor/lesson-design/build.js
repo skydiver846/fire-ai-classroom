@@ -1,48 +1,15 @@
 // 강의 설계 워크숍 사이트(lesson-design/) 자료 만들기
-// 원문: instructor/lesson-design/강의설계_*.md, 퀴즈: 이 파일의 QUIZ
-// 결과: lesson-design/content.js, lesson-design/quiz.js, api/_lib/quiz-key-ld.js(서버 채점용 정답), lesson-design/index.html 의 ?v= 버전
+// 원문: instructor/lesson-design/강의설계_*.md (퀴즈는 쓰지 않음)
+// 결과: lesson-design/content.js, lesson-design/index.html 의 ?v= 버전
 // 사용: node instructor/lesson-design/build.js
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const SRC = __dirname, ROOT = path.join(__dirname, '..', '..'), OUT = path.join(ROOT, 'lesson-design');
 
-// 퀴즈: answer 는 options 의 번호(0부터), where 는 틀렸을 때 "본문에서 다시 볼 곳"
-const QUIZ = {
-  learner: { title: '01 퀴즈 · 교육생 이해', warmup: '같은 "AI 이미지 만들기" 강의를 공무원과 상담 프로그램 참여자에게 똑같이 하면 어떤 일이 생길까요?', questions: [
-    { q: '교육생 맞춤 강의 설계의 출발점은?', options: ['가르칠 도구의 기능 목록', '교육생이 누구이고 무엇이 필요한지', '강사가 가장 자신 있는 내용', '최신 유행 기술'], answer: 1, where: '1절 · 도구가 아니라 사람에서 출발' },
-    { q: '교육생을 보는 네 가지 렌즈가 아닌 것은?', options: ['누구', '필요', '마음', '강사의 경력'], answer: 3, where: '2절 · 네 가지 렌즈' },
-    { q: '정서 · 심리 쪽 교육생의 필요를 파악할 때 바른 방법은?', options: ['사전 설문에 진단명을 적게 한다', '담당 전문가에게 안전한 활동과 피할 주제를 먼저 묻는다', '첫 시간에 각자 사연을 발표하게 한다', '필요 파악 없이 바로 실습한다'], answer: 1, where: '4절 · 민감한 대상이라면' }
-  ] },
-  product: { title: '02 퀴즈 · 산출물 중심 주제', warmup: '실습으로 만든 결과물이 강의가 끝난 뒤에도 쓰이려면 무엇이 필요할까요?', questions: [
-    { q: '산출물 중심 주제 선정의 핵심은?', options: ['모두가 똑같은 결과물을 만든다', '산출물 자체가 교육생에게 필요한 효과가 되게 한다', '도구의 모든 기능을 써 보게 한다', '결과물보다 이론 설명을 길게 한다'], answer: 1, where: '1절 · 산출물이 곧 효과가 되게' },
-    { q: '좋은 산출물의 조건이 아닌 것은?', options: ['교육생 각자의 상황이 들어간다', '다음 날 바로 쓸 수 있다', '도구의 고급 기능을 최대한 많이 쓴다', '시간 안에 완성된다'], answer: 2, where: '2절 · 좋은 산출물의 다섯 조건' },
-    { q: '"상사와 나" 풍자 4컷 활동에서 지킬 것은?', options: ['실제 상사 이름을 넣어 실감 나게', '특정인을 알아볼 수 없게 하고 비하는 금지', '가장 웃긴 작품을 투표해 공개', '전원 발표 필수'], answer: 1, where: '5절 · 민감한 주제는 더 조심스럽게' }
-  ] },
-  goal: { title: '03 퀴즈 · 학습목표', warmup: '"건강한 조직문화를 함양한다"가 목표라면, 강의가 끝나고 무엇을 보면 달성했다고 알 수 있을까요?', questions: [
-    { q: '산출물 강의의 핵심 목표로 가장 알맞은 것은?', options: ['AI 이미지 도구를 이해한다', '강사는 자동화 방법을 설명한다', '주무관은 예시 파일 3개를 20분 안에 오류 없이 합치는 도구를 만든다', '업무 효율성을 함양한다'], answer: 2, where: '1절 · 교육생이 할 수 있게 되는 것' },
-    { q: 'ABCD 목표에서 D(Degree)가 뜻하는 것은?', options: ['대상', '행동', '조건', '기준 (얼마나)'], answer: 3, where: '2절 · ABCD로 쓰기' },
-    { q: '정서 활동의 목표로 쓰지 않는 것은?', options: ['감정에 날씨 이름을 붙여 표현한다', '원하면 한 장면을 짝에게 소개한다', '우울증이 치유된다', '마음에 드는 장면을 스스로 고른다'], answer: 2, where: '3절 · 피할 동사 (치유된다)' }
-  ] },
-  design: { title: '04 퀴즈 · 내용 구성과 시간', warmup: '실습 강의가 끝날 때 결과물이 미완성으로 남는 가장 흔한 이유는 무엇일까요?', questions: [
-    { q: '산출물 강의에서 "내 것 만들기" 시간은 전체의 얼마를 권하나요?', options: ['10% 이하', '절반 가까이 이상', '마지막 5분', '시간이 남으면'], answer: 1, where: '1절 · 시간표는 거꾸로 짠다' },
-    { q: '설명을 시작하기 전에 강사가 만든 예시 산출물을 먼저 보여 주는 단계는?', options: ['열기', '완성본 보기', '나누기', '평가'], answer: 1, where: '2절 · 다섯 덩어리' },
-    { q: '줌으로 정서 활동을 할 때 바른 것은?', options: ['카메라 · 마이크를 반드시 켜게 한다', '설명을 30분 이상 이어서 한다', '카메라 · 마이크를 강요하지 않고 중간 안내를 넣는다', '나눔은 전원 필수로 한다'], answer: 2, where: '3절 · 줌으로 한다면' }
-  ] },
-  method: { title: '05 퀴즈 · 방법 · 평가 · 안전', warmup: '마음 그림책에 점수를 매기면 참여자는 어떤 마음이 들까요?', questions: [
-    { q: '"엑셀 병합 도구를 만든다" 목표에 맞는 평가는?', options: ['객관식 퀴즈', '도구가 예시 파일을 합치는지 실행 확인', '소감문만', '출석 확인'], answer: 1, where: '1절 · 목표 · 방법 · 평가를 한 줄로' },
-    { q: '정서 · 관계 산출물의 평가로 알맞은 것은?', options: ['작품에 점수와 순위를 매긴다', '완성 여부와 스스로 고른 소감 한 줄', '강사가 치료 효과를 판정한다', '가장 잘 만든 작품 1등 시상'], answer: 1, where: '4절 · 정서 · 관계 활동의 평가는 다르게' },
-    { q: '업무 자동화 실습의 안전 장치로 맞는 것은?', options: ['실제 개인정보 파일로 실습한다', '예시(가짜) 데이터로 실습한다', '보안 규정은 확인하지 않는다', '내부 문서 원문을 AI에 붙여넣는다'], answer: 1, where: '5절 · 안전 설계 체크리스트' }
-  ] }
-};
 
 const files = fs.readdirSync(SRC).filter(f => /^강의설계_\d\d_.+\.md$/.test(f)).sort();
 const content = Object.fromEntries(files.map(f => [f, fs.readFileSync(path.join(SRC, f), 'utf8')]));
 fs.writeFileSync(path.join(OUT, 'content.js'), `// instructor/lesson-design/build.js 가 강의설계_*.md 에서 만든 파일입니다. 직접 고치지 마세요.\nwindow.COURSE_CONTENT = ${JSON.stringify(content)};\n`);
 
-const pub = Object.fromEntries(Object.entries(QUIZ).map(([id, z]) => [id, { title: z.title, warmup: z.warmup, questions: z.questions.map(q => ({ q: q.q, options: q.options })) }]));
-fs.writeFileSync(path.join(OUT, 'quiz.js'), `// instructor/lesson-design/build.js 가 만든 파일입니다. 정답은 서버(api/_lib/quiz-key-ld.js)에만 있습니다.\nwindow.QUIZ = ${JSON.stringify(pub)};\n`);
-const keys = Object.fromEntries(Object.entries(QUIZ).map(([id, z]) => [id, z.questions.map(q => q.answer)]));
-const where = Object.fromEntries(Object.entries(QUIZ).map(([id, z]) => [id, z.questions.map(q => q.where)]));
-fs.writeFileSync(path.join(ROOT, 'api', '_lib', 'quiz-key-ld.js'), `// instructor/lesson-design/build.js 가 만든 파일입니다. 강의 설계 워크숍 퀴즈의 정답과 "본문에서 다시 볼 곳".\nmodule.exports = { keys: ${JSON.stringify(keys)}, where: ${JSON.stringify(where)} };\n`);
 
 // index.html 의 스크립트 · 스타일 주소에 내용 기준 버전(?v=) 달기
 const ver = f => crypto.createHash('md5').update(fs.readFileSync(path.join(OUT, f))).digest('hex').slice(0, 8);
@@ -50,4 +17,4 @@ const idx = path.join(OUT, 'index.html');
 let html = fs.readFileSync(idx, 'utf8');
 html = html.replace(/(href|src)="([\w-]+\.(?:css|js))(?:\?v=\w+)?"/g, (m, attr, f) => fs.existsSync(path.join(OUT, f)) ? `${attr}="${f}?v=${ver(f)}"` : m);
 fs.writeFileSync(idx, html);
-console.log('lesson-design:', files.length, 'docs,', Object.keys(QUIZ).length, 'quizzes');
+console.log('lesson-design:', files.length, 'docs');
