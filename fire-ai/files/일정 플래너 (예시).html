@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-pointer-pos="bl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -428,5 +428,6 @@ document.querySelectorAll("#zoom button").forEach((b) => (b.onclick = () => {
 function renderAll() { renderCal(); if ($("view-gantt").classList.contains("on")) renderGantt(); stats(); }
 renderAll();
 </script>
+<script src="/assets/pointer.js?v=856d35f3"></script>
 </body>
 </html>

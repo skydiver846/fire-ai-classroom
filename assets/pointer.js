@@ -1,7 +1,7 @@
 // 사이트 공통: 큰 커서 + 누를 수 있는 곳 블록 강조 (발표 화면에서 잘 보이게)
 // 페이지 끝에 <script src="/assets/pointer.js"></script> 한 줄로 붙입니다.
 // - 큰 커서: 처음에는 켜짐, [큰 커서 켜짐/꺼짐] 단추로 끄고 켜며 이 브라우저에 기억 (모든 페이지 공통)
-// - 단추 위치: 교안 머리띠(.masthead)가 있으면 그 안, 없으면 화면 오른쪽 아래
+// - 단추 위치: 교안 머리띠(.masthead)가 있으면 그 안, 없으면 화면 오른쪽 위의 작은 🖱 단추(올리면 글자가 보임)
 // - 블록 강조: 교안(1차 · 2차)의 목록 · 칸 · 단추는 정해 둔 모양으로, 다른 페이지는 :where() 로 약하게 걸어 각 페이지 스타일이 이깁니다.
 (function () {
   if (window.__bigPointer) return; window.__bigPointer = true;
@@ -20,8 +20,11 @@
     // 켜기/끄기 단추
     ".cursor-toggle { flex: none; font: 700 15px var(--font-body, system-ui, sans-serif); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; white-space: nowrap; cursor: pointer; }",
     ".cursor-toggle[aria-pressed=true] { background: " + ACC + "; border-color: " + ACC + "; }",
-    ".cursor-toggle.floating { position: fixed; right: 16px; bottom: 16px; z-index: 2147483000; background: #14213d; border-color: #14213d; box-shadow: 0 4px 14px rgba(0,0,0,.25); }",
+    ".cursor-toggle.floating { position: fixed; right: 12px; top: 12px; z-index: 2147483000; width: 44px; height: 44px; padding: 0; overflow: hidden; border-radius: 999px; background: #14213d; border-color: #14213d; box-shadow: 0 3px 10px rgba(0,0,0,.25); font-size: 0; opacity: .85; transition: width .15s, opacity .15s; }",
+    ".cursor-toggle.floating::before { content: '🖱'; font-size: 20px; line-height: 44px; display: inline-block; width: 44px; text-align: center; }",
+    ".cursor-toggle.floating:hover, .cursor-toggle.floating:focus-visible { width: auto; padding: 0 14px 0 0; font-size: 14px; opacity: 1; }",
     ".cursor-toggle.floating[aria-pressed=true] { background: #c8321e; border-color: #c8321e; }",
+    ".cursor-toggle.floating.pos-bl { top: auto; right: auto; left: 12px; bottom: 12px; }",
     "@media (max-width: 900px), (hover: none) { .cursor-toggle { display: none; } }",
     // 블록 강조: 교안(1차 · 2차) 공통 모양
     ".mods a, .tile, .pager a, .group a, .btn, .steps-bar a, .copy { transition: background-color .15s, border-color .15s, box-shadow .15s, transform .15s, color .15s; }",
@@ -53,11 +56,14 @@
   } catch (e) {}
   root.classList.toggle("big-cursor", on);
 
+  var framed = false; try { framed = window.top !== window; } catch (e) { framed = true; }
   function addButton() {
-    if (document.querySelector(".cursor-toggle")) return;
+    if (framed || document.querySelector(".cursor-toggle")) return;   // 교안 안 실습 칸(iframe)에서는 단추 없이 커서만
     var head = document.querySelector(".masthead");
     var btn = document.createElement("button");
     btn.type = "button"; btn.className = "cursor-toggle" + (head ? "" : " floating");
+    if (!head) btn.title = "큰 커서 켜기/끄기";
+    if (!head && root.getAttribute("data-pointer-pos") === "bl") btn.classList.add("pos-bl");   // 오른쪽 위에 단추가 있는 페이지는 <html data-pointer-pos="bl">
     function paint() { btn.setAttribute("aria-pressed", on ? "true" : "false"); btn.textContent = on ? "큰 커서 켜짐" : "큰 커서 꺼짐"; }
     btn.addEventListener("click", function () {
       on = !on; root.classList.toggle("big-cursor", on); paint();

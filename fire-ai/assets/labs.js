@@ -30,7 +30,8 @@
   async function fetchText(url) {
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) throw new Error(`${url} (${response.status})`);
-    return response.text();
+    // 사이트 공통 큰 커서 줄(/assets/pointer.js)은 교육생이 보는 코드에서 뺍니다
+    return (await response.text()).replace(/<script src="\/assets\/pointer\.js[^"]*"><\/script>\n?/g, '').replace(/ data-pointer-pos="\w+"/g, '');
   }
 
   // 단계별 "코드 직접 고쳐 보기" 도전 과제. find: [이 줄로 가기]가 찾아 줄 글자, ok: 고친 코드가 맞는지 확인
