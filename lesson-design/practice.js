@@ -502,6 +502,80 @@
     fill();
   }
 
+
+  /* ───────── 02-③ 즉석 주제 정하기 연습 ───────── */
+  // 강사가 열린 질문 → 세 번 더 묻기 → 메뉴에서 고르기를 직접 진행해 봅니다.
+  const LIVE = {
+    shop: { label: '🏪 동네 식당 사장님', first: '장사가 안 돼요~',
+      follow: [['언제 특히 그러세요?', '점심은 그럭저럭인데, 저녁 손님이 뚝 끊겨요.'], ['손님들이 왜 안 올까요?', '근처에 새 가게들이 생겼는데, 우리 가게는 동네 사람들도 잘 몰라요.'], ['무엇이 바뀌면 제일 좋겠어요?', '동네 사람들이 우리 가게를 알고, 한 번이라도 와 봤으면 좋겠어요.']],
+      need: '동네 사람들이 우리 가게를 모른다',
+      menu: [['🖼', '가게 SNS 홍보 카드 3장', '이미지 생성 AI', '내일부터 동네 단톡 · SNS에 올림'], ['🎵', '우리 가게 30초 CM송', '음악 생성 AI', '가게 앞 · 영상에 틀어 기억에 남기기'], ['💬', '단골 감사 문자 · 쿠폰 문구 세트', '대화형 AI', '온 손님이 다시 오게']] },
+    market: { label: '🧺 전통시장 상인', first: '손님들이 다 마트로 가요.',
+      follow: [['어떤 손님이 줄었어요?', '젊은 사람들이요. 어르신 단골만 남았어요.'], ['젊은 손님은 뭘 보고 가게를 고를까요?', '휴대폰으로 찾아보고 오더라고요. 우리는 사진 한 장 없어요.'], ['무엇이 바뀌면 좋겠어요?', '우리 가게 물건이 신선하다는 걸 보여 주고 싶어요.']],
+      need: '젊은 손님이 볼 가게 사진 · 소개가 없다',
+      menu: [['🖼', '오늘의 신선 상품 소개 카드', '이미지 생성 AI', '매일 아침 시장 단톡 · SNS에'], ['💬', '가게 소개 글 · 지도 등록 문구', '대화형 AI', '검색했을 때 우리 가게가 나오게'], ['🎵', '우리 시장 응원가', '음악 생성 AI', '시장 행사 · 영상에 함께 쓰기']] },
+    daycare: { label: '👩‍🏫 어린이집 교사', first: '서류가 너무 많아요.',
+      follow: [['어떤 서류가 제일 오래 걸려요?', '아이들 관찰일지랑 학부모님께 보내는 알림장이요.'], ['왜 오래 걸릴까요?', '아이마다 다르게 써야 하는데, 매번 처음부터 써요.'], ['무엇이 바뀌면 좋겠어요?', '아이들과 노는 시간이 더 길었으면 좋겠어요.']],
+      need: '알림장 · 관찰일지를 매번 처음부터 쓴다',
+      menu: [['💬', '알림장 문장 틀 10개 (상황별)', '대화형 AI', '내일 알림장부터 5분 단축'], ['📊', '관찰 메모 → 일지 정리표', '대화형 AI + 표', '짧은 메모만 적으면 일지가 정리됨'], ['🎵', '정리 시간 노래 (우리 반 버전)', '음악 생성 AI', '정리 시간이 즐거워짐']] },
+    fire: { label: '🚒 신임 소방 교육생', first: '외울 게 너무 많아요.',
+      follow: [['뭐가 제일 안 외워져요?', '무전 용어랑 장비 점검 순서요.'], ['언제 공부하세요?', '이동할 때나 자기 전에 잠깐씩이요. 책 펴기는 힘들어요.'], ['무엇이 바뀌면 좋겠어요?', '귀로 듣거나 휴대폰으로 금방 확인할 수 있으면 좋겠어요.']],
+      need: '틈틈이 듣고 확인할 수 있는 자료가 없다',
+      menu: [['🎙', '무전 용어 듣기 퀴즈 오디오', '음성 합성 AI', '이동 중에 이어폰으로'], ['🎵', '장비 점검 순서 암기 노래', '음악 생성 AI', '흥얼거리며 순서가 몸에 붙음'], ['📊', '출동 전 점검 체크 화면', '대화형 AI + 웹', '현장에서 휴대폰으로 바로 확인']] },
+    senior: { label: '👵 복지관 어르신', first: '자식들이 바빠서 연락이 없어요.',
+      follow: [['연락은 주로 어떻게 하세요?', '전화는 미안해서 못 하고, 문자는 어려워요.'], ['손주들은 뭘 좋아할까요?', '그림이나 사진 보내 주면 좋아하더라고요.'], ['무엇이 바뀌면 좋겠어요?', '내가 먼저 안부를 보내 보고 싶어요.']],
+      need: '내가 먼저 보낼 수 있는 쉬운 안부 방법이 없다',
+      menu: [['🖼', '손주에게 보내는 AI 그림 안부 카드', '이미지 생성 AI (음성 입력)', '오늘 바로 보내고 답장 받기'], ['🎙', '내 목소리 음성 편지', '녹음 · 음성 AI', '글이 어려워도 마음 전하기'], ['🎵', '추억을 가사로 쓴 내 인생 노래', '음악 생성 AI', '가족 모임에서 함께 듣기']] }
+  };
+  function liveTopic(body) {
+    let key = null, asked = [], pick = null;
+    body.innerHTML = `
+      <div class="lab-actions ld-presets"><span class="ld-out-label">교육생:</span>${Object.entries(LIVE).map(([k, v]) => `<button class="lab-button ghost" type="button" data-live="${k}">${v.label}</button>`).join('')}</div>
+      <div class="vis-chat ld-live-chat" aria-live="polite" hidden></div>
+      <div class="ld-live-ask" hidden><p class="ld-out-label">② 더 물어보기 (눌러서 질문)</p><div class="lab-actions ld-qs"></div></div>
+      <div class="ld-live-need ld-out" hidden></div>
+      <div class="ld-live-menu" hidden><p class="ld-out-label">③ 준비한 산출물 메뉴에서 함께 고르기</p><div class="vis-cards ld-menu"></div></div>
+      <div class="ld-live-done" hidden></div>`;
+    const chat = body.querySelector('.ld-live-chat');
+    const say = (who, msg) => { chat.insertAdjacentHTML('beforeend', `<div class="vc-msg ${who === '강사' ? 'teacher' : 'learner'}"><span class="vc-who">${who === '강사' ? '🧑‍🏫' : '🙋'} ${who}</span><p>${esc(msg)}</p></div>`); chat.scrollTop = chat.scrollHeight; };
+    function drawAsk() {
+      const L = LIVE[key];
+      body.querySelector('.ld-qs').innerHTML = L.follow.map(([q], i) => `<button class="lab-button ${asked.includes(i) ? 'ghost' : ''}" type="button" data-q="${i}" ${asked.includes(i) ? 'disabled' : ''}>${esc(q)}</button>`).join('');
+      const needBox = body.querySelector('.ld-live-need');
+      needBox.hidden = asked.length < 3;
+      needBox.innerHTML = `<p class="ld-out-label">찾은 진짜 필요</p><p class="ld-sentence">"${esc(L.first.replace(/~/g, ''))}" → ${esc(L.need)}</p>`;
+      body.querySelector('.ld-live-menu').hidden = asked.length < 3;
+      body.querySelector('.ld-menu').innerHTML = L.menu.map(([ic, name, tool, eff], i) => `<button type="button" class="vc-card ld-menu-card ${pick === i ? 'picked' : ''}" data-m="${i}"><span class="vc-icon">${ic}</span><p class="vc-title">${esc(tool)}</p><p class="vc-main">${esc(name)}</p><p class="vc-sub">${esc(eff)}</p></button>`).join('');
+    }
+    body.addEventListener('click', e => {
+      const lv = e.target.closest('[data-live]');
+      if (lv) {
+        key = lv.dataset.live; asked = []; pick = null;
+        chat.hidden = false; chat.innerHTML = '';
+        say('강사', '요즘 어떤 게 가장 힘드세요?'); say(LIVE[key].label.replace(/^\S+\s/, ''), LIVE[key].first);
+        body.querySelector('.ld-live-ask').hidden = false; body.querySelector('.ld-live-done').hidden = true;
+        body.querySelectorAll('[data-live]').forEach(b => b.classList.toggle('ghost', b !== lv));
+        drawAsk(); return;
+      }
+      const q = e.target.closest('[data-q]');
+      if (q && key) {
+        const i = Number(q.dataset.q), [qq, aa] = LIVE[key].follow[i];
+        asked.push(i); say('강사', qq); say(LIVE[key].label.replace(/^\S+\s/, ''), aa); drawAsk(); return;
+      }
+      const m = e.target.closest('[data-m]');
+      if (m && key) {
+        pick = Number(m.dataset.m); drawAsk();
+        const L = LIVE[key], [, name, tool, eff] = L.menu[pick];
+        const who = L.label.replace(/^\S+\s/, '');
+        const line = `${josa(who, '이', '가')} ${josa(name, '을', '를')} 만들어 가는 실습 → ${eff}`;
+        say('강사', `그럼 오늘은 "${name}"을(를) 함께 만들어 가 보죠!`.replace(/"을\(를\)/, () => { const c = name.charCodeAt(name.length - 1); return c >= 0xac00 && c <= 0xd7a3 ? ((c - 0xac00) % 28 ? '"을' : '"를') : '"을(를)'; }));
+        const done = body.querySelector('.ld-live-done'); done.hidden = false;
+        done.innerHTML = `<p class="vn-result"><span>④ 오늘의 주제</span>${esc(line)} <small>(${esc(tool)})</small></p><div class="lab-actions"><button class="lab-button" type="button" data-act="copy-live">채팅에 올릴 한 줄 복사</button><button class="lab-button ghost" type="button" data-live="${key}">처음부터 다시</button></div>`;
+        done.querySelector('[data-act="copy-live"]').addEventListener('click', ev => copyText(`[즉석 주제] ${line} (${tool})`, ev.currentTarget));
+      }
+    });
+  }
+
   const INLINE = {
     'learner-card': { title: '내 교육생 카드', time: '약 4분', goal: '네 렌즈(누구 · 필요 · 마음 · 환경)로 내 교육생을 적습니다. 아직 없으면 예시 세 가지 중 하나를 눌러 따라 하세요.', build: learnerCard },
     'product-remix': { title: '교육생 카드 뽑기: 같은 도구, 다른 산출물', time: '약 5분', goal: '처음 보는 교육생을 뽑아, 오늘 쓸 도구로 그 사람에게 맞는 산출물과 효과를 직접 적습니다. 다섯 조건으로 점검하고, 한 줄을 줌 채팅에 올려 서로의 답을 봅니다.', build: productRemix },
@@ -511,6 +585,7 @@
     'time-blocks': { title: '내 90분 시간 블록 짜기', time: '약 5분', goal: '예시 시간표를 내 강의에 맞게 고칩니다. 합계 · 만들기 비율 · 설명 길이 · 열기 · 나누기를 자동으로 점검합니다.', build: timeBlocks },
     'align-match': { title: '목표에 맞는 평가 · 교육생에 맞는 방법', time: '약 3분', goal: 'Ⓐ 목표마다 알맞은 평가, Ⓑ 교육생 유형마다 알맞은 방법을 고릅니다.', build: alignMatch },
     'safety-check': { title: '내 강의 안전 설계', time: '약 2분', goal: '여섯 가지 안전 장치 중 내 강의에 필요한 것을 고르고, 나만의 장치를 한 줄 더합니다.', build: safetyCheck },
+    'live-topic': { title: '즉석 주제 정하기 연습: 강사가 되어 물어보기', time: '약 4분', goal: '교육생 그룹을 골라, 첫 대답(증상)에서 세 번 더 물어 진짜 필요를 찾고, 준비한 메뉴에서 오늘의 산출물을 함께 고르는 흐름을 연습합니다.', build: liveTopic },
     'plan-builder': { title: '내 맞춤 강의계획서 한 장', time: '약 8분', goal: '앞 장에서 적은 것을 불러와 빈칸을 채웁니다. 오른쪽 점검이 모두 ✓가 되면 새 창으로 열어 PDF로 저장하세요.', build: planBuilder }
   };
 

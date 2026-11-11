@@ -34,7 +34,7 @@
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
   const INLINE_AT = {
     learner: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card']],
-    product: [['## 3. 유형별 산출물 아이디어', 'product-remix'], ['## 4. 산출물 깔때기', 'product-funnel']],
+    product: [['## 3. 유형별 산출물 아이디어', 'product-remix'], ['## 4. 산출물 깔때기', 'product-funnel'], ['## 6. 즉석으로 정하기', 'live-topic']],
     goal: [['## 3. 보이는 동사', 'goal-judge'], ['## 4. 목표는 1~3개', 'abcd']],
     design: [['## 3. 세 교육생의 90분', 'time-blocks']],
     method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 5. 안전 설계 체크리스트', 'safety-check']],
@@ -94,6 +94,17 @@
     letters: lines => `<div class="vis vis-letters">${lines.map(l => {
       const [k, en, ko, desc] = cells(l);
       return `<div class="vl-cell vs-${k.toLowerCase()}"><b>${escapeHtml(k)}</b><p class="vl-ko">${inline(ko || '')}</p><p class="vl-en">${inline(en || '')}</p><p class="vl-desc">${inline(desc || '')}</p></div>`;
+    }).join('')}</div>`,
+    // chat : "강사 | 말" · "교육생 | 말" → 말풍선 대화
+    chat: lines => `<figure class="vis vis-chat">${lines.map(l => {
+      const [who, msg] = cells(l);
+      const me = /강사/.test(who);
+      return `<div class="vc-msg ${me ? 'teacher' : 'learner'}"><span class="vc-who">${me ? '🧑‍🏫' : '🙋'} ${escapeHtml(who)}</span><p>${inline(msg || '')}</p></div>`;
+    }).join('')}</figure>`,
+    // methods : "아이콘 | 방법 이름 | 어떻게 | 이럴 때 좋아요"
+    methods: lines => `<div class="vis vis-methods">${lines.map((l, i) => {
+      const [icon, name, how, tip] = cells(l);
+      return `<div class="vm-card"><div class="vm-top"><span class="vm-icon">${icon}</span><span class="vm-no">${i + 1}</span></div><p class="vm-name">${inline(name)}</p><p class="vm-how">${inline(how || '')}</p>${tip ? `<p class="vm-tip">💡 ${inline(tip)}</p>` : ''}</div>`;
     }).join('')}</div>`,
     cards: lines => `<div class="vis vis-cards">${lines.map(l => {
       const [icon, title, main, sub] = cells(l);

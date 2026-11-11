@@ -457,3 +457,39 @@
 .vl-en { margin: 0 0 6px; font-size: 12.5px; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
 .vl-desc { margin: 0; font-size: 13.5px; line-height: 1.5; }
 @media (max-width: 760px) { .vis-letters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* 말풍선 대화 */
+.vis-chat { display: grid; gap: 8px; padding: 16px 18px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vc-msg { max-width: 78%; display: grid; gap: 2px; animation: vc-in .25s ease-out; }
+.vc-msg p { margin: 0; padding: 9px 14px; border-radius: 16px; font-size: 15px; line-height: 1.55; }
+.vc-who { font-size: 12px; font-weight: 700; color: var(--muted); }
+.vc-msg.teacher { justify-self: start; }
+.vc-msg.teacher p { background: color-mix(in srgb, #2f6fd0 12%, var(--paper)); border-top-left-radius: 4px; }
+.vc-msg.learner { justify-self: end; text-align: right; }
+.vc-msg.learner p { background: color-mix(in srgb, #ef8a17 18%, var(--paper)); border-top-right-radius: 4px; text-align: left; }
+@keyframes vc-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .vc-msg { animation: none; } }
+@media (max-width: 640px) { .vc-msg { max-width: 92%; } }
+/* 즉석 주제 연습 */
+.ld-live-chat { margin: 10px 0; max-height: 420px; overflow-y: auto; }
+.ld-qs .lab-button { border-radius: 999px; }
+.ld-menu { margin-top: 6px; }
+.ld-menu-card { text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.ld-menu-card.picked { box-shadow: 0 0 0 3px var(--accent); }
+.ld-live-done { margin-top: 10px; }
+.ld-live-done small { font-weight: 400; color: var(--muted); }
+.ld-menu-card { background: var(--paper); }
+.ld-menu-card:hover { background: var(--paper); }
+.ld-menu-card.picked { background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent); }
+.ld-menu-card.picked .vc-main::after { content: " ✓"; color: var(--accent); }
+
+/* 방법 모음 카드 */
+.vis-methods { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.vm-card { display: grid; align-content: start; gap: 4px; padding: 14px 16px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(16, 24, 40, .05); transition: transform .15s, box-shadow .15s, border-color .15s; }
+.vm-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 8px 18px rgba(16, 24, 40, .12); }
+.vm-top { display: flex; justify-content: space-between; align-items: center; }
+.vm-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); font-size: 21px; }
+.vm-no { font: 800 12px var(--font-mono, monospace); color: var(--muted); }
+.vm-name { margin: 6px 0 0; font-size: 16.5px; font-weight: 800; }
+.vm-how { margin: 0; font-size: 14px; line-height: 1.5; }
+.vm-tip { margin: 4px 0 0; padding-top: 6px; border-top: 1px dashed var(--line); font-size: 12.5px; color: var(--muted); line-height: 1.5; }
