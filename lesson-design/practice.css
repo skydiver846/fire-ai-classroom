@@ -339,3 +339,87 @@
 .ld-hint { margin: 6px 0 0; font-size: 14px; }
 .ld-make { font-weight: 700; color: var(--ink); }
 .ld-presets { flex-wrap: wrap; }
+
+/* ───────── 그림 블록 (vis-) ───────── */
+.vis { margin: 18px 0 22px; }
+/* 흐름: 단계 칩을 화살표로 */
+.vis-flow { display: grid; gap: 12px; padding: 16px 18px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vf-row { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--code); }
+.vf-row.bad { background: color-mix(in srgb, #8a94a3 12%, var(--paper)); }
+.vf-row.good { background: color-mix(in srgb, var(--accent) 10%, var(--paper)); box-shadow: inset 4px 0 0 var(--accent); }
+.vf-label { font-weight: 800; font-size: 15px; }
+.vf-row.bad .vf-label { color: var(--muted); }
+.vf-row.good .vf-label { color: var(--accent); }
+.vf-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 26px; }
+.vf-steps li { position: relative; padding: 7px 14px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-size: 14.5px; font-weight: 600; }
+.vf-row.bad .vf-steps li { color: var(--muted); border-style: dashed; }
+.vf-row.good .vf-steps li { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.vf-steps li + li::before { content: "➜"; position: absolute; left: -21px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; }
+.vf-row.good .vf-steps li + li::before { color: var(--accent); }
+/* 깔때기: 아래로 갈수록 좁아지는 띠 */
+.vis-funnel { display: grid; gap: 6px; padding: 16px 18px 18px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vn-row { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 12px; align-items: center; }
+.vn-bar { --w: calc(100% - var(--i) * 9%); width: var(--w); margin-inline: auto; display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: center; padding: 11px 16px; border-radius: 10px;
+  color: #fff; background: color-mix(in srgb, var(--accent) calc(55% + var(--i) * 15%), #14213d); box-shadow: 0 2px 6px rgba(16, 24, 40, .12); }
+.vn-bar b { font-size: 15px; white-space: nowrap; }
+.vn-bar span { font-size: 14.5px; line-height: 1.45; }
+.vn-note { margin: 0; font-size: 13px; color: var(--muted); padding-left: 10px; border-left: 3px solid var(--line); }
+.vn-result { margin: 12px 0 0; padding: 12px 16px; border-radius: 10px; border: 2px dashed var(--accent); background: var(--accent-soft); font-weight: 600; }
+.vn-result span { display: inline-block; margin-right: 10px; padding: 2px 10px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12.5px; font-weight: 700; vertical-align: 1px; }
+/* 시간 막대 */
+.vis-time { display: grid; gap: 12px; padding: 16px 18px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); }
+.vt-row { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: center; }
+.vt-label { font-weight: 800; font-size: 15px; }
+.vt-row.bad .vt-label { color: var(--muted); } .vt-row.good .vt-label { color: var(--accent); }
+.vt-bar { display: flex; height: 40px; border-radius: 10px; overflow: hidden; }
+.vt-bar span { display: grid; place-items: center; min-width: 0; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #fff; font-size: 12.5px; font-weight: 700; border-right: 2px solid var(--paper); }
+.vt-row.bad .vt-bar { opacity: .7; }
+.vt-open { background: #ef8a17; } .vt-talk { background: #2f6fd0; } .vt-follow { background: #4f9fa8; } .vt-make { background: #13897a; } .vt-share { background: #7a52c7; } .vt-other { background: #8a94a3; }
+.vt-legend { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0; padding-left: 142px; }
+.vt-legend span { font-size: 12px; font-weight: 700; color: #fff; padding: 1px 9px; border-radius: 999px; }
+/* 카드 */
+.vis-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.vc-card { position: relative; padding: 16px 16px 14px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(16, 24, 40, .06); border-top: 4px solid var(--accent); transition: transform .15s, box-shadow .15s; }
+.vc-card:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(16, 24, 40, .12); }
+.vc-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); font-size: 24px; margin-bottom: 8px; }
+.vc-title { margin: 0; font-size: 13.5px; color: var(--muted); font-weight: 600; }
+.vc-main { margin: 2px 0 6px; font-size: 16.5px; font-weight: 800; line-height: 1.4; }
+.vc-sub { margin: 0; font-size: 13.5px; color: var(--ink); line-height: 1.5; }
+.vis-cards .vc-card:nth-child(6n+2) { border-top-color: #2f6fd0; } .vis-cards .vc-card:nth-child(6n+3) { border-top-color: #13897a; }
+.vis-cards .vc-card:nth-child(6n+4) { border-top-color: #ef8a17; } .vis-cards .vc-card:nth-child(6n+5) { border-top-color: #7a52c7; } .vis-cards .vc-card:nth-child(6n) { border-top-color: #4f9fa8; }
+@media (max-width: 640px) {
+  .vf-row, .vt-row { grid-template-columns: 1fr; }
+  .vn-row { grid-template-columns: 1fr; }
+  .vn-bar { --w: 100%; grid-template-columns: 1fr; gap: 2px; }
+  .vt-legend { padding-left: 0; }
+  .vt-bar span { font-size: 0; }
+}
+
+/* ───────── 교육생 카드 뽑기 ───────── */
+.ld-card { position: relative; margin: 12px 0; padding: 18px 20px 16px 22px; border-radius: 16px; color: #fff;
+  background: linear-gradient(135deg, #14213d 0%, #2b3a63 60%, #c8321e 140%); box-shadow: 0 8px 22px rgba(20, 33, 61, .28); animation: ld-flip .45s ease-out; }
+.ld-card .ld-out-label { color: #c9d2e3; margin: 0 0 4px; }
+.ld-card .ld-sentence { font-size: 21px; color: #fff; margin: 0 0 10px; }
+.ld-card-row { margin: 4px 0; font-size: 14.5px; color: #e6e9ee; }
+.ld-card-row span { display: inline-block; min-width: 46px; margin-right: 8px; padding: 1px 8px; border-radius: 999px; background: rgba(255,255,255,.16); font-size: 12px; font-weight: 700; text-align: center; }
+@keyframes ld-flip { from { transform: perspective(600px) rotateY(-70deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ld-card { animation: none; } }
+.ld-ex { border-left-color: #13897a; background: color-mix(in srgb, #13897a 10%, var(--paper)); }
+.ld-tool { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+
+/* ───────── 바로 해 보기 상자 다듬기 ───────── */
+.inline-lab { border-radius: 16px; box-shadow: 0 6px 20px rgba(16, 24, 40, .07); }
+.inline-lab .inline-title { font-size: 20px; }
+.ld-presets .lab-button.ghost { border-radius: 999px; }
+.ld-out { border-radius: 12px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent); }
+.ld-sentence { font-size: 18px; line-height: 1.5; }
+
+/* ───────── AI에게 보낼 예시 요청 (복사) ───────── */
+.prompt-block { border: 1px solid color-mix(in srgb, #2f6fd0 35%, var(--line)); border-radius: 12px; overflow: hidden; background: var(--paper); box-shadow: 0 4px 14px rgba(16, 24, 40, .06); }
+.prompt-block .pr-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 8px 12px 8px 16px; background: color-mix(in srgb, #2f6fd0 10%, var(--paper)); border-bottom: 1px solid color-mix(in srgb, #2f6fd0 25%, var(--line)); font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.prompt-block .pr-head b { color: #2f6fd0; }
+.prompt-block .copy-button { position: static; padding: 6px 16px; border: 0; border-radius: 8px; background: #2f6fd0; color: #fff; font-size: 14px; font-weight: 700; }
+.prompt-block .copy-button:hover { background: #1f57ad; color: #fff; }
+.prompt-block pre { border: 0; border-radius: 0; background: transparent; overflow-x: visible; }
+.prompt-block pre code { white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font-family: var(--font-body); font-size: 15px; line-height: 1.75; }
+.pr-slot { background: color-mix(in srgb, #ef8a17 22%, transparent); color: inherit; border-radius: 4px; padding: 0 2px; font-weight: 600; }

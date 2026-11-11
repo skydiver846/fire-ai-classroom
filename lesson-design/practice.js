@@ -101,19 +101,74 @@
     update();
   }
 
-  /* ───────── 02-① 교육생 ↔ 산출물 잇기 ───────── */
-  const MATCH_ITEMS = [
-    { q: '매달 부서별 엑셀을 손으로 합치는 주무관', a: '엑셀 병합 자동화 도구', why: '업무 필요 → 다음 날 바로 쓰는 도구' },
-    { q: '감정을 말로 꺼내기 어려운 마음 돌봄 참여자', a: '내 마음 날씨 그림책', why: '정서 필요 → 말 대신 그림으로 표현' },
-    { q: '상사와 대화가 어려운 부서 직원들', a: '상사와 나, 풍자 4컷 만화', why: '관계 필요 → 웃음으로 꺼내는 대화의 계기' },
-    { q: '출동 전 점검을 자주 빠뜨리는 신임 소방 교육생', a: '출동 전 장비 점검 체크 화면', why: '업무 필요 → 현장에서 바로 쓰는 내 점검표' },
-    { q: '스마트폰이 낯설고 가족과 소식이 뜸한 복지관 어르신', a: '손주에게 보내는 AI 그림 안부 카드', why: '정서 · 관계 필요 → 해냈다는 자신감과 가족 연결' },
-    { q: '화재 대피를 집에서 해 본 적 없는 중학생', a: '우리 집 화재 대피 지도 + 119 신고 연습 카드', why: '안전 · 생활 필요 → 집에 가져가 가족과 확인' }
+  const PCHECK = [['내 것', '교육생 각자의 상황 · 감정 · 업무가 들어간다'], ['바로 씀', '강의 다음 날 실제로 쓰거나 보게 된다'], ['시간 안에 완성', '주어진 시간 안에 끝까지 만든다'], ['도구는 최소', '꼭 필요한 기능만 쓴다'], ['안전', '만들고 나누며 상처받거나 곤란해질 사람이 없다']];
+  /* ───────── 02-① 교육생 카드 뽑기 → 산출물 바꿔 쓰기 ───────── */
+  // 처음 보는 교육생을 뽑아, 같은 도구로 그 사람에게 맞는 산출물과 효과를 직접 적어 봅니다. 정답은 없고 예시 답 하나와 비교합니다.
+  const DECK = [
+    { who: '야간 근무가 잦은 119 구급대원', need: '교대 근무로 수면 · 피로 관리가 어렵다', mind: '지쳐 있다, 짧고 쓸모 있는 것만', ex: { 음악: '퇴근길에 듣는 나만의 “오늘도 수고했다” 노래', 음성: '교대 근무 맞춤 수면 유도 안내 음성 (내가 쓴 문장)', 이미지: '내 수면 리듬 포스터 (근무표 · 잠 · 식사를 한눈에)', 대화: '교대 근무 맞춤 수면 · 식사 계획표', 엑셀: '근무표를 넣으면 수면 시간을 계산해 주는 피로 관리표' }, effect: '근무표에 맞춘 내 수면 계획을 바로 냉장고에 붙임' },
+    { who: '자녀의 학교 안내문이 어려운 다문화 가정 학부모', need: '가정통신문 · 준비물 안내를 이해하기 어렵다', mind: '묻기 미안하다, 실수할까 걱정', ex: { 음악: '아이와 함께 부르는 준비물 챙기기 노래', 음성: '가정통신문을 쉬운 말로 읽어 주는 음성 안내', 이미지: '그림으로 보는 우리 아이 학교 준비물 카드', 대화: '안내문을 쉬운 말 · 모국어로 바꿔 주는 나만의 질문 문장 모음', 엑셀: '학교 일정 · 준비물 체크 달력' }, effect: '다음 안내문부터 혼자 읽고 준비' },
+    { who: '퇴직을 1년 앞둔 소방관', need: '30년 경험을 정리하고 다음 삶을 준비하고 싶다', mind: '아쉽고 막막하다', ex: { 음악: '30년 소방 인생을 가사로 쓴 내 노래 한 곡', 음성: '후배에게 남기는 목소리 편지 · 현장 이야기 오디오', 이미지: '내 소방 인생 연표 포스터 한 장', 대화: '후배에게 남기는 현장 노하우 10문 10답', 엑셀: '퇴직 후 1년 계획 · 버킷리스트 표' }, effect: '경험을 후배와 나누고, 다음 계획의 첫 줄을 씀' },
+    { who: '처음 강의를 맡은 신임 교관', need: '강의 자료를 만드는 데 며칠씩 걸린다', mind: '잘하고 싶다, 평가가 두렵다', ex: { 음악: '강의 도입에 쓰는 30초 오프닝 음악', 음성: '내 강의 핵심을 3분에 정리한 오디오 예고편', 이미지: '내 첫 강의 표지 · 도입 장면 그림 3장', 대화: '내 강의 주제의 50분 강의계획서 초안', 엑셀: '강의 준비 체크리스트 · 일정표' }, effect: '다음 주 첫 강의에 바로 쓰는 자료' },
+    { who: '귀농한 지 1년 된 농촌 마을 어르신', need: '농산물을 알리고 싶은데 홍보물을 만들 줄 모른다', mind: '해 보고 싶지만 어려울까 걱정', ex: { 음악: '우리 밭 농산물 홍보 노래 (CM송)', 음성: '직거래 장터 안내 방송 음성', 이미지: '우리 밭 농산물 홍보 전단 한 장', 대화: '직거래 문자 · 소개 글 문장 3가지', 엑셀: '주문 · 배송 기록표' }, effect: '마을 직거래 장터에 바로 붙이는 전단' },
+    { who: '사회복무요원으로 처음 행정 업무를 맡은 청년', need: '민원 응대 문장이 서툴러 긴장한다', mind: '실수할까 긴장, 물어보기 어렵다', ex: { 음악: '긴장을 푸는 출근길 응원 노래', 음성: '민원 응대 문장을 소리 내어 연습하는 음성 카드', 이미지: '민원 응대 흐름 한 장 그림', 대화: '자주 받는 민원 10가지 응대 문장 카드', 엑셀: '민원 유형별 처리 기록표' }, effect: '내일 창구에서 꺼내 보는 내 응대 카드' },
+    { who: '발달장애 청소년 방과후 프로그램 참여자', need: '하루 일과 순서를 스스로 챙기기 어렵다', mind: '새로운 것이 불안, 그림이 편하다', ex: { 음악: '하루 일과를 순서대로 부르는 노래 (보호자 · 교사와 함께)', 음성: '쉬운 말로 일과를 알려 주는 음성 안내', 이미지: '그림으로 보는 내 하루 일과 카드 (보호자 · 교사와 함께)', 대화: '쉬운 말 일과 안내 문장', 엑셀: '하루 일과 체크표 (그림 아이콘)' }, effect: '집 · 교실에 붙여 두고 스스로 확인' },
+    { who: '회의가 많은 부서의 팀장', need: '회의록 정리와 후속 업무 배분에 시간이 걸린다', mind: '바쁘다, 팀원 눈치도 본다', ex: { 음악: '우리 팀 응원가 (회의실 공감 가사)', 음성: '회의 결정 사항 1분 음성 브리핑', 이미지: '우리 팀 회의 규칙 포스터', 대화: '회의 녹취를 넣으면 결정 · 할 일 · 담당을 뽑아 주는 요청문', 엑셀: '회의 후속 업무 담당 · 기한 추적표' }, effect: '다음 회의부터 정리 시간 절반' }
   ];
-  const productMatch = body => pickGrade(body, MATCH_ITEMS, ['엑셀 병합 자동화 도구', '내 마음 날씨 그림책', '상사와 나, 풍자 4컷 만화', '출동 전 장비 점검 체크 화면', '손주에게 보내는 AI 그림 안부 카드', '우리 집 화재 대피 지도 + 119 신고 연습 카드'], { left: '교육생', right: '들고 갈 산출물' });
+  const TOOLS = [['이미지', '🖼 이미지 생성 AI'], ['음악', '🎵 음악 생성 AI'], ['음성', '🎙 음성 합성 · 녹음 AI'], ['대화', '💬 대화형 AI (ChatGPT · Claude 등)'], ['엑셀', '📊 엑셀 · 표']];
+  function productRemix(body) {
+    const id = uid();
+    let card = null, tool = '이미지';
+    body.innerHTML = `
+      <p class="ld-note">강의 주제가 <b>"도구 사용법"</b>으로 정해져 왔다고 해 봅시다. 같은 도구라도 교육생에 따라 들고 갈 산출물이 달라야 합니다.</p>
+      <div class="ld-row"><label for="${id}-tool">오늘 쓸 도구</label><select id="${id}-tool" class="ld-tool">${TOOLS.map(([k, l]) => `<option value="${k}">${l}</option>`).join('')}</select>
+        <button class="lab-button primary" type="button" data-act="draw">🎴 교육생 카드 뽑기</button></div>
+      <div class="ld-card" hidden></div>
+      <div class="ld-remix" hidden>
+        <div class="ld-form">
+          <label for="${id}-p">이 사람이 만들어 갈 산출물</label><input id="${id}-p" data-k="p" type="text" maxlength="80" placeholder="예: ○○을 넣으면 ○○해 주는 ○○">
+          <label for="${id}-d">만드는 과정의 효과</label><input id="${id}-d" data-k="d" type="text" maxlength="80" placeholder="만들면서 무엇을 경험 · 정리하게 되나">
+          <label for="${id}-a">들고 간 뒤의 효과</label><input id="${id}-a" data-k="a" type="text" maxlength="80" placeholder="다음 날 무엇이 달라지나">
+        </div>
+        <fieldset class="ld-checks"><legend>스스로 점검: 좋은 산출물의 다섯 조건</legend>${PCHECK.map(([k, d], i) => `<label><input type="checkbox" data-c="${i}"> <b>${k}</b> · ${d}</label>`).join('')}</fieldset>
+        <div class="lab-actions">
+          <button class="lab-button" type="button" data-act="chat">채팅에 올릴 한 줄 복사</button>
+          <button class="lab-button ghost" type="button" data-act="ex">예시 답 보기</button>
+          <button class="lab-button ghost" type="button" data-act="draw">다른 카드 뽑기</button>
+          <p class="lab-result" aria-live="polite"></p>
+        </div>
+        <div class="ld-out ld-ex" hidden></div>
+      </div>`;
+    const cardEl = body.querySelector('.ld-card'), remix = body.querySelector('.ld-remix'), ex = body.querySelector('.ld-ex'), result = body.querySelector('.lab-result');
+    const val = k => body.querySelector(`[data-k="${k}"]`).value.trim();
+    function draw() {
+      const pool = DECK.filter(c => c !== card);
+      card = pool[Math.floor(Math.random() * pool.length)];
+      cardEl.hidden = false; remix.hidden = false; ex.hidden = true; result.textContent = '';
+      cardEl.innerHTML = `<p class="ld-out-label">🎴 내가 뽑은 교육생</p><p class="ld-sentence">${esc(card.who)}</p><p class="ld-card-row"><span>필요</span>${esc(card.need)}</p><p class="ld-card-row"><span>마음</span>${esc(card.mind)}</p>`;
+      body.querySelectorAll('[data-k]').forEach(i => { i.value = ''; });
+      body.querySelectorAll('[data-c]').forEach(c => { c.checked = false; });
+      body.querySelector('[data-k="p"]').focus();
+    }
+    body.querySelector('.ld-tool').addEventListener('change', e => { tool = e.target.value; ex.hidden = true; });
+    body.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      const a = b.dataset.act;
+      if (a === 'draw') { draw(); return; }
+      if (!card) return;
+      if (a === 'chat') {
+        if (!val('p')) { result.textContent = '산출물부터 적어 보세요.'; return; }
+        const n = [...body.querySelectorAll('[data-c]')].filter(c => c.checked).length;
+        copyText(`[${card.who}] 산출물: ${val('p')} / 과정 효과: ${val('d') || '-'} / 들고 간 뒤: ${val('a') || '-'} (조건 ${n}/5)`, b);
+      }
+      if (a === 'ex') {
+        ex.hidden = false;
+        ex.innerHTML = `<p class="ld-out-label">예시 답 (${esc(TOOLS.find(t => t[0] === tool)[1])}) · 정답은 아닙니다</p><p class="ld-sentence">${esc(card.ex[tool])}</p><p class="ld-hint">들고 간 뒤: ${esc(card.effect)}</p><p class="ld-hint">내 답과 무엇이 다른가요? 내 답이 다섯 조건을 더 잘 지키면 내 답이 더 좋은 답입니다.</p>`;
+      }
+    });
+    body.addEventListener('input', () => { result.textContent = ''; });
+  }
 
   /* ───────── 02-② 산출물 깔때기 ───────── */
-  const PCHECK = [['내 것', '교육생 각자의 상황 · 감정 · 업무가 들어간다'], ['바로 씀', '강의 다음 날 실제로 쓰거나 보게 된다'], ['시간 안에 완성', '주어진 시간 안에 끝까지 만든다'], ['도구는 최소', '꼭 필요한 기능만 쓴다'], ['안전', '만들고 나누며 상처받거나 곤란해질 사람이 없다']];
   const PF = [['product', '산출물 (무엇을 만들어 가나)', '예: 엑셀 병합 자동화 도구'], ['during', '만드는 과정의 효과', '예: 내 업무를 단계로 쪼개 보기'], ['after', '들고 간 뒤의 효과', '예: 매달 30분 → 1분'], ['tool', '필요한 도구', '예: 대화형 AI']];
   function productFunnel(body) {
     const id = uid(), st = load(), p = st.product || {}, l = st.learner || {};
@@ -449,7 +504,7 @@
 
   const INLINE = {
     'learner-card': { title: '내 교육생 카드', time: '약 4분', goal: '네 렌즈(누구 · 필요 · 마음 · 환경)로 내 교육생을 적습니다. 아직 없으면 예시 세 가지 중 하나를 눌러 따라 하세요.', build: learnerCard },
-    'product-match': { title: '교육생 ↔ 산출물 잇기', time: '약 3분', goal: '교육생마다 들고 갈 산출물을 골라 채점합니다. 필요(업무 · 정서 · 관계)와 산출물의 관계를 봅니다.', build: productMatch },
+    'product-remix': { title: '교육생 카드 뽑기: 같은 도구, 다른 산출물', time: '약 5분', goal: '처음 보는 교육생을 뽑아, 오늘 쓸 도구로 그 사람에게 맞는 산출물과 효과를 직접 적습니다. 다섯 조건으로 점검하고, 한 줄을 줌 채팅에 올려 서로의 답을 봅니다.', build: productRemix },
     'product-funnel': { title: '내 산출물 깔때기', time: '약 5분', goal: '01장의 교육생에게 맞는 산출물과 효과를 적고, 좋은 산출물의 다섯 조건으로 점검합니다.', build: productFunnel },
     'goal-judge': { title: '좋은 목표 · 고칠 목표', time: '약 3분', goal: '목표 문장마다 좋은 목표인지 고칠 목표인지 고르고 이유를 확인합니다.', build: goalJudge },
     abcd: { title: 'ABCD 목표 조립', time: '약 4분', goal: 'A · B · C · D를 채워 핵심 목표(만들기)와 보조 목표(마음 · 관계)를 목록에 넣습니다.', build: abcd },

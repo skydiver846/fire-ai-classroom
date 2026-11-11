@@ -35,7 +35,7 @@
   // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
   const INLINE_AT = {
     learner: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card']],
-    product: [['## 3. 유형별 산출물 아이디어', 'product-match'], ['## 4. 산출물 깔때기', 'product-funnel']],
+    product: [['## 3. 유형별 산출물 아이디어', 'product-remix'], ['## 4. 산출물 깔때기', 'product-funnel']],
     goal: [['## 3. 보이는 동사', 'goal-judge'], ['## 4. 목표는 1~3개', 'abcd']],
     design: [['## 3. 세 교육생의 90분', 'time-blocks']],
     method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 5. 안전 설계 체크리스트', 'safety-check']],
@@ -52,6 +52,40 @@
   const pager = document.getElementById('pager');
   const topTitle = document.getElementById('topTitle');
   const search = document.getElementById('q');
+
+  /* ───────── 그림 블록: ```flow · ```funnel · ```timebar · ```cards ───────── */
+  // flow    : "제목 | 단계 > 단계 > 단계"   (제목 앞 ✕ 는 나쁜 예, ✓ 는 좋은 예)
+  // funnel  : "라벨 | 내용 | 점검 메모"   마지막 "= 문장" 은 결과 띠
+  // timebar : "제목 | 이름:비율:종류, …"  종류 = open · talk · follow · make · share · other
+  // cards   : "아이콘 | 제목 | 굵은 줄 | 설명"
+  const cells = l => l.split('|').map(x => x.trim());
+  const VIS = {
+    flow: lines => `<figure class="vis vis-flow">${lines.map(l => {
+      const [t, steps = ''] = cells(l);
+      const mood = /^✕/.test(t) ? 'bad' : /^✓/.test(t) ? 'good' : '';
+      return `<div class="vf-row ${mood}"><span class="vf-label">${inline(t)}</span><ol class="vf-steps">${steps.split('>').map(x => `<li>${inline(x.trim())}</li>`).join('')}</ol></div>`;
+    }).join('')}</figure>`,
+    funnel: lines => {
+      const rows = lines.filter(l => !l.startsWith('='));
+      const res = lines.find(l => l.startsWith('='));
+      return `<figure class="vis vis-funnel">${rows.map((l, i) => {
+        const [label, body, note] = cells(l);
+        return `<div class="vn-row" style="--i:${i};--n:${rows.length}"><div class="vn-bar"><b>${inline(label)}</b><span>${inline(body || '')}</span></div>${note ? `<p class="vn-note">${inline(note)}</p>` : ''}</div>`;
+      }).join('')}${res ? `<p class="vn-result"><span>주제 문장</span>${inline(res.replace(/^=\s*/, ''))}</p>` : ''}</figure>`;
+    },
+    timebar: lines => `<figure class="vis vis-time">${lines.map(l => {
+      const [t, parts = ''] = cells(l);
+      const mood = /^✕/.test(t) ? 'bad' : /^✓/.test(t) ? 'good' : '';
+      return `<div class="vt-row ${mood}"><span class="vt-label">${inline(t)}</span><div class="vt-bar">${parts.split(',').map(p => {
+        const [name, pct, kind] = p.split(':').map(x => x.trim());
+        return `<span class="vt-${kind || 'other'}" style="flex:${Number(pct) || 1}" title="${escapeHtml(name)}">${escapeHtml(name)}</span>`;
+      }).join('')}</div></div>`;
+    }).join('')}<p class="vt-legend"><span class="vt-open">열기</span><span class="vt-talk">설명</span><span class="vt-follow">따라 하기</span><span class="vt-make">만들기</span><span class="vt-share">나누기</span></p></figure>`,
+    cards: lines => `<div class="vis vis-cards">${lines.map(l => {
+      const [icon, title, main, sub] = cells(l);
+      return `<div class="vc-card"><span class="vc-icon">${icon}</span><p class="vc-title">${inline(title)}</p><p class="vc-main">${inline(main || '')}</p>${sub ? `<p class="vc-sub">${inline(sub)}</p>` : ''}</div>`;
+    }).join('')}</div>`
+  };
 
   /* ───────── 마크다운 ───────── */
   function escapeHtml(text) {
@@ -95,12 +129,18 @@
 
       const fence = line.match(/^```\s*([\w-]*)/);
       if (fence) {
-        const lang = fence[1] || 'text';
+        const lang = fence[1] || 'prompt';   // 이름 없는 블록 = AI에게 보낼 예시 요청(복사 버튼)
         const block = [];
         i += 1;
         while (i < lines.length && !lines[i].startsWith('```')) block.push(lines[i++]);
         i += 1;
         const source = escapeHtml(block.join('\n'));
+        if (VIS[lang]) { out.push(VIS[lang](block.filter(l => l.trim()))); continue; }
+        if (lang === 'prompt') {
+          const marked = source.replace(/\[([^\]\n]+)\]/g, '<mark class="pr-slot">[$1]</mark>');
+          out.push(`<div class="code-block prompt-block"><div class="pr-head"><span>🤖 AI에게 보낼 요청 · <b>[대괄호]</b>를 내 것으로 바꿔 쓰세요</span><button class="copy-button" type="button">📋 복사</button></div><pre><code>${marked}</code></pre></div>`);
+          continue;
+        }
         if (lang === 'mermaid') out.push(`<figure class="diagram" data-source="${source}"><pre class="mermaid-src">${source}</pre></figure>`);
         // text: 글자로 그린 설명 그림(복사할 코드가 아님) → 복사 버튼 없이
         else if (lang === 'text') out.push(`<figure class="text-figure"><pre>${source}</pre></figure>`);
@@ -436,14 +476,15 @@
 
   async function copyBlock(event) {
     const button = event.currentTarget;
-    const text = button.parentElement.querySelector('code').textContent;
+    const text = button.closest('.code-block').querySelector('code').textContent;
     try {
       await navigator.clipboard.writeText(text);
-      button.textContent = '복사됨';
-      setTimeout(() => { button.textContent = '복사'; }, 1300);
+      const label = button.textContent;
+      button.textContent = '✓ 복사됨';
+      setTimeout(() => { button.textContent = label.startsWith('✓') ? '📋 복사' : label; }, 1300);
     } catch (_) {
       const range = document.createRange();
-      range.selectNodeContents(button.parentElement.querySelector('code'));
+      range.selectNodeContents(button.closest('.code-block').querySelector('code'));
       const selection = getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
