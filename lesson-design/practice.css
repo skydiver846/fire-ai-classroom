@@ -332,3 +332,9 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ld-warn li { background: #3a3220; color: #f3d48a; } :root:not([data-theme="light"]) .ld-warn li.ok { background: #15241c; color: #7fd6a3; } }
 :root[data-theme="dark"] .ld-warn li { background: #3a3220; color: #f3d48a; }
 :root[data-theme="dark"] .ld-warn li.ok { background: #15241c; color: #7fd6a3; }
+.ld-presets { align-items: center; margin: 0 0 8px; }
+.ld-presets .ld-out-label { margin: 0 4px 0 0; }
+.ld-note { margin: 4px 0 10px; font-size: 14px; color: var(--muted); }
+.ld-note b { color: var(--ink); }
+.ld-hint { margin: 6px 0 0; font-size: 14px; }
+.ld-make { font-weight: 700; color: var(--ink); }

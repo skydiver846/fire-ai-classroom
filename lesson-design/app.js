@@ -17,26 +17,28 @@
   const SITE_URL = 'https://www.jg-sobang.com/lesson-design/';
   // 인쇄 · PDF 마지막에 붙는 안내(화면에는 보이지 않음)
   const PRINT_FOOT = `<footer class="print-foot"><p>바로 해 보기와 퀴즈는 강의 사이트에서 해 보세요: ${SITE_URL}</p>
-    <p>참고: ADDIE 모형, Mager의 ABCD 목표 진술, Bloom의 개정 교육목표 분류, Gagné의 9가지 수업 사태를 강의용으로 간추렸습니다.</p></footer>`;
+    <p>참고: 학습자 분석 · ADDIE, 프로젝트 기반 학습, Mager의 ABCD 목표 진술, Bloom의 교육목표 분류, Gagné의 수업 사태를 강의용으로 간추렸습니다.</p></footer>`;
   const PRINT_BUTTON = '<button type="button" class="print-button" data-print>PDF로 저장 · 인쇄</button>';
   const DOCS = [
     { id: 'guide', group: '강의 개요', kind: 'lecture', short: '00 강의 안내', file: '강의설계_00_강의안내.md' },
-    { id: 'topic', group: '본 강의', kind: 'lecture', short: '01 강의 주제 선정', file: '강의설계_01_주제선정.md' },
-    { id: 'goal', group: '본 강의', kind: 'lecture', short: '02 학습목표 쓰기', file: '강의설계_02_학습목표.md' },
-    { id: 'design', group: '본 강의', kind: 'lecture', short: '03 내용 구성 · 시간 배분', file: '강의설계_03_내용구성_시간배분.md' },
-    { id: 'method', group: '본 강의', kind: 'lecture', short: '04 교수방법 · 평가', file: '강의설계_04_교수방법_평가.md' },
-    { id: 'plan', group: '본 강의', kind: 'lecture', short: '05 AI로 강의계획서 완성', file: '강의설계_05_AI로_강의계획서.md' },
+    { id: 'learner', group: '본 강의', kind: 'lecture', short: '01 교육생 이해', file: '강의설계_01_교육생이해.md' },
+    { id: 'product', group: '본 강의', kind: 'lecture', short: '02 산출물 중심 주제 선정', file: '강의설계_02_산출물중심_주제선정.md' },
+    { id: 'goal', group: '본 강의', kind: 'lecture', short: '03 학습목표', file: '강의설계_03_학습목표.md' },
+    { id: 'design', group: '본 강의', kind: 'lecture', short: '04 내용 구성 · 시간 배분', file: '강의설계_04_내용구성_시간배분.md' },
+    { id: 'method', group: '본 강의', kind: 'lecture', short: '05 방법 · 평가 · 안전', file: '강의설계_05_방법_평가_안전.md' },
+    { id: 'plan', group: '본 강의', kind: 'lecture', short: '06 AI로 강의계획서 완성', file: '강의설계_06_AI로_강의계획서.md' },
     { id: 'board', group: '마무리', kind: 'board', short: '퀴즈 결과 공유판', title: '퀴즈 결과 공유판' }
   ];
-  const ORDER = ['guide', 'topic', 'goal', 'design', 'method', 'plan', 'board'];
+  const ORDER = ['guide', 'learner', 'product', 'goal', 'design', 'method', 'plan', 'board'];
   const GROUPS = ['강의 개요', '본 강의', '마무리'];
 
-  // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류, 설정]. 활동은 그 절의 끝에 들어갑니다.
+  // 강의 본문 속 "바로 해 보기": [그 절의 제목 줄 앞부분, 활동 종류]. 활동은 그 절의 끝에 들어갑니다.
   const INLINE_AT = {
-    topic: [['## 4. 주제 좁히기', 'topic-funnel'], ['## 6. AI로 주제 후보', 'topic-sort']],
-    goal: [['## 3. 보이는 동사 쓰기', 'goal-judge'], ['## 4. 한 차시 목표는', 'abcd']],
-    design: [['## 4. 시간 배분 예시', 'time-blocks']],
-    method: [['## 2. 방법 고르기', 'align-match']],
+    learner: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card']],
+    product: [['## 3. 유형별 산출물 아이디어', 'product-match'], ['## 4. 산출물 깔때기', 'product-funnel']],
+    goal: [['## 3. 보이는 동사', 'goal-judge'], ['## 4. 목표는 1~3개', 'abcd']],
+    design: [['## 3. 세 교육생의 90분', 'time-blocks']],
+    method: [['## 2. 교육생에 맞는 방법', 'align-match'], ['## 5. 안전 설계 체크리스트', 'safety-check']],
     plan: [['## 4. AI 초안 검토', 'plan-builder']]
   };
   const byId = Object.fromEntries(DOCS.map(d => [d.id, d]));

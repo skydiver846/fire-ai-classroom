@@ -62,7 +62,7 @@
       <div class="quiz-name">
         <label for="${uid}-name">이름 (또는 별명)</label>
         <input id="${uid}-name" type="text" maxlength="20" autocomplete="off" placeholder="예: 홍길동">
-        <small>같은 이름으로 4개 퀴즈를 모두 내야 점수가 합산됩니다.</small>
+        <small>같은 이름으로 5개 퀴즈를 모두 내야 점수가 합산됩니다.</small>
       </div>`}
       <ol class="quiz-list">
         ${quiz.questions.map((item, qi) => `
@@ -110,7 +110,7 @@
       result.hidden = false;
       // 다른 사람이 이미 같은 이름으로 낸 경우: 고른 답은 그대로 두고 이름만 바꿔 바로 다시 낼 수 있게 합니다.
       if (data.already && !mine) {
-        result.innerHTML = `<p class="quiz-score warn">“${esc(data.name)}” 이름으로 이미 제출된 기록이 있습니다.</p><p>본인이 낸 기록이 아니라면 이름을 바꿔(예: 이름+숫자) 다시 제출해 주세요. 4개 퀴즈 모두 같은 이름을 써야 점수가 합산됩니다.</p>`;
+        result.innerHTML = `<p class="quiz-score warn">“${esc(data.name)}” 이름으로 이미 제출된 기록이 있습니다.</p><p>본인이 낸 기록이 아니라면 이름을 바꿔(예: 이름+숫자) 다시 제출해 주세요. 5개 퀴즈 모두 같은 이름을 써야 점수가 합산됩니다.</p>`;
         status.textContent = '';
         nameInput.focus();
         nameInput.select();
@@ -196,7 +196,7 @@
       const quizTitle = id => (window.QUIZ[id] ? window.QUIZ[id].title.split(' · ')[0] : id);
       host.querySelector('.board-top').innerHTML = data.top
         ? (data.top.length ? `<ol class="podium">${data.top.map((p, i) => `<li><span class="medal">${['🥇', '🥈', '🥉'][i]}</span><strong>${esc(p.name)}</strong><span>${p.score} / ${p.total}점 · 퀴즈 ${p.quizzes}개</span></li>`).join('')}</ol>` : '<p class="muted-line">아직 제출한 사람이 없습니다.</p>')
-        : '<p class="muted-line">강사가 공개하면 4개 퀴즈 총점 상위 3명이 여기에 나타납니다. (총점이 같으면 마지막 퀴즈를 먼저 낸 순서)</p>';
+        : '<p class="muted-line">강사가 공개하면 5개 퀴즈 총점 상위 3명이 여기에 나타납니다. (총점이 같으면 마지막 퀴즈를 먼저 낸 순서)</p>';
 
       const time = at => new Date(at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       host.querySelector('.board-quiz-tops').innerHTML = `<div class="quiz-tops">${data.quizIds.map(id => {
