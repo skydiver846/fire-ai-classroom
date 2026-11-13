@@ -31,8 +31,8 @@ const PAGES = [
     md: join(sec('단계 2')) + '\n' + join(sec('단계 3')) + '\n' + join(sec('단계 4')) },
   { file: 's3.html', no: '3', nav: '3교시 · 데이터 연동 · 검증', eyebrow: '3교시 · 15:00~15:50 · 설명 ② 열쇠와 규칙 + 설치 시연', title: 'v0.2 데이터 연동(필수)과 검증',
     md: join(sec('들어가기 전에')) + '\n' + join(sec('단계 5')) + '\n' + join(sec('단계 6')) + '\n' + join(sec('단계 7')) },
-  { file: 's4.html', no: '4', nav: '4교시 · 짝 검증 · 제출 · 마무리', eyebrow: '4교시 · 16:00~16:50', title: '짝 검증, 최종 제출, 과정 마무리',
-    md: join(sec('단계 8')) + '\n' + join(sec('단계 9')) + '\n' + join(sec('심사 기준')) + '\n' + join(sec('과정을 마치며')) },
+  { file: 's4.html', no: '4', nav: '4교시 · 다듬고 제출 · 투표', eyebrow: '4교시 · 16:00~16:50', title: '다듬고 제출, 투표로 1등 뽑기, 과정 마무리',
+    md: join(sec('단계 8')) + '\n' + join(sec('단계 9')) + '\n' + join(sec('과정을 마치며')) },
   { file: 'contest.html', no: '★', nav: '공모 · 투표', eyebrow: '16:20 제출 마감', title: '공모 · 투표', simple: true,
     html: read('contest.part.html'), script: 'contest.js' },
 ];

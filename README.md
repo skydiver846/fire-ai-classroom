@@ -14,7 +14,7 @@
 | `gate.html` · `api/unlock.js` | 강의 전 비공개용 접속 코드 화면. 지금은 쓰지 않음(2차 교안은 11. 13. 공개). 다시 막으려면 루트에 `vercel.json` redirects(쿠키 `jg_gate` 가 없을 때 `/gate.html?next=…`)를 추가 |
 | `assets/pointer.js` | 사이트 공통 큰 커서(켜기/끄기 단추, 모든 페이지에 기억) + 누를 수 있는 곳 블록 강조. 새 페이지는 `python3 instructor/add-pointer.py` 로 붙임(2차 교안은 빌드가 붙임) |
 | `api/fire.js` | 2차 API 트랙 강사 공용 화재 현황 주소(`/api/fire?sido=서울`, 소방청 화재정보서비스 시도단위 화재발생현황). Vercel 환경 변수 `DATA_GO_KR_KEY`(소방청_화재정보서비스 일반 인증키) 필요, 10분 CDN 캐시. Vercel 무료 한도 12개 중 서버 함수는 지금 6개(퀴즈 3 · 공모 2 · 화재 현황 1). 1차 수요조사 · 교육 신청 함수는 11. 10. 정리(코드는 git 기록에, 응답 자료는 Upstash에 그대로) |
-| `instructor/` | 강사용 자료(2차 계획안·흐름도·심사 기준)와 2차 원본. `.vercelignore` 로 배포에서 뺌 |
+| `instructor/` | 강사용 자료(2차 계획안·흐름도)와 2차 원본. `.vercelignore` 로 배포에서 뺌 |
 | `ai-literacy/` | AI 리터러시 · 웹 서비스의 뿌리 (교육생용). `skydiver846/ai-literacy-course-site` 저장소에서 `node build-student.mjs ../fire-ai-classroom/ai-literacy --api ../fire-ai-classroom/api` 로 만든 결과물이라 직접 고치지 않음. 강사용은 Claude 아티팩트로 따로 둠 |
 | `api/quiz/` | AI 리터러시 강의 후 퀴즈의 서버 함수(제출·채점, 결과 공유판, 강사 관리). 위와 같은 방법으로 만들어짐. Vercel Storage(Upstash Redis)와 환경 변수 `QUIZ_ADMIN_KEY` 가 필요 (방법은 `ai-literacy-course-site` README) |
 | `fire-ai-free/` | 같은 강의의 **무료 계정판** 보존본 (Claude Team 전환 전, 목록에는 링크하지 않음) |
