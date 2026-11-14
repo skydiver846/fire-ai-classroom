@@ -57,15 +57,15 @@
     draw();
   }
 
-  /* ───────── 예시 교육생: 조별 프로젝트 4팀 + 더 해 보기 ───────── */
+  /* ───────── 예시 교육생: 조별 프로젝트 4개 조 + 더 해 보기 ───────── */
   const PERSONAS = {
-    culture: { label: '🤝 1팀 조직문화', who: '세대 · 직급이 섞인 한 부서 직원', count: '20명', kind: '관계 · 문화', need: '상사와 대화가 어렵고 분위기가 무겁다', heart: '어색하다, 억지 참여가 싫다', env: '90분, 강당, 노트북 2인 1대',
+    culture: { label: '🤝 1조 조직문화', who: '세대 · 직급이 섞인 한 부서 직원', count: '20명', kind: '관계 · 문화', need: '상사와 대화가 어렵고 분위기가 무겁다', heart: '어색하다, 억지 참여가 싫다', env: '90분, 강당, 노트북 2인 1대',
       product: '상사와 나, 풍자 4컷 만화', during: '불편함을 웃음으로 꺼내 보기', after: '상사와 함께 보며 대화의 계기', tool: '이미지 생성 AI' },
-    shop: { label: '🏪 2팀 소상공인', who: '동네에서 카페 · 식당을 운영하는 소상공인', count: '15명', kind: '업무 · 기술', need: '손님이 줄었고, SNS에 무엇을 올려야 할지 모른다', heart: '바쁘다, AI는 처음이라 걱정', env: '3시간, 교육장, 개인 휴대폰 · 노트북',
+    shop: { label: '🏪 2조 소상공인', who: '동네에서 카페 · 식당을 운영하는 소상공인', count: '15명', kind: '업무 · 기술', need: '손님이 줄었고, SNS에 무엇을 올려야 할지 모른다', heart: '바쁘다, AI는 처음이라 걱정', env: '3시간, 교육장, 개인 휴대폰 · 노트북',
       product: '일주일 SNS 홍보 계획과 게시물 3개', during: '우리 가게 손님과 강점을 정리해 보기', after: '내일부터 바로 올리는 홍보 게시물', tool: '대화형 AI · 이미지 생성 AI' },
-    mind: { label: '🌱 3팀 마음 돌봄', who: '우울감 · 스트레스를 겪는 성인 참여자', count: '8명', kind: '정서 · 표현', need: '감정을 말로 꺼내기 어렵다', heart: '조심스럽다, 평가받기 싫다', env: '90분, 소그룹, 상담사 동석, 태블릿',
+    mind: { label: '🌱 3조 마음 돌봄', who: '우울감 · 스트레스를 겪는 성인 참여자', count: '8명', kind: '정서 · 표현', need: '감정을 말로 꺼내기 어렵다', heart: '조심스럽다, 평가받기 싫다', env: '90분, 소그룹, 상담사 동석, 태블릿',
       product: '내 마음 날씨 그림책 (4쪽)', during: '감정을 날씨 · 장면으로 바꾸며 말 대신 표현', after: '힘들 때 다시 펼쳐 보는 나만의 책', tool: '이미지 생성 AI' },
-    work: { label: '🗂 4팀 공공기관', who: '매달 부서별 엑셀을 손으로 합치는 주무관', count: '15명', kind: '업무 · 기술', need: '반복 취합에 매달 30분 넘게 쓴다', heart: '바쁘다, 바로 쓸 걸 원한다', env: '90분, 업무 PC, 외부 프로그램 설치 불가',
+    work: { label: '🗂 4조 공공기관', who: '매달 부서별 엑셀을 손으로 합치는 주무관', count: '15명', kind: '업무 · 기술', need: '반복 취합에 매달 30분 넘게 쓴다', heart: '바쁘다, 바로 쓸 걸 원한다', env: '90분, 업무 PC, 외부 프로그램 설치 불가',
       product: '엑셀 파일 병합 자동화 도구', during: '내 업무를 단계로 쪼개 보는 업무 분석', after: '매달 취합 30분 → 1분', tool: '대화형 AI (매크로 · 스크립트)' },
     teacher: { label: '🧑‍🏫 교육자', who: '수업 준비 시간이 부족한 직업훈련 강사', count: '12명', kind: '업무 · 기술', need: '수업 준비에 시간이 많이 들고, 교육생 수준 차이가 크다', heart: '잘 가르치고 싶다, 시간이 없다', env: '3시간, 노트북, 각자 담당 과목 자료',
       product: '교육생 맞춤형 강의계획서 + 수준별 문제 세트', during: '내 교육생의 수준 차이를 정리해 보기', after: '다음 수업에 바로 쓰는 계획서와 문제', tool: '대화형 AI' },
@@ -135,7 +135,7 @@
     let rows = (st.survey && st.survey.rows) || defaultSurvey(key);
     let target = (st.survey && st.survey.target) || ((PERSONAS[key] || {}).who || '');
     body.innerHTML = `
-      <div class="lab-actions ld-presets"><span class="ld-out-label">우리 팀 교육생:</span>${Object.entries(PERSONAS).map(([k, p]) => `<button class="lab-button ghost" type="button" data-sv="${k}">${p.label}</button>`).join('')}</div>
+      <div class="lab-actions ld-presets"><span class="ld-out-label">우리 조 교육생:</span>${Object.entries(PERSONAS).map(([k, p]) => `<button class="lab-button ghost" type="button" data-sv="${k}">${p.label}</button>`).join('')}</div>
       <div class="ld-form"><label>설문 대상</label><input type="text" class="ld-sv-target" maxlength="60" placeholder="예: 동네 카페 사장님 15명"></div>
       <div class="table-wrap"><table class="ld-blocks ld-sv"><thead><tr><th>넣기</th><th>항목</th><th>질문 (고쳐 쓰기)</th><th>형식</th></tr></thead><tbody></tbody></table></div>
       <div class="lab-actions"><button class="lab-button" type="button" data-act="add">질문 추가</button></div>
@@ -217,7 +217,7 @@
   function responseAnalysis(body) {
     let key = 'shop', marks = {}, stars = {};
     body.innerHTML = `
-      <div class="lab-actions ld-presets"><span class="ld-out-label">우리 팀 응답:</span>${Object.keys(RESP).map(k => `<button class="lab-button ${k === key ? '' : 'ghost'}" type="button" data-rs="${k}">${PERSONAS[k].label}</button>`).join('')}</div>
+      <div class="lab-actions ld-presets"><span class="ld-out-label">우리 조 응답:</span>${Object.keys(RESP).map(k => `<button class="lab-button ${k === key ? '' : 'ghost'}" type="button" data-rs="${k}">${PERSONAS[k].label}</button>`).join('')}</div>
       <p class="ld-note">① <b>묶기</b>: 응답마다 맞는 문제 유형을 누르세요 (여러 개 가능). ⭐는 소수지만 절박한 응답 표시. ② <b>세기</b>는 오른쪽에서 자동으로. ③ <b>고르기</b>: [핵심 문제 3가지 정리]</p>
       <div class="ld-ra"><ol class="ld-resp"></ol><div class="ld-tally-wrap"><p class="ld-out-label">② 세기</p><div class="ld-tally"></div></div></div>
       <div class="lab-actions"><button class="lab-button primary" type="button" data-act="pick">③ 핵심 문제 3가지 정리</button><button class="lab-button" type="button" data-act="ai">AI 분석 요청 복사 (응답 포함)</button><p class="lab-result" aria-live="polite"></p></div>
@@ -749,8 +749,8 @@
     'align-match': { title: '목표에 맞는 평가 · 교육생에 맞는 방법', time: '약 3분', goal: 'Ⓐ 목표마다 알맞은 평가, Ⓑ 교육생 유형마다 알맞은 방법을 고릅니다.', build: alignMatch },
     'safety-check': { title: '내 강의 안전 설계', time: '약 2분', goal: '여섯 가지 안전 장치 중 내 강의에 필요한 것을 고르고, 나만의 장치를 한 줄 더합니다.', build: safetyCheck },
     'live-topic': { title: '즉석 주제 정하기 연습: 강사가 되어 물어보기', time: '약 4분', goal: '교육생 그룹을 골라, 첫 대답(증상)에서 세 번 더 물어 진짜 필요를 찾고, 준비한 메뉴에서 오늘의 산출물을 함께 고르는 흐름을 연습합니다.', build: liveTopic },
-    'survey-builder': { title: '실습 1. 우리 팀 수요조사 설문 만들기', time: '약 8분', goal: '우리 팀 교육생을 고르면 공통 문항 7개가 채워집니다. 질문을 우리 교육생에 맞게 고쳐 쓰고, 경고(도구 중심 · 개인정보 · 문항 수)를 확인한 뒤 인쇄하거나 복사합니다.', build: surveyBuilder },
-    'response-analysis': { title: '응답 분석 연습: 묶고, 세고, 고르기', time: '약 8분', goal: '우리 팀의 가상 응답 8개를 문제 유형으로 묶으면 자동으로 세어 줍니다. 핵심 문제 3가지를 고르면 결과물과 교육 목표 예시가 나오고, 05 강의계획서로 이어집니다.', build: responseAnalysis },
+    'survey-builder': { title: '실습 1. 우리 조 수요조사 설문 만들기', time: '약 8분', goal: '우리 조 교육생을 고르면 공통 문항 7개가 채워집니다. 질문을 우리 교육생에 맞게 고쳐 쓰고, 경고(도구 중심 · 개인정보 · 문항 수)를 확인한 뒤 인쇄하거나 복사합니다.', build: surveyBuilder },
+    'response-analysis': { title: '응답 분석 연습: 묶고, 세고, 고르기', time: '약 8분', goal: '우리 조의 가상 응답 8개를 문제 유형으로 묶으면 자동으로 세어 줍니다. 핵심 문제 3가지를 고르면 결과물과 교육 목표 예시가 나오고, 05 강의계획서로 이어집니다.', build: responseAnalysis },
     'plan-builder': { title: '내 맞춤 강의계획서 한 장', time: '약 8분', goal: '앞 장에서 적은 것을 불러와 빈칸을 채웁니다. 오른쪽 점검이 모두 ✓가 되면 새 창으로 열어 PDF로 저장하세요.', build: planBuilder }
   };
 
