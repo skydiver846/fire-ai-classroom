@@ -38,7 +38,7 @@
     persp: [['## 4. 같은 도구, 다른 결과물', 'product-remix']],
     survey: [['## 2. 교육생을 보는 네 가지 렌즈', 'learner-card', { optional: true }], ['## 6. 실습 1', 'survey-builder']],
     analysis: [['## 2. 여러 응답 분석하기', 'response-analysis'], ['## 4. 설문을 못 했다면', 'live-topic', { optional: true }]],
-    goal: [['## 2. ABCD로 쓰기', 'abcd'], ['## 3. 보이는 동사', 'goal-judge', { optional: true }]],
+    goal: [['## 2. ABCD로 쓰기', 'abcd'], ['## 2. ABCD로 쓰기', 'goal-judge', { optional: true }]],
     product: [['## 4. 산출물 깔때기', 'product-funnel', { optional: true }]],
     design: [['## 3. 세 교육생의 90분', 'time-blocks', { optional: true }]],
     method: [['## 2. 교육생에 맞는 방법', 'align-match', { optional: true }], ['## 6. 안전 설계', 'safety-check', { optional: true }]],
@@ -344,7 +344,7 @@
   const SKIP_THIS_CLASS = {
     survey: ['## 2. 교육생을 보는 네 가지 렌즈', '## 3. 필요는 세 종류', '## 5. 설문 말고도', '## 7. 참고: AI로 처음부터'],
     analysis: ['## 4. 설문을 못 했다면'],
-    goal: ['## 3. 보이는 동사', '## 4. 목표는 1~3개', '## 5. AI로 목표 다듬기'],
+    goal: ['## 3. 목표는 1~3개', '## 4. AI로 목표 다듬기'],
     product: ['## 3. 유형별 산출물 아이디어', '## 4. 산출물 깔때기', '## 5. 민감한 주제'],
     design: ['## 3. 세 교육생의 90분', '## 4. 설명은 10분 규칙', '## 5. 내용은 산출물에서'],
     method: ['## 2. 교육생에 맞는 방법', '## 4. 정서 · 관계 활동의', '## 6. 안전 설계'],
