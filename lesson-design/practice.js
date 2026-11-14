@@ -141,9 +141,9 @@
       <div class="lab-actions"><button class="lab-button" type="button" data-act="add">질문 추가</button></div>
       <ul class="ld-warn" aria-live="polite"></ul>
       <div class="lab-actions">
-        <button class="lab-button primary" type="button" data-act="open">설문지 새 창으로 열기 (인쇄)</button>
+        <button class="lab-button" type="button" data-act="open">④ 설문지 새 창으로 열기 (인쇄)</button>
         <button class="lab-button" type="button" data-act="copy">설문지 글로 복사</button>
-        <button class="lab-button" type="button" data-act="ai">AI에게 다듬기 요청 복사</button>
+        <button class="lab-button primary" type="button" data-act="ai">③ AI에게 다듬기 요청 복사</button>
         <p class="lab-result" aria-live="polite"></p>
       </div>`;
     const tbody = body.querySelector('tbody'), result = body.querySelector('.lab-result');
@@ -749,7 +749,7 @@
     'align-match': { title: '목표에 맞는 평가 · 교육생에 맞는 방법', time: '약 3분', goal: 'Ⓐ 목표마다 알맞은 평가, Ⓑ 교육생 유형마다 알맞은 방법을 고릅니다.', build: alignMatch },
     'safety-check': { title: '내 강의 안전 설계', time: '약 2분', goal: '여섯 가지 안전 장치 중 내 강의에 필요한 것을 고르고, 나만의 장치를 한 줄 더합니다.', build: safetyCheck },
     'live-topic': { title: '즉석 주제 정하기 연습: 강사가 되어 물어보기', time: '약 4분', goal: '교육생 그룹을 골라, 첫 대답(증상)에서 세 번 더 물어 진짜 필요를 찾고, 준비한 메뉴에서 오늘의 산출물을 함께 고르는 흐름을 연습합니다.', build: liveTopic },
-    'survey-builder': { title: '실습 1. 수요조사 설문 만들기', time: '약 8분', goal: '교육생 예시를 고르면 공통 문항 7개가 채워집니다. 질문을 우리 교육생에 맞게 고쳐 쓰고, 경고(도구 중심 · 개인정보 · 문항 수)를 확인한 뒤 인쇄하거나 복사합니다.', build: surveyBuilder },
+    'survey-builder': { title: '실습 1. 수요조사 설문 만들기', time: '약 8분', goal: '① 교육생 예시를 눌러 틀을 채우고 ② 내 교육생에 맞게 고쳐 쓴 뒤 ③ [AI에게 다듬기 요청 복사]로 AI에게 다듬게 하고 ④ 인쇄하거나 폼으로 옮깁니다.', build: surveyBuilder },
     'response-analysis': { title: '응답 분석 연습: 묶고, 세고, 고르기', time: '약 8분', goal: '고른 교육생의 가상 응답 8개를 문제 유형으로 묶으면 자동으로 세어 줍니다. 핵심 문제 3가지를 고르면 결과물과 교육 목표 예시가 나오고, 05 강의계획서로 이어집니다.', build: responseAnalysis },
     'plan-builder': { title: '내 맞춤 강의계획서 한 장', time: '약 8분', goal: '앞 장에서 적은 것을 불러와 빈칸을 채웁니다. 오른쪽 점검이 모두 ✓가 되면 새 창으로 열어 PDF로 저장하세요.', build: planBuilder }
   };
