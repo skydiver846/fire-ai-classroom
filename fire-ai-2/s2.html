@@ -212,13 +212,14 @@
 </tbody></table></div>
 <p><strong>따라 하기</strong></p>
 <ol>
-<li><strong>Claude Code 화면</strong>에서 <strong>[Create PR]</strong> 단추를 누릅니다<ul>
-<li>채팅 오른쪽(또는 아래)에 <code>+120 -0</code> 처럼 <strong>바뀐 줄 수가 적힌 카드(Changes)</strong> 안에 있습니다</li>
-<li>카드가 안 보이면 화면 맨 위 제목 줄 오른쪽의 패널 아이콘 또는 <strong>⋮</strong> 메뉴에서 켭니다</li>
-<li>그래도 없으면 채팅에 <strong>&quot;PR 만들어 줘&quot;</strong> 라고 보내도 됩니다</li>
+<li><strong>Claude Code 화면 오른쪽 위</strong>의 <strong>± 모양 아이콘</strong>(네모 안에 ±)을 눌러 <strong>변경 사항 패널</strong>을 엽니다<ul>
+<li>패널 맨 위에 <code>main → claude/…</code> 가 보이고, 아래에 Claude가 만든 파일(<code>index.html</code>, <code>PRD.md</code>)이 보이면 맞습니다</li>
+<li>패널의 <strong>[Create PR]</strong> (한국어 화면이면 <strong>[PR 만들기]</strong>)를 누릅니다</li>
+<li><strong>&quot;표시할 변경 사항이 없습니다&quot;</strong> 가 나오면 Claude가 아직 올리지 않은 것 → 채팅에 <strong>&quot;지금까지 만든 것을 커밋하고 푸시해 줘&quot;</strong> → 다시 열기</li>
+<li>단추를 못 찾겠으면 채팅에 <strong>&quot;PR 만들어 줘&quot;</strong> 라고 보내도 됩니다</li>
 </ul>
 </li>
-<li>카드에 결재 요청서 제목(파란 글씨)이 생기면 누릅니다 → <strong>GitHub 화면</strong>이 새 탭으로 열립니다</li>
+<li>결재 요청서(PR) 제목이나 링크가 생기면 누릅니다 → <strong>GitHub 화면</strong>이 새 탭으로 열립니다</li>
 <li>GitHub 화면을 아래로 내려 초록 <strong>[Merge pull request]</strong> → 한 번 더 <strong>[Confirm merge]</strong></li>
 <li>보라색 <strong>Merged</strong> 표시가 보이면 결재 끝입니다</li>
 </ol>
@@ -268,7 +269,7 @@
 </thead>
 <tbody><tr>
 <td>[Create PR] 이 안 보임</td>
-<td>채팅 옆 패널을 켭니다. 그래도 없으면 &quot;결재 요청서(PR)를 만들어 주고 주소를 알려 줘&quot;</td>
+<td>오른쪽 위 <strong>± 아이콘</strong>으로 변경 사항 패널을 엽니다. &quot;표시할 변경 사항이 없습니다&quot;면 &quot;커밋하고 푸시해 줘&quot;. 그래도 없으면 &quot;결재 요청서(PR)를 만들어 주고 주소를 알려 줘&quot;</td>
 </tr>
 <tr>
 <td>배포 주소가 404 / Page not found</td>
