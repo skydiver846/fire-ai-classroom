@@ -177,7 +177,7 @@
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 4. v0.1 결재하고 배포 (15분)</h2>
 <blockquote>
 <p>🎯 <strong>목표</strong>: v0.1을 원본(main)에 합치고(결재), Vercel로 웹 주소를 만들어 공모에 낸다.</p>
-<p>📌 1차 복습: <strong>PR = 결재 요청서</strong>. Claude Code에서 [Create PR] 로 올리고, GitHub에서 [Merge] 로 결재합니다.</p>
+<p>📌 1차 복습: <strong>PR = 결재 요청서</strong>. Claude Code에 &quot;PR 만들어 줘&quot;로 올리고, GitHub에서 [Merge] 로 결재합니다.</p>
 <p>⏭ <strong>끝나면</strong>: ✅ 점검 2 (공모 페이지에 v0.1 주소) → 3교시</p>
 </blockquote>
 <h3>4-1. 결재 올리고 결재하기 (5분) · ③ Claude Code → ④ GitHub</h3>
@@ -187,15 +187,15 @@
 <tr>
 <th></th>
 <th>하는 곳</th>
-<th>누르는 것</th>
+<th>하는 것</th>
 <th>뜻</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>① 결재 올리기</td>
 <td>Claude Code</td>
-<td><strong>[Create PR]</strong></td>
-<td>&quot;초안을 원본에 넣어도 될까요?&quot; 요청서 만들기</td>
+<td>아래 문장을 <strong>복사해 보내기</strong></td>
+<td>&quot;초안을 원본에 넣어도 될까요?&quot; 요청서(PR) 만들기</td>
 </tr>
 <tr>
 <td>② 결재하기</td>
@@ -212,17 +212,19 @@
 </tbody></table></div>
 <p><strong>따라 하기</strong></p>
 <ol>
-<li><strong>Claude Code 화면 오른쪽 위</strong>의 <strong>± 모양 아이콘</strong>(네모 안에 ±)을 눌러 <strong>변경 사항 패널</strong>을 엽니다<ul>
-<li>패널 맨 위에 <code>main → claude/…</code> 가 보이고, 아래에 Claude가 만든 파일(<code>index.html</code>, <code>PRD.md</code>)이 보이면 맞습니다</li>
-<li>패널의 <strong>[Create PR]</strong> (한국어 화면이면 <strong>[PR 만들기]</strong>)를 누릅니다</li>
-<li><strong>&quot;표시할 변경 사항이 없습니다&quot;</strong> 가 나오면 Claude가 아직 올리지 않은 것 → 채팅에 <strong>&quot;지금까지 만든 것을 커밋하고 푸시해 줘&quot;</strong> → 다시 열기</li>
-<li>단추를 못 찾겠으면 채팅에 <strong>&quot;PR 만들어 줘&quot;</strong> 라고 보내도 됩니다</li>
-</ul>
-</li>
-<li>결재 요청서(PR) 제목이나 링크가 생기면 누릅니다 → <strong>GitHub 화면</strong>이 새 탭으로 열립니다</li>
+<li>Claude Code 채팅에 아래 문장을 복사해 보냅니다</li>
+</ol>
+<pre><code>지금까지 만든 것을 커밋하고 푸시한 뒤, main으로 PR을 만들어 주고 PR 주소를 알려 줘. 합치기(merge)는 내가 할게.
+</code></pre>
+<ol start="2">
+<li>Claude가 알려 준 <strong>PR 주소</strong>(<code>github.com/…/pull/1</code> 같은 링크)를 누릅니다 → <strong>GitHub 화면</strong>이 새 탭으로 열립니다</li>
 <li>GitHub 화면을 아래로 내려 초록 <strong>[Merge pull request]</strong> → 한 번 더 <strong>[Confirm merge]</strong></li>
 <li>보라색 <strong>Merged</strong> 표시가 보이면 결재 끝입니다</li>
 </ol>
+<blockquote>
+<p>💡 <strong>&quot;푸시해 줘&quot;만으로는 안 되나요?</strong> 푸시는 초안 서랍에 넣는 것까지입니다. 원본(main)에 넣는 <strong>결재(Merge)는 사람이</strong> 합니다. 그래서 문장 끝에 &quot;합치기는 내가 할게&quot;를 붙였습니다.</p>
+<p>이렇게 해도 됩니다: Claude Code 오른쪽 위 <strong>± 아이콘</strong>(변경 사항 패널) → <strong>[Create PR]</strong> (한국어 화면은 [PR 만들기])</p>
+</blockquote>
 <h3>4-2. Vercel에 연결해 웹 주소 만들기 (7분, 이 저장소는 처음 한 번) · ⑤ Vercel</h3>
 <ol>
 <li>vercel.com 오른쪽 위 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
@@ -268,8 +270,8 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>[Create PR] 이 안 보임</td>
-<td>오른쪽 위 <strong>± 아이콘</strong>으로 변경 사항 패널을 엽니다. &quot;표시할 변경 사항이 없습니다&quot;면 &quot;커밋하고 푸시해 줘&quot;. 그래도 없으면 &quot;결재 요청서(PR)를 만들어 주고 주소를 알려 줘&quot;</td>
+<td>PR 주소를 안 알려 줌</td>
+<td>&quot;PR 주소를 링크로 다시 알려 줘&quot;. 그래도 안 되면 GitHub 저장소 화면 위쪽 노란 띠의 <strong>[Compare &amp; pull request]</strong> → <strong>[Create pull request]</strong></td>
 </tr>
 <tr>
 <td>배포 주소가 404 / Page not found</td>
