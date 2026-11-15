@@ -46,4 +46,27 @@
     <span class="msg" id="v-msg" role="status"></span>
   </div>
 </section>
+
+<details class="c-step c-admin" id="c-admin">
+  <summary>🔑 강사 관리 (비밀번호)</summary>
+  <form id="a-login" class="c-form">
+    <label for="a-key">관리 비밀번호</label><input id="a-key" type="password" autocomplete="off" required>
+    <button type="submit">열기</button>
+  </form>
+  <div id="a-panel" hidden>
+    <p class="hint" id="a-sum"></p>
+    <div class="a-flags" id="a-flags"></div>
+    <p class="hint">순서: 1교시 시작에 <b>제출 열기</b> → 16:20 <b>제출 닫기 · 투표 열기</b> → 투표가 끝나면 <b>투표 닫기 · 결과 공개</b>. 참가자별 관리(투표 대상에서 빼기, 비밀번호 초기화)는 <a href="admin.html" target="_blank" rel="noopener">자세한 관리 화면</a>에서.</p>
+    <button type="button" class="a-danger" id="a-wipe">공모 자료 전부 지우기 (리허설 뒤 정리)</button>
+  </div>
+  <p class="msg" id="a-msg" role="status"></p>
+</details>
 </div>
+<style>
+.c-admin{margin-top:28px;border:1px dashed #c9ced8;border-radius:14px;padding:12px 16px;background:#fafbfc}
+.c-admin summary{cursor:pointer;font-weight:700;color:#5b6474}
+.a-flags{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.a-flags .flag{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #dde1e8;border-radius:12px;background:#fff}
+.a-flags b.on{color:#16825d}.a-flags b.off{color:#8a93a3}
+.a-danger{background:#fff;color:#c8321e;border:1px solid #c8321e;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}
+</style>

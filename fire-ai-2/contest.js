@@ -174,6 +174,39 @@
       .catch(function (e) { say($('v-msg'), e.message, false); });
   });
 
+  // ── 강사 관리: 같은 페이지에서 단계 열고 닫기 · 전부 지우기 (서버: /api/fire-contest/admin, 비밀번호 QUIZ_ADMIN_KEY)
+  var akey = ''; try { akey = sessionStorage.getItem('f2-admin') || ''; } catch (_) {}
+  var LABEL = { submit: '제출', vote: '투표', result: '결과 공개' };
+  function admin(body) { body.key = akey; return call('admin', body); }
+  function adminLoad() {
+    return admin({ action: 'state' }).then(function (d) {
+      try { sessionStorage.setItem('f2-admin', akey); } catch (_) {}
+      $('a-login').hidden = true; $('a-panel').hidden = false;
+      var works = d.rows.filter(function (r) { return r.work; }).length, voted = d.rows.filter(function (r) { return r.picks.length; }).length;
+      $('a-sum').textContent = '참가 ' + d.rows.length + '명 · 제출 ' + works + '개 · 투표 ' + voted + '명';
+      var box = $('a-flags'); box.textContent = '';
+      ['submit', 'vote', 'result'].forEach(function (k) {
+        var on = d.flags[k] === '1', f = el('span', 'flag');
+        f.appendChild(el('span', null, LABEL[k])); f.appendChild(el('b', on ? 'on' : 'off', on ? '열림' : '닫힘'));
+        var b = el('button', null, on ? '닫기' : (k === 'result' ? '공개하기' : '열기')); b.type = 'button';
+        b.addEventListener('click', function () {
+          admin({ action: 'set', flag: k, on: !on }).then(function () { say($('a-msg'), LABEL[k] + (on ? ' 닫음' : ' 열었음'), true); adminLoad(); loadBoard(); })
+            .catch(function (e) { say($('a-msg'), e.message, false); });
+        });
+        f.appendChild(b); box.appendChild(f);
+      });
+    }).catch(function (e) { $('a-login').hidden = false; $('a-panel').hidden = true; say($('a-msg'), e.message, false); });
+  }
+  $('a-login').addEventListener('submit', function (ev) { ev.preventDefault(); akey = $('a-key').value; adminLoad(); });
+  var armed = false;
+  $('a-wipe').addEventListener('click', function () {
+    if (!armed) { armed = true; $('a-wipe').textContent = '정말 지우려면 한 번 더 누르기'; return; }
+    armed = false; $('a-wipe').textContent = '공모 자료 전부 지우기 (리허설 뒤 정리)';
+    admin({ action: 'delete-all' }).then(function () { say($('a-msg'), '공모 자료를 모두 지웠습니다.', true); forget(); adminLoad(); loadBoard(); })
+      .catch(function (e) { say($('a-msg'), e.message, false); });
+  });
+  if (akey) { $('c-admin').open = true; adminLoad(); }
+
   var saved = recall();
   if (saved) { $('e-name').value = saved.name; enter(saved.name, saved.pin, null); }
   loadBoard();
