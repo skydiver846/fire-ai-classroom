@@ -1,0 +1,47 @@
+rules_version = '2';
+
+// 장비 점검표 장부 규칙 (PRD.md "데이터" 항목과 같음)
+// 컬렉션 checks 의 문서 하나 = 점검 기록 한 줄
+//   equip  글자 1~30자   장비 이름        (만든 뒤 못 고침)
+//   status '정상'|'이상'  점검 결과        (고칠 수 있음: 조치 완료 → 정상)
+//   memo   글자 0~100자  메모             (고칠 수 있음)
+//   by     글자 1~20자   점검자           (만든 뒤 못 고침)
+//   at     시각          기록 시각(서버)  (만든 뒤 못 고침)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function validText(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+    function validStatus(v) {
+      return v in ['정상', '이상'];
+    }
+
+    match /checks/{id} {
+      // 읽기: 누구나 (부서 공용 점검표)
+      allow read: if true;
+
+      // 새 기록: 표에 있는 칸 다섯 개만, 정해진 종류와 길이로, 시각은 서버 시각으로만
+      allow create: if request.resource.data.keys().hasOnly(['equip', 'status', 'memo', 'by', 'at'])
+                    && request.resource.data.keys().hasAll(['equip', 'status', 'memo', 'by', 'at'])
+                    && validText(request.resource.data.equip, 1, 30)
+                    && validStatus(request.resource.data.status)
+                    && validText(request.resource.data.memo, 0, 100)
+                    && validText(request.resource.data.by, 1, 20)
+                    && request.resource.data.at == request.time;
+
+      // 고치기: 결과(status)와 메모(memo)만
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'memo'])
+                    && validStatus(request.resource.data.status)
+                    && validText(request.resource.data.memo, 0, 100);
+
+      // 지우기: 아무도 못 함 (점검 기록은 남김)
+      allow delete: if false;
+    }
+
+    // 그 밖의 장부는 모두 잠금
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

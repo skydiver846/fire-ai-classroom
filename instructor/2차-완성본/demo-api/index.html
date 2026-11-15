@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘의 화재 현황</title>
+<style>
+  :root { --ink:#1b2230; --muted:#5b6474; --line:#dde1e8; --bg:#f4f5f7; --red:#c8321e; --amber:#b86e00; --green:#16825d; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, "Malgun Gothic", sans-serif; background:var(--bg); color:var(--ink); font-size:17px; }
+  main { max-width:640px; margin:0 auto; padding:16px; }
+  h1 { font-size:24px; margin:8px 0 4px; }
+  .sub { color:var(--muted); margin:0 0 16px; font-size:15px; }
+  .row { display:flex; gap:10px; align-items:center; margin-bottom:14px; }
+  select, button { font:inherit; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:#fff; }
+  select { flex:1; }
+  button { font-weight:700; cursor:pointer; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:14px; }
+  .when { color:var(--muted); font-size:15px; margin-bottom:12px; }
+  .big { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .big div { text-align:center; padding:14px 6px; border-radius:12px; background:var(--bg); }
+  .big b { display:block; font-size:34px; }
+  .big .r b { color:var(--red); } .big .p b { color:var(--amber); } .big .e b { color:var(--green); }
+  .small { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; font-size:14px; color:var(--muted); text-align:center; }
+  .msg { padding:16px; border-radius:12px; background:#fff4e8; border:1px solid #f2d2a8; color:#7a4300; }
+  .msg.err { background:#fbe9e6; border-color:#f0b9ae; color:var(--red); font-weight:700; }
+  footer { color:var(--muted); font-size:13px; line-height:1.6; margin:20px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>🔥 오늘의 화재 현황</h1>
+  <p class="sub">우리 시도의 오늘 화재 접수 · 진행 · 종료 건수를 봅니다.</p>
+
+  <div class="row">
+    <select id="sido" aria-label="시도 고르기"></select>
+    <button id="reload" type="button">새로 보기</button>
+  </div>
+
+  <div id="out"><div class="msg">불러오는 중…</div></div>
+
+  <footer id="src">출처: 공공데이터포털 · 소방청 화재정보서비스(시도단위 화재발생현황)</footer>
+</main>
+
+<script>
+  // ── 자료 받는 주소 ──
+  // (가) 우리 주방(서버 함수): "/api/data"  ← 서비스 키는 Vercel 금고에만 있음
+  // (나) 강사 공용 주소:        "https://www.jg-sobang.com/api/fire"
+  // 두 주소는 돌려주는 모양이 같아서 이 한 줄만 바꾸면 됩니다.
+  const API = "/api/data";
+
+  const SIDO = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"];
+  const $ = (id) => document.getElementById(id);
+  $("sido").innerHTML = SIDO.map((s) => `<option>${s}</option>`).join("");
+  $("sido").value = localStorage.getItem("sido") || "경기";
+
+  // v0.1에서는 이 함수만 예시 자료를 돌려줬음
+  async function loadFire(sido) {
+    const r = await fetch(`${API}?sido=${encodeURIComponent(sido)}`);
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || `오류 ${r.status}`);
+    return data;   // { source, sido, date, items: [{ sido, received, ongoing, ended, selfExtinguished, falseReport, misreport }] }
+  }
+
+  const ymd = (d) => d ? `${d.slice(0, 4)}. ${Number(d.slice(4, 6))}. ${Number(d.slice(6, 8))}.` : "";
+  const num = (v) => (v === null || v === undefined ? "-" : v);
+
+  async function show() {
+    const sido = $("sido").value;
+    localStorage.setItem("sido", sido);
+    $("out").innerHTML = '<div class="msg">불러오는 중…</div>';
+    try {
+      const data = await loadFire(sido);
+      const it = data.items && data.items[0];
+      if (!it) { $("out").innerHTML = `<div class="msg">${ymd(data.date)} ${sido} 자료가 아직 없습니다.</div>`; return; }
+      $("out").innerHTML = `
+        <div class="card">
+          <div class="when">📅 기준: ${ymd(it.date || data.date)} · ${it.sido}</div>
+          <div class="big">
+            <div class="r"><b>${num(it.received)}</b>화재 접수</div>
+            <div class="p"><b>${num(it.ongoing)}</b>진행 중</div>
+            <div class="e"><b>${num(it.ended)}</b>상황 종료</div>
+          </div>
+          <div class="small"><span>자체 진화 ${num(it.selfExtinguished)}</span><span>허위 신고 ${num(it.falseReport)}</span><span>오보 처리 ${num(it.misreport)}</span></div>
+        </div>`;
+      $("src").textContent = `출처: 공공데이터포털 · 소방청 화재정보서비스(시도단위 화재발생현황) · 기준 날짜 ${ymd(data.date)}`;
+    } catch (err) {
+      console.error(err);
+      $("out").innerHTML = `<div class="msg err">자료를 불러오지 못했습니다.<br><small>${err.message.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</small></div>`;
+    }
+  }
+
+  $("sido").addEventListener("change", show);
+  $("reload").addEventListener("click", show);
+  show();
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 부서 장비 점검표</title>
+<style>
+  :root { --ink:#1b2230; --muted:#5b6474; --line:#dde1e8; --bg:#f4f5f7; --ok:#16825d; --bad:#c8321e; --soft-bad:#fbe9e6; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, "Malgun Gothic", sans-serif; background:var(--bg); color:var(--ink); font-size:17px; }
+  main { max-width:640px; margin:0 auto; padding:16px; }
+  h1 { font-size:24px; margin:8px 0 4px; }
+  .sub { color:var(--muted); margin:0 0 16px; font-size:15px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:14px; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .stat { text-align:center; padding:12px 6px; border-radius:12px; background:var(--bg); }
+  .stat b { display:block; font-size:28px; }
+  .stat.bad b { color:var(--bad); }
+  label { display:block; font-weight:700; margin:10px 0 6px; font-size:15px; }
+  input, textarea { width:100%; font:inherit; padding:12px; border:1px solid var(--line); border-radius:10px; }
+  .seg { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .seg button { padding:14px; border-radius:10px; border:2px solid var(--line); background:#fff; font:inherit; font-weight:700; cursor:pointer; }
+  .seg button[aria-pressed="true"][data-v="정상"] { border-color:var(--ok); background:#e8f5ef; color:var(--ok); }
+  .seg button[aria-pressed="true"][data-v="이상"] { border-color:var(--bad); background:var(--soft-bad); color:var(--bad); }
+  .primary { width:100%; margin-top:14px; padding:15px; font:inherit; font-weight:800; color:#fff; background:var(--ink); border:0; border-radius:12px; cursor:pointer; }
+  .primary:disabled { opacity:.5; }
+  .bar { display:flex; justify-content:space-between; align-items:center; margin:6px 0 10px; }
+  .bar h2 { font-size:19px; margin:0; }
+  .filter { font:inherit; font-size:15px; padding:8px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  .filter[aria-pressed="true"] { background:var(--bad); color:#fff; border-color:var(--bad); }
+  ul { list-style:none; margin:0; padding:0; }
+  li { background:#fff; border:1px solid var(--line); border-left:6px solid var(--ok); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
+  li.bad { border-left-color:var(--bad); background:#fffafa; }
+  li .top { display:flex; justify-content:space-between; gap:8px; }
+  li .name { font-weight:800; }
+  li .tag { font-size:14px; font-weight:800; color:var(--ok); }
+  li.bad .tag { color:var(--bad); }
+  li .meta { color:var(--muted); font-size:14px; margin-top:4px; }
+  li .memo { margin-top:6px; font-size:15px; }
+  li .fix { margin-top:8px; font:inherit; font-size:15px; padding:8px 12px; border-radius:8px; border:1px solid var(--bad); color:var(--bad); background:#fff; cursor:pointer; }
+  .msg { min-height:22px; margin-top:8px; font-size:15px; color:var(--muted); }
+  .msg.err { color:var(--bad); font-weight:700; }
+  .empty { color:var(--muted); text-align:center; padding:20px; }
+  .setup { background:#fff4e8; border:1px solid #f2d2a8; color:#7a4300; }
+  footer { color:var(--muted); font-size:13px; text-align:center; margin:20px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>🧯 우리 부서 장비 점검표</h1>
+  <p class="sub">휴대폰으로 기록하면 모두의 화면에 바로 보입니다.</p>
+
+  <div class="card setup" id="setup" hidden>
+    아직 Firebase 설정값이 없습니다. 아래 코드의 <code>firebaseConfig</code> 에 내 웹 앱 설정값을 붙여 넣어 주세요.
+  </div>
+
+  <section class="card">
+    <div class="stats">
+      <div class="stat"><b id="s-today">0</b>오늘 기록</div>
+      <div class="stat"><b id="s-ok">0</b>정상</div>
+      <div class="stat bad"><b id="s-bad">0</b>미조치</div>
+    </div>
+  </section>
+
+  <form class="card" id="form">
+    <label for="equip">장비 이름</label>
+    <input id="equip" maxlength="30" placeholder="예: 공기호흡기 3번" required>
+    <label>점검 결과</label>
+    <div class="seg" id="status">
+      <button type="button" data-v="정상" aria-pressed="true">✅ 정상</button>
+      <button type="button" data-v="이상" aria-pressed="false">⚠️ 이상</button>
+    </div>
+    <label for="memo">메모 (선택)</label>
+    <textarea id="memo" maxlength="100" rows="2" placeholder="예: 압력 게이지 확인 필요"></textarea>
+    <label for="by">점검자</label>
+    <input id="by" maxlength="20" placeholder="예: 홍길동" required>
+    <button class="primary" id="save" type="submit">기록하기</button>
+    <div class="msg" id="msg" role="status"></div>
+  </form>
+
+  <section>
+    <div class="bar">
+      <h2>점검 기록</h2>
+      <button class="filter" id="only-bad" type="button" aria-pressed="false">이상만 보기</button>
+    </div>
+    <ul id="list"><li class="empty">불러오는 중…</li></ul>
+  </section>
+
+  <footer>v0.2 · 기록은 Firebase Firestore 공용 장부에 저장됩니다</footer>
+</main>
+
+<script type="module">
+  // ── 1. Firebase 불러오기 (공식 CDN, 모듈 방식) ──
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // ── 2. 내 웹 앱 설정값 (비밀이 아님. 장부를 지키는 것은 firestore.rules) ──
+  const firebaseConfig = {
+    // 여기에 Firebase 콘솔 → 프로젝트 개요 → 웹 앱의 firebaseConfig 내용을 붙여 넣습니다
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const msg = (text, isError) => { $("msg").textContent = text; $("msg").className = "msg" + (isError ? " err" : ""); };
+
+  if (!firebaseConfig.projectId) {
+    $("setup").hidden = false;
+    $("save").disabled = true;
+    $("list").innerHTML = '<li class="empty">설정값을 넣으면 기록이 보입니다.</li>';
+    throw new Error("firebaseConfig가 비어 있습니다.");
+  }
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const checks = collection(db, "checks");
+
+  // ── 3. 저장 · 불러오기 함수 (v0.1에서는 이 세 함수만 localStorage를 썼음) ──
+  async function saveCheck(item) {
+    // 칸 이름 · 종류는 firestore.rules와 정확히 같게
+    await addDoc(checks, {
+      equip: item.equip,
+      status: item.status,
+      memo: item.memo,
+      by: item.by,
+      at: serverTimestamp()          // 시각은 서버가 정함 (규칙: at == request.time)
+    });
+  }
+
+  async function markFixed(id, oldMemo) {
+    const memo = (oldMemo ? oldMemo + " / " : "") + "조치 완료";
+    await updateDoc(doc(db, "checks", id), { status: "정상", memo: memo.slice(0, 100) });   // 규칙: status · memo만 고칠 수 있음
+  }
+
+  function watchChecks(onChange) {
+    // 실시간: 누가 기록하면 새로고침 없이 다시 그림. 정렬 · 합계는 화면에서 계산(색인 필요 없음)
+    return onSnapshot(checks,
+      (snap) => onChange(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+      (err) => { console.error(err); $("list").innerHTML = '<li class="empty">기록을 불러오지 못했습니다. (' + err.code + ")</li>"; });
+  }
+
+  // ── 4. 화면 ──
+  let status = "정상";
+  let onlyBad = false;
+  let rows = [];
+
+  $("status").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    status = b.dataset.v;
+    $("status").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  });
+
+  $("only-bad").addEventListener("click", () => {
+    onlyBad = !onlyBad;
+    $("only-bad").setAttribute("aria-pressed", String(onlyBad));
+    draw();
+  });
+
+  $("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const item = { equip: $("equip").value.trim(), status, memo: $("memo").value.trim(), by: $("by").value.trim() };
+    if (!item.equip || !item.by) return msg("장비 이름과 점검자를 적어 주세요.", true);
+    $("save").disabled = true; msg("기록하는 중…");
+    try {
+      await saveCheck(item);
+      localStorage.setItem("checker", item.by);           // 점검자 이름만 이 브라우저에 기억 (편의용)
+      $("equip").value = ""; $("memo").value = "";
+      msg("기록했습니다. 모두의 화면에 보입니다.");
+    } catch (err) {
+      console.error(err);
+      msg(err.code === "permission-denied" ? "장부 규칙이 막았습니다. 글자 수와 칸을 확인해 주세요." : "기록하지 못했습니다. 인터넷 연결을 확인해 주세요.", true);
+    } finally { $("save").disabled = false; }
+  });
+  $("by").value = localStorage.getItem("checker") || "";
+
+  $("list").addEventListener("click", async (e) => {
+    const b = e.target.closest(".fix"); if (!b) return;
+    b.disabled = true;
+    const row = rows.find((r) => r.id === b.dataset.id);
+    try { await markFixed(row.id, row.memo); }
+    catch (err) { console.error(err); b.disabled = false; alert("고치지 못했습니다: " + err.code); }
+  });
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const timeOf = (r) => (r.at && r.at.toDate ? r.at.toDate() : new Date());   // 막 기록한 줄은 서버 시각이 오기 전이라 지금 시각으로
+  const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+
+  function draw() {
+    const sorted = [...rows].sort((a, b) => timeOf(b) - timeOf(a));
+    const today = new Date().toDateString();
+    $("s-today").textContent = sorted.filter((r) => timeOf(r).toDateString() === today).length;
+    $("s-ok").textContent = sorted.filter((r) => r.status === "정상").length;
+    $("s-bad").textContent = sorted.filter((r) => r.status === "이상").length;
+    const shown = onlyBad ? sorted.filter((r) => r.status === "이상") : sorted;
+    $("list").innerHTML = shown.length ? shown.map((r) => `
+      <li class="${r.status === "이상" ? "bad" : ""}">
+        <div class="top"><span class="name">${esc(r.equip)}</span><span class="tag">${r.status === "이상" ? "⚠️ 이상" : "✅ 정상"}</span></div>
+        <div class="meta">${esc(r.by)} · ${fmt(timeOf(r))}</div>
+        ${r.memo ? `<div class="memo">${esc(r.memo)}</div>` : ""}
+        ${r.status === "이상" ? `<button class="fix" type="button" data-id="${r.id}">조치 완료</button>` : ""}
+      </li>`).join("") : `<li class="empty">${onlyBad ? "이상 장비가 없습니다 👍" : "아직 기록이 없습니다."}</li>`;
+  }
+
+  watchChecks((list) => { rows = list; draw(); });
+</script>
+</body>
+</html>

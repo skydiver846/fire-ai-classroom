@@ -1,0 +1,156 @@
+# 강사용: Firebase · 공공데이터 API 완전 정복 (2차 3교시 대비)
+
+2차에서 **새로 가르치는 것은 두 가지**입니다: 🗂 Firebase(공용 장부)와 🌤 공공데이터 API(우리 주방). 이 문서는 강사가 11. 16.~17.에 **직접 한 번 끝까지 해 보고**, 당일 막힘 없이 시연 · 순회하도록 만든 학습 · 리허설 자료입니다.
+
+이 폴더에는 실습지 지시문대로 만든 **시연 · 순회용 완성본 2개**가 있습니다(강의계획안 0-3).
+
+| 폴더 | 트랙 | 무엇 | 시험 결과 (11. 15.) |
+|---|---|---|---|
+| `demo-db/` | 🗂 DB | 우리 부서 장비 점검표 (`index.html`, `firestore.rules`, `PRD.md`) | Firebase 에뮬레이터로 규칙 14개 시험 모두 통과, 휴대폰 · PC 두 화면 실시간 반영 확인 |
+| `demo-api/` | 🌤 API | 오늘의 화재 현황 (`index.html`, `api/data.js`, `PRD.md`) | 가짜 응답으로 함수 · 화면 시험 통과 (진짜 키 호출은 강사 리허설에서 확인) |
+
+---
+
+## 1. 개념 한 장 — 교육생에게 말로 설명할 수 있어야 하는 것
+
+### 🗂 Firebase (Firestore)
+
+```
+Firebase 프로젝트 (team-tool-hgd)
+ └─ Firestore 데이터베이스 = 공용 장부 (서울 리전, 1개)
+     └─ 컬렉션 checks       = 장부의 한 권 (표 이름)
+         └─ 문서 (자동 ID)  = 한 줄 기록
+             └─ 칸(필드)     equip · status · memo · by · at
+ + 규칙(Rules)               = 장부 앞 문지기 (누가 · 어떤 칸을 · 어떻게 쓸 수 있나)
+ + 웹 앱 설정값(firebaseConfig) = 장부 주소 (비밀 아님)
+```
+
+| 꼭 말할 것 | 한 줄 설명 |
+|---|---|
+| **apiKey는 비밀이 아니다** | 화면 코드에 그대로 들어가는 "장부 주소"입니다. 장부를 지키는 것은 **규칙**입니다. |
+| **프로덕션 모드** | 처음엔 아무도 못 쓰게 잠근 상태. 규칙을 [게시]해 필요한 만큼만 엽니다. 테스트 모드(30일 뒤 잠김)는 쓰지 않습니다. |
+| **규칙 = 마지막 문지기** | 화면(JavaScript)의 검사는 누구나 F12로 우회할 수 있습니다. 규칙은 Google 서버에서 검사하므로 우회할 수 없습니다. |
+| **칸 이름이 규칙과 코드에서 같아야** | 하나라도 다르면 `permission-denied`. 오늘 가장 흔한 오류입니다. |
+| **실시간(onSnapshot)** | 누가 기록하면 다른 사람 화면에 새로고침 없이 생깁니다. 이것이 v0.1(브라우저 저장)과의 차이입니다. |
+| **서버 시각(serverTimestamp)** | 휴대폰 시계가 틀려도 기록 시각은 Google 서버가 찍습니다. 규칙의 `at == request.time` 이 이것을 강제합니다. |
+| **무료(Spark)** | 저장 1 GiB, 하루 읽기 5만 · 쓰기 2만. 넘으면 요금이 아니라 **그날 멈춤**. "Blaze · 업그레이드"는 누르지 않습니다. |
+| **리전은 못 바꿈** | 처음 만들 때 `asia-northeast3 (Seoul)`. 잘못 고르면 프로젝트를 새로 만드는 것이 빠릅니다. |
+
+**완성본 코드에서 짚을 곳** (`demo-db/index.html`의 `<script type="module">`)
+1. `import … from "https://www.gstatic.com/firebasejs/10.12.2/…"` — 설치 없이 공식 CDN에서 불러옴
+2. `const firebaseConfig = { … }` — 교육생이 붙여 넣는 곳
+3. `saveCheck` · `markFixed` · `watchChecks` — **v0.1 때 모아 둔 함수 세 개만** 바뀐 것 (실습지 "주문 창구만 바꾼다")
+4. `addDoc` (새 줄) · `updateDoc` (고치기) · `onSnapshot` (실시간 듣기)
+5. 정렬 · 합계는 화면에서 계산 → "색인이 필요합니다" 오류가 나지 않음
+
+**규칙 읽는 법** (`demo-db/firestore.rules`) — 교육생에게 "규칙 한 줄 = PRD 한 줄"로 보여 줍니다.
+
+| 규칙 | PRD 말로 |
+|---|---|
+| `allow read: if true` | 누구나 볼 수 있다 |
+| `keys().hasOnly([...])` · `hasAll([...])` | 표에 있는 다섯 칸만, 빠짐없이 |
+| `validText(equip, 1, 30)` | 장비 이름은 1~30자 |
+| `status in ['정상','이상']` | 결과는 정상 또는 이상만 |
+| `at == request.time` | 시각은 서버가 찍은 것만 |
+| `affectedKeys().hasOnly(['status','memo'])` | 고칠 수 있는 칸은 결과와 메모뿐 |
+| `allow delete: if false` | 아무도 지울 수 없다 |
+| `match /{document=**} … if false` | 그 밖의 장부는 모두 잠금 |
+
+### 🌤 공공데이터 API + 서버 함수
+
+```
+교육생 화면(index.html) ──/api/data?sido=경기──▶ 우리 주방 api/data.js (Vercel 서버 함수)
+                                                   │  금고에서 키 꺼냄: process.env.DATA_GO_KR_KEY
+                                                   ▼
+                                     공공데이터포털 apis.data.go.kr (소방청 화재정보서비스)
+                                                   │  JSON 응답 (resultCode "00")
+화면 ◀── 필요한 값만 JSON (키 없음, 10분 캐시) ──────┘
+```
+
+| 꼭 말할 것 | 한 줄 설명 |
+|---|---|
+| **서비스 키는 진짜 비밀** | 공개 저장소 · 채팅 · 화면 코드에 넣으면 누구나 내 한도를 씁니다. **Vercel 환경 변수에만** 넣습니다. |
+| **왜 화면이 직접 안 부르나** | ① 키가 화면에 드러남 ② 공공데이터포털은 다른 사이트(브라우저)에서 부르는 것을 막는 경우가 많음(CORS). 서버 함수가 대신 부르면 둘 다 해결됩니다. |
+| **`api/` 폴더 파일 = 창구 하나** | Vercel이 `api/data.js` 를 `/api/data` 주소로 자동 연결합니다. package.json 없이 됩니다. 무료 12개. |
+| **환경 변수는 넣은 뒤 Redeploy** | 키를 넣기 **전에** 만든 배포에는 키가 없습니다. Deployments → ⋯ → Redeploy. "넣었는데 안 돼요"의 1순위 원인입니다. |
+| **Preview에도 체크** | 미리보기(결재 전 확인)에서 쓰려면 환경 변수의 Environments에 Preview도 체크해야 합니다. |
+| **10분 캐시 (`s-maxage=600`)** | 여러 사람이 열어도 공공데이터포털은 10분에 한 번만 부릅니다. 하루 호출 한도를 아낍니다. |
+| **오늘 자료가 비면 어제** | 이른 시간에는 오늘 자료가 아직 없을 수 있습니다. |
+| **(나) 강사 공용 주소** | 키 승인이 안 된 교육생은 `https://www.jg-sobang.com/api/fire?sido=경기` 를 바로 씁니다. **완성본과 응답 모양이 같아서** `const API = …` 한 줄만 바꾸면 됩니다. |
+
+---
+
+## 2. 리허설 순서 (11. 16.~17., 약 1시간)
+
+교육생과 **같은 계정 종류 · 같은 순서**로 해 봐야 당일 화면이 낯설지 않습니다. 시간을 재며 하세요.
+
+### ⓪ 먼저: 강사 공용 주소 살리기 (5분)
+1. Vercel → `fire-ai-classroom`(www.jg-sobang.com) 프로젝트 → Settings → Environment Variables
+2. `DATA_GO_KR_KEY` = 소방청 화재정보서비스 **일반 인증키**, Production · Preview · Development 모두 체크 → Save
+3. Deployments → 맨 위 ⋯ → **Redeploy**
+4. `https://www.jg-sobang.com/api/fire?sido=경기` 를 열어 `"items":[{"sido":"경기도","received":…` 가 보이면 성공 → **Claude에게 알려 주시면 제가 다시 확인합니다**
+
+### Ⓐ DB 트랙 리허설 (약 25분) — 실습지 단계 5 → 6 → 7 그대로
+1. **(5-DB-1~3)** Firebase 프로젝트 `team-tool-강사` → Firestore(Standard, Seoul, 프로덕션) → 웹 앱 추가 → firebaseConfig 복사. ⏱ 교육생은 8분 안에 끝나야 합니다
+2. GitHub에 새 저장소 `demo-db` → **Add file → Upload files** 로 `demo-db/` 의 세 파일 올리기
+3. GitHub에서 `index.html` 연필(✏️) → `const firebaseConfig = {` 안에 붙여 넣기 → Commit
+4. Firebase 콘솔 → Firestore → **규칙** → 모두 지우고 `firestore.rules` 내용 붙여 넣기 → **[게시]**
+5. Vercel → Add New → Project → `demo-db` Import → Deploy
+6. **휴대폰과 PC로 동시에 열기** → 휴대폰에서 기록 → PC에 새로고침 없이 생기는지 → Firestore **데이터** 탭에서 확인
+7. **일부러 틀려 보기** (당일 순회 대비)
+   - 규칙에서 `'memo'` 를 `'note'` 로 바꿔 게시 → 기록 → "장부 규칙이 막았습니다" 확인 → F12 Console의 `permission-denied` 보기 → 되돌려 게시
+   - `firebaseConfig` 를 비워 보기 → 노란 안내 상자 확인
+
+### Ⓑ API 트랙 리허설 (약 20분)
+1. **(5-API-1)** 실습지의 주소에 내 키를 넣어 **Chrome 주소창**에서 열기 → `"resultCode":"00"` 확인. 응답 칸 이름(SIDO_NM, FIRE_RCPT_MNB …)을 눈으로 익혀 두기
+2. GitHub에 새 저장소 `demo-api` → `index.html`, `PRD.md`, `api/data.js` 올리기 (`api` 폴더는 Upload 화면에 **폴더째 끌어다 놓기**)
+3. Vercel Import → Deploy → 열어 보면 **"서비스 키가 설정되지 않았습니다"** ← 교육생이 반드시 만나는 화면. 미리 봐 두기
+4. Settings → Environment Variables → `DATA_GO_KR_KEY` (세 환경 모두) → Save → **Redeploy**
+5. `○○.vercel.app/api/data?sido=경기` → JSON 확인, 이어서 화면 확인
+6. **F12 → Network → `data` → Response** 에 키가 없는지 확인 (검증표 마지막 줄)
+7. `index.html` 의 `const API` 를 `"https://www.jg-sobang.com/api/fire"` 로 바꿔 커밋 → 같은 화면이 나오면 (나) 경로도 확인 끝
+
+### Ⓒ 강의장 네트워크 (10분, 가능하면 11. 17.)
+- 교육장 PC에서 **`www.jg-sobang.com/fire-ai-2/check.html`** 을 열어 DB · API 연결 점검을 돌립니다
+- 막히면: Firebase 콘솔은 휴대폰 · 집 PC로, 검증은 휴대폰 LTE로. 전산 담당자에게 `firebase.google.com`, `gstatic.com`, `firestore.googleapis.com`, `apis.data.go.kr` 허용 요청
+- 오늘처럼 PC에서 `jg-sobang.com` 이 DNS 오류로 안 열리면 당일 교안 자체가 안 보입니다 → **11. 17.에 교육장 PC에서 꼭 열어 보기**
+
+---
+
+## 3. 3교시 설명 ② 시연 대본 (10분)
+
+| 분 | 화면 | 말할 것 |
+|---|---|---|
+| 0~2 | 교안 "저장하는 곳 세 군데" 표 | "지금 v0.1은 연필 표시(브라우저)라 짝 휴대폰엔 안 보입니다. 오늘은 공용 장부나 우리 주방을 붙입니다." |
+| 2~4 | 휴대폰 두 대로 `demo-db` | 한 대에서 기록 → 다른 대에 바로 생김. "이게 v0.2입니다." |
+| 4~7 | Firebase 콘솔 (미리 만든 강사 프로젝트) | 프로젝트 만들기 → Firestore(Seoul · 프로덕션) → 웹 앱 → firebaseConfig. **애널리틱스 끄기 · 리전 · Blaze 안 누르기** 세 곳을 판서로 표시 |
+| 7~9 | Vercel Environment Variables | "서비스 키는 이 금고에만. 넣고 나서 Redeploy." 키 값은 **화면 공유 전에 가리기** |
+| 9~10 | `demo-api` 화면 + F12 Network | "화면은 키를 모릅니다. 주방만 압니다." → 단계 5로 |
+
+> ⚠️ 시연 중 **실제 서비스 키가 화면에 보이지 않게** 합니다. Vercel 환경 변수 화면은 Value 칸이 가려진 상태로만 보여 주세요.
+
+---
+
+## 4. 예상 질문과 답
+
+| 질문 | 답 |
+|---|---|
+| apiKey가 코드에 보이는데 괜찮나요? | Firebase의 apiKey는 "어느 프로젝트인지" 알려 주는 주소입니다. 장부는 규칙이 지킵니다. 공공데이터 **서비스 키**와는 다릅니다. |
+| 누가 장부를 마구 채우면요? | 규칙이 칸 · 길이를 막고, 무료 한도를 넘으면 그날 멈출 뿐 요금은 안 나옵니다. 실제 업무용이면 로그인(Firebase Authentication)을 붙여 "직원만 쓰기"로 규칙을 바꿉니다. |
+| 기록을 엑셀로 받을 수 있나요? | 다음 버전으로 "CSV 내려받기 단추를 만들어 줘"라고 Claude에게 요청하면 됩니다(화면에서 만들므로 서버 불필요). |
+| 사진도 올릴 수 있나요? | 오늘은 안 합니다. 사진은 Firebase Storage(별도 설정, 요금제 확인 필요)에 두고 장부엔 주소만 적습니다. |
+| 다른 공공데이터도 되나요? | 됩니다. 활용신청 → 상세 화면의 End Point와 요청 변수 표를 지시문에 붙이면 같은 방법입니다. XML만 주는 API는 "resultType/_type=json 이 있는지" 먼저 봅니다. |
+| 키를 실수로 GitHub에 올렸어요 | 공공데이터포털 마이페이지에서 **키 재발급** → Vercel 환경 변수 교체 → Redeploy. 커밋을 지워도 기록이 남으므로 재발급이 답입니다. |
+| 호출 한도는요? | 활용신청 상세 화면의 "일일 트래픽"을 봅니다. 10분 캐시 덕분에 교육 중 수십 명이 열어도 몇 번만 부릅니다. |
+| 회사 업무망에서도 되나요? | 기관 보안 장비에 따라 Firebase · 공공데이터 주소가 막힐 수 있습니다. 운영 전에 전산 담당과 확인합니다. |
+
+---
+
+## 5. 순회할 때 보는 순서 (막힌 교육생)
+
+1. **F12 → Console** 의 빨간 글: `permission-denied` → 규칙 · 칸 이름 / `firebaseConfig` 관련 → 설정값 붙여 넣기
+2. **F12 → Network** 의 빨간 줄 번호: 403 규칙 · 404 함수 위치(또는 파일을 더블클릭해서 엶) · 500 금고(키 · Redeploy) · 502 거래처(키 미등록 · XML)
+3. 그래도 모르면 **완성본과 비교**: "이 완성본의 `watchChecks` 함수와 내 함수를 비교해 달라고 Claude에게"
+4. 10분 넘게 막히면 (나) 강사 공용 주소 / DB는 짝 화면 보며 다시 — **제출이 우선**입니다
+
+자세한 오류표는 실습지 단계 7 "오류 번호 읽기 · 막히면" 표에 있습니다.
