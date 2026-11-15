@@ -76,19 +76,13 @@ Firebase 프로젝트 (team-tool-hgd)
 | **Preview에도 체크** | 미리보기(결재 전 확인)에서 쓰려면 환경 변수의 Environments에 Preview도 체크해야 합니다. |
 | **10분 캐시 (`s-maxage=600`)** | 여러 사람이 열어도 공공데이터포털은 10분에 한 번만 부릅니다. 하루 호출 한도를 아낍니다. |
 | **오늘 자료가 비면 어제** | 이른 시간에는 오늘 자료가 아직 없을 수 있습니다. |
-| **(나) 강사 공용 주소** | 키 승인이 안 된 교육생은 `https://www.jg-sobang.com/api/fire?sido=경기` 를 바로 씁니다. **완성본과 응답 모양이 같아서** `const API = …` 한 줄만 바꾸면 됩니다. |
+| **키가 막히면 그대로 진행** | 승인 반영 전(`SERVICE_KEY_IS_NOT_REGISTERED_ERROR`)이어도 금고에 키를 넣고 연결 코드까지 만들면 끝. 화면은 "예시 자료 · 키 승인 대기"로 보이다가 승인이 반영되면 **저절로** 진짜 자료가 나옵니다. 이 상태로 제출해도 연동으로 인정합니다. 강사가 따로 예비 경로를 운영하지 않습니다. |
 
 ---
 
 ## 2. 리허설 순서 (11. 16.~17., 약 1시간)
 
 교육생과 **같은 계정 종류 · 같은 순서**로 해 봐야 당일 화면이 낯설지 않습니다. 시간을 재며 하세요.
-
-### ⓪ 먼저: 강사 공용 주소 살리기 (5분)
-1. Vercel → `fire-ai-classroom`(www.jg-sobang.com) 프로젝트 → Settings → Environment Variables
-2. `DATA_GO_KR_KEY` = 소방청 화재정보서비스 **일반 인증키**, Production · Preview · Development 모두 체크 → Save
-3. Deployments → 맨 위 ⋯ → **Redeploy**
-4. `https://www.jg-sobang.com/api/fire?sido=경기` 를 열어 `"items":[{"sido":"경기도","received":…` 가 보이면 성공 → **Claude에게 알려 주시면 제가 다시 확인합니다**
 
 ### Ⓐ DB 트랙 리허설 (약 25분) — 실습지 단계 5 → 6 → 7 그대로
 1. **(5-DB-1~3)** Firebase 프로젝트 `team-tool-강사` → Firestore(Standard, Seoul, 프로덕션) → 웹 앱 추가 → firebaseConfig 복사. ⏱ 교육생은 8분 안에 끝나야 합니다
@@ -104,11 +98,11 @@ Firebase 프로젝트 (team-tool-hgd)
 ### Ⓑ API 트랙 리허설 (약 20분)
 1. **(5-API-1)** 실습지의 주소에 내 키를 넣어 **Chrome 주소창**에서 열기 → `"resultCode":"00"` 확인. 응답 칸 이름(SIDO_NM, FIRE_RCPT_MNB …)을 눈으로 익혀 두기
 2. GitHub에 새 저장소 `demo-api` → `index.html`, `PRD.md`, `api/data.js` 올리기 (`api` 폴더는 Upload 화면에 **폴더째 끌어다 놓기**)
-3. Vercel Import → Deploy → 열어 보면 **"서비스 키가 설정되지 않았습니다"** ← 교육생이 반드시 만나는 화면. 미리 봐 두기
+3. Vercel Import → Deploy → 열어 보면 **"예시 자료 · 실제 자료를 불러오지 못했습니다 (키 승인 대기)"** + "서비스 키가 설정되지 않았습니다" ← 키 승인이 늦은 교육생이 당일 보게 될 화면. 미리 봐 두기
 4. Settings → Environment Variables → `DATA_GO_KR_KEY` (세 환경 모두) → Save → **Redeploy**
 5. `○○.vercel.app/api/data?sido=경기` → JSON 확인, 이어서 화면 확인
 6. **F12 → Network → `data` → Response** 에 키가 없는지 확인 (검증표 마지막 줄)
-7. `index.html` 의 `const API` 를 `"https://www.jg-sobang.com/api/fire"` 로 바꿔 커밋 → 같은 화면이 나오면 (나) 경로도 확인 끝
+7. (선택) 활용신청을 하나 더 해서 **승인 전 키**로 금고를 바꿔 보면 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR` 가 화면 빨간 상자에 보이는 것까지 확인할 수 있습니다
 
 ### Ⓒ 강의장 네트워크 (10분, 가능하면 11. 17.)
 - 교육장 PC에서 **`www.jg-sobang.com/fire-ai-2/check.html`** 을 열어 DB · API 연결 점검을 돌립니다
@@ -125,7 +119,7 @@ Firebase 프로젝트 (team-tool-hgd)
 | 2~4 | 휴대폰 두 대로 `demo-db` | 한 대에서 기록 → 다른 대에 바로 생김. "이게 v0.2입니다." |
 | 4~7 | Firebase 콘솔 (미리 만든 강사 프로젝트) | 프로젝트 만들기 → Firestore(Seoul · 프로덕션) → 웹 앱 → firebaseConfig. **애널리틱스 끄기 · 리전 · Blaze 안 누르기** 세 곳을 판서로 표시 |
 | 7~9 | Vercel Environment Variables | "서비스 키는 이 금고에만. 넣고 나서 Redeploy." 키 값은 **화면 공유 전에 가리기** |
-| 9~10 | `demo-api` 화면 + F12 Network | "화면은 키를 모릅니다. 주방만 압니다." → 단계 5로 |
+| 9~10 | `demo-api` 화면 + F12 Network | "화면은 키를 모릅니다. 주방만 압니다. 키 승인이 아직이면 예시 자료로 보이다가 승인되면 저절로 바뀝니다." → 단계 5로 |
 
 > ⚠️ 시연 중 **실제 서비스 키가 화면에 보이지 않게** 합니다. Vercel 환경 변수 화면은 Value 칸이 가려진 상태로만 보여 주세요.
 
@@ -151,6 +145,6 @@ Firebase 프로젝트 (team-tool-hgd)
 1. **F12 → Console** 의 빨간 글: `permission-denied` → 규칙 · 칸 이름 / `firebaseConfig` 관련 → 설정값 붙여 넣기
 2. **F12 → Network** 의 빨간 줄 번호: 403 규칙 · 404 함수 위치(또는 파일을 더블클릭해서 엶) · 500 금고(키 · Redeploy) · 502 거래처(키 미등록 · XML)
 3. 그래도 모르면 **완성본과 비교**: "이 완성본의 `watchChecks` 함수와 내 함수를 비교해 달라고 Claude에게"
-4. 10분 넘게 막히면 (나) 강사 공용 주소 / DB는 짝 화면 보며 다시 — **제출이 우선**입니다
+4. 10분 넘게 막히면: API는 "키 승인 대기" 그대로 결재 · 제출, DB는 완성본과 비교하며 한 번 더 — **제출이 우선**입니다
 
 자세한 오류표는 실습지 단계 7 "오류 번호 읽기 · 막히면" 표에 있습니다.

@@ -108,7 +108,6 @@
       { g: "DB", use: "Firestore 서버 (공용 장부)", url: "https://firestore.googleapis.com/v1/projects/jg-sobang-netcheck/databases/(default)/documents/x/y", firestore: true, key: "firestore" },
       { g: "API", use: "공공데이터포털 (가입 · 활용신청)", url: "https://www.data.go.kr/", key: "datagokr" },
       { g: "API", use: "공공데이터 API 서버", url: "https://apis.data.go.kr/", key: "apis" },
-      { g: "API", use: "강사 공용 화재 현황 주소", url: "/api/fire?sido=서울", json: true, key: "fire" },
     ];
     const LABEL = { wait: "확인 중…", open: "열림", ok: "응답 확인", blocked: "막힘", slow: "응답 없음", manual: "직접 확인" };
     const results = {};
@@ -178,7 +177,6 @@
       if (!api.length) line("API 트랙: 공공데이터포털과 API 서버에 닿습니다. 수업 방식(Vercel 서버 함수가 부름)은 행정망과 관계없이 됩니다.", "open");
       else line("API 트랙: 막힌 곳 — " + api.map(name).join(", ") + ". 수업 방식(Vercel 서버 함수)은 서버끼리 부르므로 그래도 됩니다. 다만 활용신청 · 주소창 시험은 다른 망에서 해야 합니다.", "blocked");
 
-      if (results.fire && !good("fire")) line("강사 공용 화재 현황 주소(/api/fire)가 답하지 않습니다. 강사가 Vercel 환경 변수 DATA_GO_KR_KEY 를 넣고 다시 배포했는지, 서비스 키 승인이 반영됐는지 확인하세요.", "blocked");
       line("Claude Code는 자동 확인이 안 됩니다. 표의 주소를 눌러 화면이 열리는지 직접 보세요.");
     }
 

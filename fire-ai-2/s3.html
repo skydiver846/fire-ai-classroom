@@ -88,7 +88,7 @@
 <p><strong>서버 함수 = 주방 창구</strong></p>
 <ul>
 <li>저장소의 <code>api</code> 폴더 안 파일 하나가 창구 하나입니다. 화면이 부르면 Vercel이 그때만 잠깐 실행합니다.</li>
-<li>비밀(서비스 키)은 이 창구 안에만 두고 화면에는 내보내지 않습니다. API 트랙 (가)에서 만드는 <code>api/data.js</code> 가 이것입니다.</li>
+<li>비밀(서비스 키)은 이 창구 안에만 두고 화면에는 내보내지 않습니다. API 트랙에서 만드는 <code>api/data.js</code> 가 이것입니다.</li>
 <li>무료는 <strong>창구 12개</strong>까지. 창구 하나가 여러 일을 할 수 있어서(예: 공모 창구 하나가 등록 · 제출 · 투표를 모두 처리) 오늘 만드는 화면은 0~1개면 충분합니다.</li>
 </ul>
 <blockquote>
@@ -159,8 +159,6 @@
 </tr>
 </tbody></table></div>
 <h3>🌤 API 트랙: 키 확인과 금고에 넣기</h3>
-<p>둘 중 하나를 고릅니다. 사전 학습 ①에서 활용신청이 <strong>승인</strong>됐으면 (가), 아니면 (나).</p>
-<p><strong>(가) 내 서비스 키로 (권장)</strong></p>
 <p><strong>5-API-1. 주소창에서 키가 되는지 시험 (3분)</strong></p>
 <ol>
 <li>아래 주소의 <code>여기에키</code> 자리에 <code>공공데이터 메모.txt</code> 의 <strong>일반 인증키</strong>(64자리 한 줄)를 붙여 <strong>내 Chrome 주소창</strong>에서 엽니다 (이 주소는 어디에도 공유하지 않습니다)</li>
@@ -172,7 +170,7 @@
 </ul>
 <ol start="2">
 <li><code>&quot;resultCode&quot;:&quot;00&quot;</code> 과 <code>SIDO_NM</code>(시도), <code>FIRE_RCPT_MNB</code>(화재 접수), <code>FIRE_PROG_MNB</code>(진행 중), <code>STN_END_MNB</code>(상황 종료)가 보이면 키가 됩니다</li>
-<li><code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code> 가 나오면 승인 반영 전입니다 → <strong>(나)</strong> 로 갑니다</li>
+<li><code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code> 가 나오면 승인 반영 전입니다. <strong>그래도 5-API-2를 하고 그대로 진행합니다</strong> (아래 ⏳)</li>
 </ol>
 <p><strong>5-API-2. Vercel 금고(환경 변수)에 키 넣기 (2분)</strong></p>
 <ol>
@@ -182,13 +180,10 @@
 <blockquote>
 <p>⚠️ <strong>서비스 키는 진짜 비밀</strong>입니다. 이 Vercel 화면에만 넣고, Claude Code 채팅 · GitHub · 화면 코드에는 붙이지 않습니다. 화면은 키를 모르고, <strong>우리 주방(서버 함수)</strong> 만 금고에서 꺼내 씁니다.</p>
 </blockquote>
-<p><strong>(나) 강사 공용 주소로 (키 승인이 아직 안 됐거나, 가장 빨리 연동하고 싶을 때)</strong></p>
-<ol>
-<li>브라우저에서 <code>https://www.jg-sobang.com/api/fire?sido=서울</code> (서울 대신 내 시도: 경기, 충북 … 전국은 <code>전체</code>)을 엽니다</li>
-<li><code>&quot;items&quot;:[{&quot;sido&quot;:&quot;서울특별시&quot;,&quot;received&quot;:…</code> 같은 글자 덩어리가 보이면 됩니다. 앞부분을 복사해 둡니다</li>
-<li>키 · 서버 함수 없이 바로 연결됩니다. 키는 강사 쪽 금고에만 있습니다</li>
-</ol>
-<p><strong>✅ 다음으로</strong>: (DB) firebaseConfig를 복사해 두었다 / (API 가) 주소창 시험이 되고 Vercel에 키를 넣었다 / (API 나) 공용 주소에서 자료가 보인다.</p>
+<blockquote>
+<p>⏳ <strong>키가 아직 안 되면 그대로 진행합니다.</strong> 금고(5-API-2)에 키를 넣고 연결 코드까지 만들어 두면, 승인이 반영되는 순간 <strong>진짜 자료가 저절로</strong> 보입니다. 그 전까지 화면에는 예시 자료가 &quot;예시 자료 · 키 승인 대기&quot; 표시와 함께 보이고, <strong>이 상태로 제출해도 연동으로 인정</strong>합니다.</p>
+</blockquote>
+<p><strong>✅ 다음으로</strong>: (DB) firebaseConfig를 복사해 두었다 / (API) Vercel에 키를 넣었다 (주소창 시험이 아직 안 돼도 됨).</p>
 <hr>
 </section>
 <section class="do do-h2"><p class="do-tag"><span>✋ 실습</span> 약 15분 · 혼자 해 보는 부분</p><h2>단계 6. v0.2 만들기: 자료 붙이기 (15분)</h2>
@@ -224,7 +219,7 @@
 <blockquote>
 <p>💡 화면(JavaScript)의 검사는 누구나 고칠 수 있습니다. <strong>마지막 문지기는 장부 규칙</strong>입니다.</p>
 </blockquote>
-<h3>🌤 API 트랙 (가) 우리 주방(서버 함수)</h3>
+<h3>🌤 API 트랙: 우리 주방(서버 함수)</h3>
 <pre><code>이제 v0.2로, 예시 자료 대신 공공데이터포털의 진짜 자료를 보여 주게 바꿔 줘.
 API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조회 (다른 API면 이름과 요청 변수 표를 붙여넣기)
 요청 주소: https://apis.data.go.kr/1661000/FireInformationService/getOcBysidoFireSmrzPcnd
@@ -238,22 +233,12 @@ API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조
   필요한 값만 JSON으로 돌려주게 해 줘. 함수는 module.exports = async (req, res) =&gt; { … } 모양(Node.js)으로,
   package.json 없이 동작하게 해 줘. 키는 함수 안에서 process.env.DATA_GO_KR_KEY 로만 읽고 응답에 넣지 마.
 - 함수 응답에 Cache-Control: s-maxage=600 을 붙여 10분 동안 캐시해서 호출 횟수를 아껴 줘.
-- index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /api/data 를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
-- 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
+- index.html에서는 v0.1 때 모아 둔 자료 받기 함수만 /api/data 를 부르게 바꿔 줘. 진짜 자료가 오면 &quot;예시 자료&quot; 표시는 없애 줘.
+- 실패하면(키 승인 전 등) v0.1의 예시 자료를 그대로 보여 주고, 위에 &quot;예시 자료 · 실제 자료를 불러오지 못했습니다(키 승인 대기)&quot; 표시와 실패 이유를 붙여 줘.
 - 오늘 자료가 비어 있으면 어제 날짜로 한 번 더 불러 줘. 응답의 items 는 배열이거나 {item: [...]} 일 수 있으니 둘 다 처리해 줘.
 - 화면 아래에 출처(공공데이터포털, 소방청, 기준 날짜)를 적어 줘.
 - 추가 라이브러리는 쓰지 마. PRD.md 변경 기록에 v0.2를 적어 줘.
 - 네 환경에는 키가 없어서 실제 호출 시험은 못 할 거야. 시험하지 못한 것은 못 했다고 알려 줘.
-</code></pre>
-<h3>🌤 API 트랙 (나) 강사 공용 주소</h3>
-<pre><code>이제 v0.2로, 예시 자료 대신 아래 주소의 진짜 자료를 보여 주게 바꿔 줘.
-주소: https://www.jg-sobang.com/api/fire?sido=[우리 시도]
-이 주소를 열면 나오는 자료 모양: [단계 5에서 복사한 글자 덩어리 앞부분 붙여넣기]
-
-- index.html에서 v0.1 때 모아 둔 자료 받기 함수만 이 주소를 부르게 바꾸고, &quot;예시 자료&quot; 표시는 지워 줘.
-- 실패하면 화면에 &quot;자료를 불러오지 못했습니다&quot;처럼 알기 쉽게 보여 줘.
-- 화면 아래에 출처(공공데이터포털, 소방청, 기준 날짜)를 적어 줘.
-- PRD.md 변경 기록에 v0.2를 적어 줘.
 </code></pre>
 <p><strong>✅ 다음으로</strong>: Claude가 다 고쳤다고 하고, (DB) 규칙을 게시했다.</p>
 <hr>
@@ -303,7 +288,7 @@ API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조
 </tr>
 </thead>
 <tbody><tr>
-<td>진짜 값과 <strong>기준 날짜</strong>가 보인다 (&quot;예시 자료&quot; 표시가 없다)</td>
+<td>진짜 값과 <strong>기준 날짜</strong>가 보인다 (&quot;예시 자료&quot; 표시가 없다). 키 승인 대기면 이 줄은 ✕여도 결재</td>
 <td></td>
 </tr>
 <tr>
@@ -311,7 +296,7 @@ API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조
 <td></td>
 </tr>
 <tr>
-<td>값 하나를 주소창 시험(5-API-1) 또는 강사 공용 주소의 같은 시도 · 같은 날짜 값과 대조했다</td>
+<td>값 하나를 주소창 시험(5-API-1)의 같은 시도 · 같은 날짜 값과 대조했다 (키 승인 대기면: &quot;예시 자료 · 키 승인 대기&quot; 표시가 보인다)</td>
 <td></td>
 </tr>
 <tr>
@@ -377,7 +362,7 @@ API: 소방청_화재정보서비스 / 시도단위 화재발생현황 목록조
 </tr>
 <tr>
 <td>(API) <code>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</code></td>
-<td>승인 뒤 반영 전(승인 직후엔 1시간쯤 걸리기도 함)이거나 키를 잘못 붙여넣은 것(앞뒤 빈칸, 일부만 복사). 바로 안 되면 (나) 강사 공용 주소로 바꾸기</td>
+<td>승인 뒤 반영 전(승인 직후엔 1시간쯤 걸리기도 함)이거나 키를 잘못 붙여넣은 것(앞뒤 빈칸, 일부만 복사). 키를 다시 확인해도 같으면 <strong>그대로 결재 · 제출</strong> (승인되면 저절로 됨)</td>
 </tr>
 <tr>
 <td>(API) 결과가 XML로 옴</td>

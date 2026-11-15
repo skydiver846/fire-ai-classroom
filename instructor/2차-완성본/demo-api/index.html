@@ -43,11 +43,11 @@
 </main>
 
 <script>
-  // ── 자료 받는 주소 ──
-  // (가) 우리 주방(서버 함수): "/api/data"  ← 서비스 키는 Vercel 금고에만 있음
-  // (나) 강사 공용 주소:        "https://www.jg-sobang.com/api/fire"
-  // 두 주소는 돌려주는 모양이 같아서 이 한 줄만 바꾸면 됩니다.
+  // ── 자료 받는 주소: 우리 주방(서버 함수). 서비스 키는 Vercel 금고에만 있음 ──
   const API = "/api/data";
+
+  // v0.1 예시 자료. 진짜 자료를 못 받으면(키 승인 대기 등) 이것을 "예시 자료" 표시와 함께 보여 줌
+  const SAMPLE = { date: "", items: [{ sido: "예시 시도", received: 12, ongoing: 1, ended: 11, selfExtinguished: 3, falseReport: 0, misreport: 2 }] };
 
   const SIDO = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"];
   const $ = (id) => document.getElementById(id);
@@ -70,12 +70,18 @@
     localStorage.setItem("sido", sido);
     $("out").innerHTML = '<div class="msg">불러오는 중…</div>';
     try {
-      const data = await loadFire(sido);
+      let data, note = "";
+      try { data = await loadFire(sido); }
+      catch (err) {
+        console.error(err);
+        data = SAMPLE;
+        note = `<div class="msg err">예시 자료 · 실제 자료를 불러오지 못했습니다 (키 승인 대기)<br><small>${err.message.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</small></div>`;
+      }
       const it = data.items && data.items[0];
       if (!it) { $("out").innerHTML = `<div class="msg">${ymd(data.date)} ${sido} 자료가 아직 없습니다.</div>`; return; }
-      $("out").innerHTML = `
-        <div class="card">
-          <div class="when">📅 기준: ${ymd(it.date || data.date)} · ${it.sido}</div>
+      $("out").innerHTML = note + `
+        <div class="card"${note ? ' style="margin-top:12px;opacity:.75"' : ""}>
+          <div class="when">${note ? "🧪 예시 자료" : `📅 기준: ${ymd(it.date || data.date)} · ${it.sido}`}</div>
           <div class="big">
             <div class="r"><b>${num(it.received)}</b>화재 접수</div>
             <div class="p"><b>${num(it.ongoing)}</b>진행 중</div>
@@ -83,10 +89,10 @@
           </div>
           <div class="small"><span>자체 진화 ${num(it.selfExtinguished)}</span><span>허위 신고 ${num(it.falseReport)}</span><span>오보 처리 ${num(it.misreport)}</span></div>
         </div>`;
-      $("src").textContent = `출처: 공공데이터포털 · 소방청 화재정보서비스(시도단위 화재발생현황) · 기준 날짜 ${ymd(data.date)}`;
+      $("src").textContent = note ? "출처: 공공데이터포털 · 소방청 화재정보서비스 (키 승인 뒤 표시)" : `출처: 공공데이터포털 · 소방청 화재정보서비스(시도단위 화재발생현황) · 기준 날짜 ${ymd(data.date)}`;
     } catch (err) {
       console.error(err);
-      $("out").innerHTML = `<div class="msg err">자료를 불러오지 못했습니다.<br><small>${err.message.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</small></div>`;
+      $("out").innerHTML = '<div class="msg err">화면을 그리지 못했습니다.</div>';
     }
   }
 
