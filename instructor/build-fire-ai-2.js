@@ -58,8 +58,17 @@ function render(md) {
 }
 
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+// ── 교육 당일 공개: 11. 18.(수) 0시(한국 시각) 전에는 처음 화면 · 사전 학습만 보이고, 수업 교안은 "당일 공개" 안내로 가립니다.
+// 강사 미리보기: 아무 페이지 주소 끝에 ?preview=jg2026 를 붙여 한 번 열면 그 브라우저에서는 계속 보입니다(?preview=off 로 해제).
+// 화면에서만 가리는 것이라 페이지 소스를 열면 내용이 보입니다(비밀 자료가 아니므로 충분).
+const OPEN_AT = '2026-11-18T00:00:00+09:00';
+const LOCKED = ['flow.html', 's1.html', 's2.html', 's3.html', 's4.html', 'contest.html'];
+const lockAttr = f => (LOCKED.includes(f) ? ' data-lock' : '');
+const LOCK_HEAD = `<script>(function(){var open=Date.parse('${OPEN_AT}'),k='f2-preview',v=null,m=location.search.match(/[?&]preview=([^&]+)/);try{if(m){if(m[1]==='off')localStorage.removeItem(k);else localStorage.setItem(k,m[1]);}v=localStorage.getItem(k);}catch(e){}if(Date.now()<open&&v!=='jg2026')document.documentElement.className+=' f2-pre';})();</script>
+<style>.f2-pre a[data-lock]{opacity:.55}.f2-pre a[data-lock]::after{content:" 🔒 11. 18. 공개";font-size:.8em;font-weight:700;color:#a3281a;white-space:nowrap}.f2-pre .mods a[data-lock]::after{content:none}#f2-lock{display:none}.f2-pre-only{display:none}.f2-pre .f2-pre-only{display:block}.f2-pre .locked-page main>*{display:none}.f2-pre .locked-page main>#f2-lock{display:block}#f2-lock{max-width:640px;margin:48px auto;padding:32px 28px;background:#fff;border:1px solid #dde1e8;border-radius:18px;text-align:center}#f2-lock b{display:block;font-size:1.4em;margin:10px 0}#f2-lock p{color:#5b6474;line-height:1.7}#f2-lock .btn{margin:6px 4px}</style>`;
 function nav(current) {
-  const a = p => `<a href="${p.file}"${p.file === current ? ' aria-current="page"' : ''}>${p.no ? `<span class="n">${esc(p.no)}</span>` : ''}${esc(p.nav)}</a>`;
+  const a = p => `<a href="${p.file}"${lockAttr(p.file)}${p.file === current ? ' aria-current="page"' : ''}>${p.no ? `<span class="n">${esc(p.no)}</span>` : ''}${esc(p.nav)}</a>`;
   const by = f => PAGES.find(p => p.file === f);
   return `<nav aria-label="목차">
     <div class="group">${a(by('index.html'))}${a(by('prework.html'))}</div>
@@ -73,7 +82,7 @@ function page(p, body) {
   const i = PAGES.indexOf(p), prev = PAGES[i - 1], next = PAGES[i + 1];
   const k = CONTENT.indexOf(p) + 1;
   const hero = p.no ? `<header class="hero"${p.simple ? ' data-chips="off"' : ''}><span class="hero-no">${esc(p.no)}</span><div class="hero-body"><p class="eyebrow">${esc(p.eyebrow)}</p><h1>${esc(p.title)}</h1>${p.simple ? '' : `<div class="hero-prog"><div class="prog" aria-label="전체 ${CONTENT.length}개 중 ${k}번째"><span style="width:${(k / CONTENT.length * 100).toFixed(1)}%"></span></div><span class="prog-t">${k} / ${CONTENT.length}</span></div>`}</div></header>\n` : '';
-  const pager = p.file === 'index.html' ? '' : `<div class="pager">${prev ? `<a class="prev" href="${prev.file}"><span>← 이전</span>${esc(prev.title || prev.nav)}</a>` : ''}${next ? `<a class="next" href="${next.file}"><span>다음 →</span>${esc(next.title || next.nav)}</a>` : ''}</div>`;
+  const pager = p.file === 'index.html' ? '' : `<div class="pager">${prev ? `<a class="prev" href="${prev.file}"${lockAttr(prev.file)}><span>← 이전</span>${esc(prev.title || prev.nav)}</a>` : ''}${next ? `<a class="next" href="${next.file}"${lockAttr(next.file)}><span>다음 →</span>${esc(next.title || next.nav)}</a>` : ''}</div>`;
   return `<!doctype html>
 <html lang="ko">
 <head>
@@ -82,8 +91,9 @@ function page(p, body) {
 <title>${esc(p.title || '처음 화면')} · ${TITLE}</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&family=Nanum+Gothic+Coding&display=swap">
 <link rel="stylesheet" href="assets/site.css?v=${ver('assets/site.css')}">
+${LOCK_HEAD}
 </head>
-<body>
+<body${LOCKED.includes(p.file) ? ' class="locked-page"' : ''}>
 <header class="masthead">
   <button type="button" id="menu" aria-label="목차 열기">☰</button>
   <a class="brand" href="index.html"><span class="mark" aria-hidden="true">AI</span><span class="brand-t"><small>소방학교 특별교육 · 과정 마무리</small><strong>${TITLE}</strong></span></a>
@@ -94,6 +104,7 @@ function page(p, body) {
     ${nav(p.file)}
   </aside>
   <main>
+    ${LOCKED.includes(p.file) ? '<div id="f2-lock"><span style="font-size:2.4em">📅</span><b>수업 교안은 11. 18.(수) 교육 당일에 공개됩니다</b><p>지금은 사전 학습(11. 16.~17.)을 해 주세요.<br>계정 준비와 공공데이터 활용신청은 미리 해 두어야 당일 막히지 않습니다.</p><a class="btn" href="prework.html">사전 학습 보기</a> <a class="btn" href="index.html">처음 화면</a></div>' : ''}
     <article>${hero}${body}</article>
     ${pager}
   </main>
@@ -106,7 +117,7 @@ ${p.script ? `<script src="${p.script}?v=${ver(p.script)}"></script>\n` : ''}</b
 }
 
 // ── 처음 화면 (1차 index 와 같은 짜임: 소개 → 모듈 목록 → 바로가기 → 준비물)
-const mod = (f, time) => { const p = PAGES.find(x => x.file === f); return `<li><a href="${f}"><span class="no">${esc(p.no)}</span><span class="t">${esc(p.title)}</span><span class="time">${esc(time)}</span></a></li>`; };
+const mod = (f, time) => { const p = PAGES.find(x => x.file === f); return `<li><a href="${f}"${lockAttr(f)}><span class="no">${esc(p.no)}</span><span class="t">${esc(p.title)}</span><span class="time">${esc(time)}</span></a></li>`; };
 const tile = (name, url, note) => `<a class="tile" href="${url}" target="_blank" rel="noopener"><b>${name}</b><span>${url.replace(/^https:\/\//, '').replace(/\/$/, '')}</span><small>${note}</small></a>`;
 const home = `
   <h1>${TITLE} · 과정 마무리</h1>
@@ -116,6 +127,7 @@ const home = `
   <ol class="mods">${mod('prework.html', '11. 16.~17.')}</ol>
   <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 준비(공공데이터 활용신청 포함), 웹 서비스의 뿌리 핵심 읽기, 데이터베이스 · 공공데이터 API 개념 한 장. 약 1시간 15분. 설치 · 연결은 당일 3교시에 함께 합니다.</p>
   <h2>수업 (4교시) · 혼자 해 보는 날</h2>
+  <p class="note f2-pre-only">🔒 수업 교안과 공모 · 투표는 <b>11. 18.(수) 교육 당일</b>에 열립니다. 그 전에는 사전 학습을 해 주세요.</p>
   <ol class="mods">${mod('flow.html', '시작 전 10분')}${mod('s1.html', '13:00')}${mod('s2.html', '14:00')}${mod('s3.html', '15:00')}${mod('s4.html', '16:00')}</ol>
   <p class="note">오늘은 시범 없이 <b>이 교안을 보며 혼자</b> 만듭니다. 막히면 ① 각 단계의 "막히면" 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>
   <h2>공모 · 투표</h2>
