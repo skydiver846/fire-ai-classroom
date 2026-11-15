@@ -181,14 +181,46 @@
 <p>⏭ <strong>끝나면</strong>: ✅ 점검 2 (공모 페이지에 v0.1 주소) → 3교시</p>
 </blockquote>
 <h3>4-1. 결재 올리고 결재하기 (5분) · ③ Claude Code → ④ GitHub</h3>
+<p><strong>왜 결재를 하나요?</strong> Claude가 만든 v0.1은 아직 <strong>초안 서랍</strong>(작업용 사본)에 들어 있습니다. 웹 주소는 <strong>원본(main)</strong> 으로 만들어지므로, 초안을 원본에 넣어야 합니다. 이때 바로 넣지 않고 <strong>결재 요청서(PR)를 올리고 → 내가 보고 → 승인(Merge)</strong> 하는 순서를 거칩니다. 1차에서 한 것과 같습니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>하는 곳</th>
+<th>누르는 것</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 결재 올리기</td>
+<td>Claude Code</td>
+<td><strong>[Create PR]</strong></td>
+<td>&quot;초안을 원본에 넣어도 될까요?&quot; 요청서 만들기</td>
+</tr>
+<tr>
+<td>② 결재하기</td>
+<td>GitHub</td>
+<td><strong>[Merge pull request] → [Confirm merge]</strong></td>
+<td>&quot;넣어도 됩니다&quot; 승인</td>
+</tr>
+<tr>
+<td>③ 확인</td>
+<td>GitHub</td>
+<td>보라색 <strong>Merged</strong></td>
+<td>원본에 들어감 → 이제 Vercel이 웹 주소를 만들 수 있음</td>
+</tr>
+</tbody></table></div>
+<p><strong>따라 하기</strong></p>
 <ol>
-<li>Claude Code 채팅 옆 패널의 <strong>Changes</strong> 카드(<code>+120 -0</code> 처럼 바뀐 줄 수가 적힌 카드)에서 <strong>[Create PR]</strong><ul>
-<li>패널이 안 보이면 화면 맨 위 세션 제목 줄의 패널 아이콘 또는 ⋮ 메뉴에서 켭니다</li>
+<li><strong>Claude Code 화면</strong>에서 <strong>[Create PR]</strong> 단추를 누릅니다<ul>
+<li>채팅 오른쪽(또는 아래)에 <code>+120 -0</code> 처럼 <strong>바뀐 줄 수가 적힌 카드(Changes)</strong> 안에 있습니다</li>
+<li>카드가 안 보이면 화면 맨 위 제목 줄 오른쪽의 패널 아이콘 또는 <strong>⋮</strong> 메뉴에서 켭니다</li>
+<li>그래도 없으면 채팅에 <strong>&quot;PR 만들어 줘&quot;</strong> 라고 보내도 됩니다</li>
 </ul>
 </li>
-<li>카드에 생긴 결재 요청서(PR) 제목을 누르면 GitHub 화면이 열립니다</li>
-<li>아래로 내려 초록 <strong>[Merge pull request]</strong> → <strong>[Confirm merge]</strong></li>
-<li>보라색 <strong>Merged</strong> 가 보이면 결재 끝</li>
+<li>카드에 결재 요청서 제목(파란 글씨)이 생기면 누릅니다 → <strong>GitHub 화면</strong>이 새 탭으로 열립니다</li>
+<li>GitHub 화면을 아래로 내려 초록 <strong>[Merge pull request]</strong> → 한 번 더 <strong>[Confirm merge]</strong></li>
+<li>보라색 <strong>Merged</strong> 표시가 보이면 결재 끝입니다</li>
 </ol>
 <h3>4-2. Vercel에 연결해 웹 주소 만들기 (7분, 이 저장소는 처음 한 번) · ⑤ Vercel</h3>
 <ol>
