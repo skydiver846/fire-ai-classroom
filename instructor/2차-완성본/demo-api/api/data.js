@@ -62,6 +62,7 @@ module.exports = async (req, res) => {
     if (!asked && raw.length === 0) { date = kstDate(1); raw = await load(key, date); }
     const words = SIDO[sido];
     const items = raw
+      .filter(i => i.SIDO_NM)                    // 시도 이름이 빈(null) 줄은 뺌
       .filter(i => !words || words.some(w => String(i.SIDO_NM || '').includes(w)))
       .map(i => ({
         sido: i.SIDO_NM,                  // 시도 이름
