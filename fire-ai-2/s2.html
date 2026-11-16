@@ -225,29 +225,62 @@
 <p>💡 <strong>&quot;푸시해 줘&quot;만으로는 안 되나요?</strong> 푸시는 초안 서랍에 넣는 것까지입니다. 원본(main)에 넣는 <strong>결재(Merge)는 사람이</strong> 합니다. 그래서 문장 끝에 &quot;합치기는 내가 할게&quot;를 붙였습니다.</p>
 </blockquote>
 <h3>4-2. Vercel에 연결해 웹 주소 만들기 (7분, 이 저장소는 처음 한 번) · ⑤ Vercel</h3>
+<p><strong>무엇을 하나요?</strong> GitHub는 파일을 넣어 두는 <strong>창고</strong>, Vercel은 그 파일로 <strong>가게 문을 여는 곳</strong>(웹 주소)입니다. 오늘 만든 창고(<code>team-tool</code>)를 Vercel에 <strong>한 번만 연결</strong>하면, 그다음부터는 결재(Merge)할 때마다 Vercel이 알아서 가게를 새로 꾸밉니다.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>하는 곳</th>
+<th>누르는 것</th>
+<th>이렇게 보이면 됨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 창고 고르기</td>
+<td>Vercel</td>
+<td><strong>[Add New…] → [Project]</strong> → <code>team-tool</code> 옆 <strong>[Import]</strong></td>
+<td>&quot;Configure Project&quot; 화면</td>
+</tr>
+<tr>
+<td>② 주소 이름 정하기</td>
+<td>같은 화면</td>
+<td><strong>Project Name</strong> 에 영어 이름</td>
+<td>이 이름이 곧 <code>이름.vercel.app</code> 주소</td>
+</tr>
+<tr>
+<td>③ 문 열기</td>
+<td>같은 화면</td>
+<td><strong>[Deploy]</strong></td>
+<td>1분 뒤 🎉 축하 화면</td>
+</tr>
+</tbody></table></div>
+<p><strong>따라 하기</strong></p>
 <ol>
-<li>vercel.com 오른쪽 위 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
+<li>⑤ Vercel 탭 오른쪽 위 <strong>[Add New…]</strong> → <strong>[Project]</strong></li>
 <li><strong>Import Git Repository</strong> 목록에서 <code>team-tool</code> 옆 <strong>[Import]</strong><ul>
-<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → Vercel 화면으로 돌아와 다시</li>
+<li>목록에 없으면: 목록 아래 <strong>Adjust GitHub App Permissions</strong> → Repository access 에 <code>team-tool</code> 추가 → [Save] → Vercel 탭으로 돌아오면 목록에 생깁니다</li>
 </ul>
 </li>
-<li><strong>Configure Project</strong> 화면에서<ul>
-<li><strong>Project Name</strong>: 주소로 쓸 이름. 예) <code>gear-check-hong</code> → 주소가 <code>https://gear-check-hong.vercel.app</code></li>
-<li><strong>Framework Preset</strong>: <strong>Other</strong></li>
-<li>나머지(Root Directory, Build 설정)는 그대로</li>
+<li><strong>Configure Project</strong> 화면에서 <strong>한 칸만</strong> 바꿉니다<ul>
+<li><strong>Project Name</strong>: 웹 주소가 될 이름 (영어 소문자 · 숫자 · <code>-</code>). 예) <code>gear-check-hong</code> → <code>https://gear-check-hong.vercel.app</code></li>
+<li><strong>Framework Preset</strong> 이 <strong>Other</strong> 인지만 봅니다 (다르면 Other로)</li>
+<li>나머지 칸(Root Directory, Build and Output Settings, Environment Variables)은 <strong>건드리지 않습니다</strong></li>
 </ul>
 </li>
-<li><strong>[Deploy]</strong> → 1분쯤 뒤 축하 화면 → <strong>[Continue to Dashboard]</strong></li>
-<li>대시보드의 <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 을 눌러 PC에서 화면이 열리는지 봅니다</li>
+<li>맨 아래 <strong>[Deploy]</strong> → 1분쯤 기다리면 🎉 축하 화면 → <strong>[Continue to Dashboard]</strong></li>
+<li>대시보드의 <strong>Domains</strong> 에 적힌 <code>○○.vercel.app</code> 을 눌러 내 화면이 열리면 성공입니다. 이 주소를 <strong>메모장에 적어 둡니다</strong> (4-5 공모 제출 · 3교시 확인에 씀)</li>
 </ol>
 <blockquote>
-<p>💡 이제 GitHub에서 결재(Merge)할 때마다 Vercel이 저절로 다시 배포합니다. 결재 요청서(PR)를 올리면 결재 전 <strong>미리보기(Preview) 주소</strong>도 저절로 생깁니다.</p>
+<p>💡 <strong>처음 한 번만</strong> 합니다. 3 · 4교시에는 결재(Merge)만 하면 1~2분 뒤 같은 주소가 저절로 새 버전으로 바뀝니다. 결재 요청서(PR)를 올리면 결재 전에 볼 수 있는 <strong>미리보기(Preview) 주소</strong>도 저절로 생깁니다.</p>
 </blockquote>
 <h3>4-3. 미리보기를 휴대폰 · 짝도 볼 수 있게 열기 (1분, 권장)</h3>
-<p>Vercel의 미리보기 주소는 처음에 <strong>Vercel 로그인을 요구</strong>합니다(나만 보는 시안이라서). 3교시에 휴대폰으로 미리보기를 보려면 지금 열어 둡니다.</p>
+<p>미리보기(결재 전 시안) 주소는 처음에 <strong>Vercel 로그인을 요구</strong>합니다. 내 PC에선 열리지만 <strong>휴대폰이나 짝의 화면에서는 안 열립니다.</strong> 3교시에 휴대폰으로 확인하려면 지금 풀어 둡니다.</p>
 <ol>
 <li>프로젝트 위쪽 <strong>Settings</strong> → 왼쪽 <strong>Deployment Protection</strong></li>
-<li><strong>Vercel Authentication</strong> 을 끄고 <strong>[Save]</strong></li>
+<li><strong>Vercel Authentication</strong> 스위치를 끄고 <strong>[Save]</strong><ul>
+<li>운영 주소(<code>○○.vercel.app</code>)는 원래 누구나 열립니다. 이 설정은 <strong>미리보기 주소</strong>에만 해당합니다</li>
+</ul>
+</li>
 </ol>
 <h3>4-4. 휴대폰으로 열어 보기 (1분)</h3>
 <ol>
