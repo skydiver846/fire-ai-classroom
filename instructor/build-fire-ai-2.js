@@ -63,7 +63,8 @@ const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 // 강사 미리보기: 아무 페이지 주소 끝에 ?preview=jg2026 를 붙여 한 번 열면 그 브라우저에서는 계속 보입니다(?preview=off 로 해제).
 // 화면에서만 가리는 것이라 페이지 소스를 열면 내용이 보입니다(비밀 자료가 아니므로 충분).
 const OPEN_AT = '2026-11-18T00:00:00+09:00';
-const LOCKED = ['flow.html', 's1.html', 's2.html', 's3.html', 's4.html', 'contest.html'];
+// 11. 16. 교안(흐름도 · 1~4교시)은 미리 열었습니다(예습용). 공모 · 투표만 당일 공개.
+const LOCKED = ['contest.html'];
 const lockAttr = f => (LOCKED.includes(f) ? ' data-lock' : '');
 const LOCK_HEAD = `<script>(function(){var open=Date.parse('${OPEN_AT}'),k='f2-preview',v=null,m=location.search.match(/[?&]preview=([^&]+)/);try{if(m){if(m[1]==='off')localStorage.removeItem(k);else localStorage.setItem(k,m[1]);}v=localStorage.getItem(k);}catch(e){}if(Date.now()<open&&v!=='jg2026')document.documentElement.className+=' f2-pre';})();</script>
 <style>.f2-pre a[data-lock]{opacity:.55}.f2-pre a[data-lock]::after{content:" 🔒 11. 18. 공개";font-size:.8em;font-weight:700;color:#a3281a;white-space:nowrap}.f2-pre .mods a[data-lock]::after{content:none}#f2-lock{display:none}.f2-pre-only{display:none}.f2-pre .f2-pre-only{display:block}.f2-pre .locked-page main>*{display:none}.f2-pre .locked-page main>#f2-lock{display:block}#f2-lock{max-width:640px;margin:48px auto;padding:32px 28px;background:#fff;border:1px solid #dde1e8;border-radius:18px;text-align:center}#f2-lock b{display:block;font-size:1.4em;margin:10px 0}#f2-lock p{color:#5b6474;line-height:1.7}#f2-lock .btn{margin:6px 4px}</style>`;
@@ -104,7 +105,7 @@ ${LOCK_HEAD}
     ${nav(p.file)}
   </aside>
   <main>
-    ${LOCKED.includes(p.file) ? '<div id="f2-lock"><span style="font-size:2.4em">📅</span><b>수업 교안은 11. 18.(수) 교육 당일에 공개됩니다</b><p>지금은 사전 학습(11. 16.~17.)을 해 주세요.<br>계정 준비와 공공데이터 활용신청은 미리 해 두어야 당일 막히지 않습니다.</p><a class="btn" href="prework.html">사전 학습 보기</a> <a class="btn" href="index.html">처음 화면</a></div>' : ''}
+    ${LOCKED.includes(p.file) ? '<div id="f2-lock"><span style="font-size:2.4em">📅</span><b>공모 · 투표는 11. 18.(수) 교육 당일에 열립니다</b><p>참가 등록 · 제출 · 투표는 수업 시간에 함께 합니다.<br>그 전에는 교안으로 미리 해 보거나 사전 학습을 해 주세요.</p><a class="btn" href="prework.html">사전 학습 보기</a> <a class="btn" href="index.html">처음 화면</a></div>' : ''}
     <article>${hero}${body}</article>
     ${pager}
   </main>
@@ -127,7 +128,7 @@ const home = `
   <ol class="mods">${mod('prework.html', '11. 16.~17.')}</ol>
   <p><a class="btn" href="prework.html">사전 학습 보기</a> 계정 준비(공공데이터 활용신청 포함), 웹 서비스의 뿌리 핵심 읽기, 데이터베이스 · 공공데이터 API 개념 한 장. 약 1시간 15분. 설치 · 연결은 당일 3교시에 함께 합니다.</p>
   <h2>수업 (4교시) · 혼자 해 보는 날</h2>
-  <p class="note f2-pre-only">🔒 수업 교안과 공모 · 투표는 <b>11. 18.(수) 교육 당일</b>에 열립니다. 그 전에는 사전 학습을 해 주세요.</p>
+  <div class="note" style="border-left:4px solid #c8321e;padding:12px 16px;background:#fff8f6;border-radius:10px"><b>📣 교안을 미리 열었습니다 (예습용)</b><br>✅ <b>1차 교육생</b>: 해 볼 수 있는 분은 1 · 2교시를 미리 따라 해 보세요. 만든 저장소와 웹 주소는 당일 그대로 이어서 씁니다.<br>🙋 <b>처음 참여하는 분</b>: 미리 하지 않아도 됩니다. 사전 학습 · 계정 준비만 해 오시면 1 · 2교시를 <b>수업 시간에 강사와 함께</b> 진행합니다.<br>🔒 공모 · 투표(참가 등록 · 제출)는 11. 18. 당일에 열립니다.</div>
   <ol class="mods">${mod('flow.html', '시작 전 10분')}${mod('s1.html', '13:00')}${mod('s2.html', '14:00')}${mod('s3.html', '15:00')}${mod('s4.html', '16:00')}</ol>
   <p class="note">오늘은 시범 없이 <b>이 교안을 보며 혼자</b> 만듭니다. 막히면 ① 각 단계의 "막히면" 표 → ② 옆 사람 → ③ 손 들기 순서로 풉니다.</p>
   <h2>공모 · 투표</h2>
