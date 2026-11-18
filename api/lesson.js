@@ -10,7 +10,7 @@ module.exports = (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'GET') return res.status(405).json({ error: 'GET으로만 받습니다.' });
   const code = String((req.query && req.query.code) || '').trim();
-  const open = process.env.LD_PUBLIC === '1';
+  const open = true; // 11. 18. 강의 날 공개 (다시 잠그려면 process.env.LD_PUBLIC === '1' 로 되돌림)
   const ok = open || (process.env.LD_ACCESS_CODE ? code === process.env.LD_ACCESS_CODE : sha(code) === DEFAULT_HASH);
   if (!ok) return res.status(401).json({ error: code ? '접속 코드가 맞지 않습니다.' : '접속 코드를 넣어 주세요.' });
   return res.status(200).json({ content: CONTENT });
