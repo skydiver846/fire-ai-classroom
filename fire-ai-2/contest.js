@@ -198,6 +198,13 @@
     }).catch(function (e) { $('a-login').hidden = false; $('a-panel').hidden = true; say($('a-msg'), e.message, false); });
   }
   $('a-login').addEventListener('submit', function (ev) { ev.preventDefault(); akey = $('a-key').value; adminLoad(); });
+  $('a-proxy').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var t = document.querySelector('input[name=p-track]:checked');
+    admin({ action: 'submit-for', name: $('p-name').value, title: $('p-title').value, url: $('p-url').value.trim(), intro: $('p-intro').value, track: t ? t.value : '' })
+      .then(function (d) { say($('a-msg'), $('p-name').value + ' 님 작품을 ' + (d.updated ? '고쳐 올렸습니다.' : '올렸습니다.') + (d.created ? ' (비밀번호 0000으로 새로 등록)' : ''), true); $('a-proxy').reset(); adminLoad(); loadBoard(); })
+      .catch(function (e) { say($('a-msg'), e.message, false); });
+  });
   var armed = false;
   $('a-wipe').addEventListener('click', function () {
     if (!armed) { armed = true; $('a-wipe').textContent = '정말 지우려면 한 번 더 누르기'; return; }
