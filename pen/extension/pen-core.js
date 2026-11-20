@@ -87,6 +87,7 @@
     'button:focus-visible{outline:3px solid #1f6feb;outline-offset:2px}',
     '.fs{display:none;align-items:center;gap:4px;padding:0 2px 8px;margin-bottom:4px;border-bottom:1px solid #dde1e8}.box.text .fs{display:flex}',
     '.fs button{flex:1;height:30px;border:1px solid #dde1e8;border-radius:8px;background:#fff;color:#1b2230;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}.fs button:hover{background:#eef1f5}.fsv{min-width:44px;text-align:center;font-size:13px;color:#5b6474}',
+    '.rz{display:none;position:absolute;right:-6px;bottom:-6px;width:22px;height:22px;border-radius:6px;background:#fff;border:1px solid #c3c9d3;box-shadow:0 2px 6px rgba(16,24,40,.2);cursor:nwse-resize;touch-action:none;background-image:linear-gradient(135deg,transparent 45%,#8a93a3 45%,#8a93a3 52%,transparent 52%,transparent 65%,#8a93a3 65%,#8a93a3 72%,transparent 72%)}.box.open .rz{display:block}',
     '.ta{position:fixed;display:none;margin:0;padding:2px 6px;border:2px dashed #1f6feb;border-radius:6px;background:rgba(255,255,255,.85);resize:none;overflow:hidden;line-height:1.3;pointer-events:auto;outline:none;min-width:4em;z-index:1}',
     '.sz{display:flex;gap:4px;padding:0 0 6px;margin-bottom:2px;border-bottom:1px solid #dde1e8}',
     '.sz button{flex:1;min-width:26px;height:26px;padding:0 4px;border:1px solid #dde1e8;border-radius:7px;background:#fff;color:#1b2230;font-weight:700;font-size:12px;font-family:inherit;cursor:pointer}',
@@ -320,7 +321,10 @@
   var ZOOMS = [0.8, 1, 1.25, 1.5, 1.8];
   var sz = el('div', 'sz');
   function szBtn(text, title, fn) { var b = el('button', null, text); b.type = 'button'; b.title = title; b.addEventListener('click', fn); sz.appendChild(b); return b; }
-  function zoomBy(d) { var i = ZOOMS.indexOf(state.zoom); if (i < 0) i = 1; state.zoom = ZOOMS[Math.max(0, Math.min(ZOOMS.length - 1, i + d))]; save(); sync(); place(); }
+  function zoomBy(d) {
+    var z = state.zoom, next = d > 0 ? ZOOMS.filter(function (v) { return v > z + 0.01; })[0] : ZOOMS.filter(function (v) { return v < z - 0.01; }).pop();
+    if (next) { state.zoom = next; save(); sync(); place(); }
+  }
   szBtn('−', '도구상자 작게', function () { zoomBy(-1); });
   szBtn('+', '도구상자 크게', function () { zoomBy(1); });
   var miniB = szBtn('▤', '아이콘만 보기 / 글자도 보기', function () { state.mini = !state.mini; save(); sync(); place(); });
@@ -360,12 +364,28 @@
   var clearB = button('clear', '모두 지우기', '그림 모두 지우기 (Del)', 'Del'); clearB.addEventListener('click', clearAll); panel.appendChild(clearB);
   var closeB = button('close', '닫기', '판서 끝내기 (그림도 지움)'); closeB.addEventListener('click', function () { api.close(); }); panel.appendChild(closeB);
   box.appendChild(panel);
+  // 오른쪽 아래 모서리를 끌어 도구상자 크기 바꾸기
+  var rz = el('div', 'rz'); rz.title = '끌어서 도구상자 크기 바꾸기';
+  rz.addEventListener('pointerdown', function (e) {
+    e.preventDefault(); e.stopPropagation(); rz.setPointerCapture(e.pointerId);
+    var r = box.getBoundingClientRect(); state.pos = { x: r.left, y: r.top }; place();   // 왼쪽 위를 고정하고 오른쪽 아래로 늘림
+    var pr = panel.getBoundingClientRect(), w0 = pr.width, h0 = pr.height, z0 = state.zoom, x0 = e.clientX, y0 = e.clientY;
+    function mv(ev) {
+      var k = ((w0 + ev.clientX - x0) / w0 + (h0 + ev.clientY - y0) / h0) / 2;
+      var maxZ = z0 * (innerWidth - 24) / w0;   // 화면 폭을 넘지 않게. 오른쪽에 자리가 없으면 왼쪽으로 늘어남(place)
+      state.zoom = Math.round(Math.max(0.6, Math.min(2.2, maxZ, z0 * k)) * 100) / 100; sync(); place();
+    }
+    function up() { rz.removeEventListener('pointermove', mv); rz.removeEventListener('pointerup', up); save(); }
+    rz.addEventListener('pointermove', mv); rz.addEventListener('pointerup', up);
+  });
+  box.appendChild(rz);
   root.appendChild(box);
 
   // 도구상자 끌어서 옮기기 (위치는 이 사이트에 기억)
   function place() {
     if (!state.pos) { box.style.left = ''; box.style.top = ''; box.style.right = ''; return; }
-    var x = Math.max(4, Math.min(innerWidth - 60, state.pos.x)), y = Math.max(4, Math.min(innerHeight - 60, state.pos.y));
+    var r = box.getBoundingClientRect(), bw = r.width || 60, bh = Math.min(r.height || 60, innerHeight - 8);
+    var x = Math.max(4, Math.min(innerWidth - bw - 8, state.pos.x)), y = Math.max(4, Math.min(innerHeight - bh - 8, state.pos.y));
     box.style.left = x + 'px'; box.style.top = y + 'px'; box.style.right = 'auto';
   }
   grip.addEventListener('pointerdown', function (e) {
