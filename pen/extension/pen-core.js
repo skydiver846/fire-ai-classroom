@@ -99,9 +99,29 @@
     paint();
   }
 
-  // ── 그리기 (그림은 페이지 위치에 붙어 스크롤을 따라감)
+  // ── 그림은 그 자리의 내용(요소)에 붙음: 페이지 스크롤뿐 아니라 안쪽 상자 스크롤 · 부드러운 스크롤 · 슬라이드도 따라감
+  function pageRect(node) { var r = node.getBoundingClientRect(); return { x: r.left + scrollX, y: r.top + scrollY, w: r.width, h: r.height }; }
+  function anchorAt(cx, cy) {
+    var list = document.elementsFromPoint ? document.elementsFromPoint(cx, cy) : [];
+    for (var i = 0; i < list.length; i++) {
+      var n = list[i];
+      if (n === host || n === document.documentElement || n === document.body) continue;
+      return n;
+    }
+    return null;
+  }
+  function offset(s) {
+    if (!s.anchor) return { x: 0, y: 0, hide: false };
+    if (!s.anchor.isConnected) return { x: 0, y: 0, hide: true };
+    var r = pageRect(s.anchor);
+    if (!r.w && !r.h) return { x: 0, y: 0, hide: true };   // 내용이 사라지면(다음 슬라이드 등) 그림도 숨김
+    return { x: r.x - s.base.x, y: r.y - s.base.y, hide: false };
+  }
   function stroke(s) {
+    var o = s === cur ? { x: 0, y: 0 } : (s.off || offset(s));
+    if (o.hide) return;
     ctx.save();
+    ctx.translate(o.x, o.y);
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     ctx.strokeStyle = s.color; ctx.lineWidth = s.width;
     if (s.type === 'hl') { ctx.globalAlpha = 0.35; ctx.lineWidth = s.width * 3; }
@@ -124,6 +144,7 @@
     ctx.restore();
   }
   function paint() {
+    shapes.forEach(function (s) { s.off = offset(s); });
     ctx.clearRect(0, 0, innerWidth, innerHeight);
     ctx.save(); ctx.translate(-scrollX, -scrollY);
     shapes.forEach(stroke); if (cur) stroke(cur);
@@ -136,6 +157,9 @@
     return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
   }
   function hit(s, x, y) {
+    var o = s.off || offset(s);
+    if (o.hide) return false;
+    x -= o.x; y -= o.y;
     var tol = 12 + s.width;
     if (s.pts) { for (var i = 0; i < s.pts.length; i++) { var a = s.pts[i], b = s.pts[i + 1] || a; if (seg(x, y, a.x, a.y, b.x, b.y) < tol) return true; } return false; }
     if (s.type === 'arrow') return seg(x, y, s.x1, s.y1, s.x2, s.y2) < tol;
@@ -155,6 +179,8 @@
     cur = (state.tool === 'pen' || state.tool === 'hl')
       ? { type: state.tool, color: state.color, width: state.width, pts: [p] }
       : { type: state.tool, color: state.color, width: state.width, x1: p.x, y1: p.y, x2: p.x, y2: p.y };
+    cur.anchor = anchorAt(e.clientX, e.clientY);
+    if (cur.anchor) cur.base = pageRect(cur.anchor);
     paint();
   });
   cv.addEventListener('pointermove', function (e) {
@@ -282,6 +308,17 @@
   (document.body || document.documentElement).appendChild(host);
   window.addEventListener('resize', function () { fit(); place(); });
   window.addEventListener('scroll', paint, { passive: true });
+  document.addEventListener('scroll', paint, { passive: true, capture: true });   // 안쪽 상자 스크롤
+  // 스크롤 신호 없이 움직이는 화면(부드러운 스크롤 · 슬라이드)은 매 프레임 위치를 보고 바뀌면 다시 그림
+  (function watch() {
+    if (state.open && shapes.length && !drawing) {
+      for (var i = 0; i < shapes.length; i++) {
+        var a = shapes[i].off, b = offset(shapes[i]);
+        if (!a || a.x !== b.x || a.y !== b.y || a.hide !== b.hide) { paint(); break; }
+      }
+    }
+    requestAnimationFrame(watch);
+  })();
   fit(); place(); sync();
   if (!launcher) api.open();   // 확장 · 북마클릿은 누르자마자 펜으로
 })();
