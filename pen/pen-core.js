@@ -46,8 +46,8 @@
   var KEY = 'zpen-settings';
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
-  var state = { open: false, tool: 'mouse', color: saved.color || COLORS[0].c, width: saved.width || WIDTHS[1].w, pos: saved.pos || null, zoom: saved.zoom || 1, mini: !!saved.mini };
-  function save() { try { localStorage.setItem(KEY, JSON.stringify({ color: state.color, width: state.width, pos: state.pos, zoom: state.zoom, mini: state.mini })); } catch (e) {} }
+  var state = { open: false, tool: 'mouse', color: saved.color || COLORS[0].c, width: saved.width || WIDTHS[1].w, pos: saved.pos || null, zoom: saved.zoom || 1, mini: !!saved.mini, fsize: saved.fsize || 30 };
+  function save() { try { localStorage.setItem(KEY, JSON.stringify({ color: state.color, width: state.width, pos: state.pos, zoom: state.zoom, mini: state.mini, fsize: state.fsize })); } catch (e) {} }
 
   var shapes = [], cur = null, drawing = false;
 
@@ -85,6 +85,8 @@
     '.w i{display:block;width:26px;border-radius:4px;background:#1b2230}',
     '.w[aria-pressed="true"]{border-color:#c8321e;box-shadow:0 0 0 1px #c8321e}',
     'button:focus-visible{outline:3px solid #1f6feb;outline-offset:2px}',
+    '.fs{display:none;align-items:center;gap:4px;padding:0 2px 8px;margin-bottom:4px;border-bottom:1px solid #dde1e8}.box.text .fs{display:flex}',
+    '.fs button{flex:1;height:30px;border:1px solid #dde1e8;border-radius:8px;background:#fff;color:#1b2230;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}.fs button:hover{background:#eef1f5}.fsv{min-width:44px;text-align:center;font-size:13px;color:#5b6474}',
     '.ta{position:fixed;display:none;margin:0;padding:2px 6px;border:2px dashed #1f6feb;border-radius:6px;background:rgba(255,255,255,.85);resize:none;overflow:hidden;line-height:1.3;pointer-events:auto;outline:none;min-width:4em;z-index:1}',
     '.sz{display:flex;gap:4px;padding:0 0 6px;margin-bottom:2px;border-bottom:1px solid #dde1e8}',
     '.sz button{flex:1;min-width:26px;height:26px;padding:0 4px;border:1px solid #dde1e8;border-radius:7px;background:#fff;color:#1b2230;font-weight:700;font-size:12px;font-family:inherit;cursor:pointer}',
@@ -124,7 +126,8 @@
     return { x: r.x - s.base.x, y: r.y - s.base.y, hide: false };
   }
   var FONT = '"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif';
-  function fontSize(w) { return w <= 3 ? 22 : w <= 6 ? 30 : 44; }
+  var FSIZES = [16, 20, 24, 30, 36, 44, 56, 72, 96];
+  function fontSize() { return state.fsize; }
   function textBox(s) {
     ctx.save(); ctx.font = '700 ' + s.size + 'px ' + FONT;
     var lines = s.text.split('\n'), w = 0;
@@ -253,12 +256,23 @@
   var editing = null;
   var ta = el('textarea', 'ta'); ta.rows = 1; ta.setAttribute('aria-label', '판서 글자');
   function openText(cx, cy, p) {
-    var size = fontSize(state.width);
-    editing = { type: 'text', color: state.color, size: size, x: p.x, y: p.y - size * 0.65, text: '' };
+    var size = fontSize();
+    editing = { type: 'text', color: state.color, size: size, x: p.x, y: p.y - size * 0.65, y0: p.y, text: '' };
     editing.anchor = anchorAt(cx, cy); if (editing.anchor) editing.base = pageRect(editing.anchor);
     ta.value = ''; ta.style.left = cx + 'px'; ta.style.top = (cy - size * 0.65) + 'px';
     ta.style.font = '700 ' + size + 'px ' + FONT; ta.style.color = state.color; ta.style.display = 'block';
     growText(); ta.focus(); setTimeout(function () { if (editing) ta.focus(); }, 0);
+  }
+  function setFont(d) {
+    var i = FSIZES.indexOf(state.fsize); if (i < 0) i = 3;
+    state.fsize = FSIZES[Math.max(0, Math.min(FSIZES.length - 1, i + d))]; save();
+    if (editing) {
+      var top = parseFloat(ta.style.top) + editing.size * 0.65;
+      editing.size = state.fsize;
+      ta.style.font = '700 ' + state.fsize + 'px ' + FONT; ta.style.top = (top - state.fsize * 0.65) + 'px';
+      editing.y = editing.y0 - state.fsize * 0.65; growText(); ta.focus();
+    }
+    sync();
   }
   function growText() {
     var lines = ta.value.split('\n');
@@ -275,6 +289,7 @@
   ta.addEventListener('keydown', function (e) {
     e.stopPropagation();
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); commitText(); }
+    else if ((e.ctrlKey || e.altKey) && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) { e.preventDefault(); setFont(e.key === 'ArrowUp' ? 1 : -1); }
     else if (e.key === 'Escape') { e.preventDefault(); editing = null; ta.blur(); ta.style.display = 'none'; ta.value = ''; }
   });
   ta.addEventListener('blur', function () { setTimeout(function () { if (editing && root.activeElement !== ta) commitText(); }, 0); });
@@ -311,7 +326,7 @@
   var miniB = szBtn('▤', '아이콘만 보기 / 글자도 보기', function () { state.mini = !state.mini; save(); sync(); place(); });
   panel.appendChild(sz);
   var TOOLS = [['mouse', '마우스', 'Esc'], ['pen', '펜', 'P'], ['hl', '형광펜', 'H'], ['rect', '사각형', 'R'], ['ellipse', '원', 'O'], ['arrow', '화살표', 'A'], ['text', '글자', 'T'], ['eraser', '지우개', 'E']];
-  var TIPS = { mouse: '그리기 멈추고 화면 누르기 · 스크롤', pen: '자유롭게 그리기', hl: '반투명하게 굵게', rect: '드래그 · Shift는 정사각형', ellipse: '드래그 · Shift는 정원', arrow: '드래그로 화살표', text: '누른 자리에 글자 쓰기 · Enter로 붙이기 (Shift+Enter 줄바꿈)', eraser: '닿은 그림 지우기' };
+  var TIPS = { mouse: '그리기 멈추고 화면 누르기 · 스크롤', pen: '자유롭게 그리기', hl: '반투명하게 굵게', rect: '드래그 · Shift는 정사각형', ellipse: '드래그 · Shift는 정원', arrow: '드래그로 화살표', text: '누른 자리에 글자 쓰기 · Enter로 붙이기 (Shift+Enter 줄바꿈) · 크기는 가− 가+ 또는 [ ]', eraser: '닿은 그림 지우기' };
   var toolBtns = TOOLS.map(function (t) {
     var b = button(t[0], t[1], t[1] + ': ' + TIPS[t[0]] + ' (' + t[2] + ')', t[2]);
     b.addEventListener('click', function () { setTool(t[0]); });
@@ -320,6 +335,7 @@
   var sw = el('div', 'sw');
   var cBtns = COLORS.map(function (c, i) {
     var b = el('button', 'c'); b.type = 'button'; b.style.background = c.c; b.title = c.n + ' (' + (i + 1) + ')'; b.setAttribute('aria-label', c.n);
+    b.addEventListener('mousedown', function (e) { if (editing) e.preventDefault(); });
     b.addEventListener('click', function () { setColor(c.c); });
     sw.appendChild(b); return b;
   });
@@ -332,6 +348,14 @@
     wd.appendChild(b); return b;
   });
   panel.appendChild(wd);
+  var fs = el('div', 'fs');
+  var fsDown = el('button', null, '가−'); fsDown.type = 'button'; fsDown.title = '글자 작게 ( [ )';
+  var fsVal = el('span', 'fsv');
+  var fsUp = el('button', null, '가+'); fsUp.type = 'button'; fsUp.title = '글자 크게 ( ] )';
+  fsDown.addEventListener('mousedown', function (e) { e.preventDefault(); }); fsUp.addEventListener('mousedown', function (e) { e.preventDefault(); });
+  fsDown.addEventListener('click', function () { setFont(-1); }); fsUp.addEventListener('click', function () { setFont(1); });
+  fs.appendChild(fsDown); fs.appendChild(fsVal); fs.appendChild(fsUp);
+  panel.appendChild(fs);
   var undoB = button('undo', '되돌리기', '마지막 그림 지우기 (Ctrl+Z)', '^Z'); undoB.addEventListener('click', undo); panel.appendChild(undoB);
   var clearB = button('clear', '모두 지우기', '그림 모두 지우기 (Del)', 'Del'); clearB.addEventListener('click', clearAll); panel.appendChild(clearB);
   var closeB = button('close', '닫기', '판서 끝내기 (그림도 지움)'); closeB.addEventListener('click', function () { api.close(); }); panel.appendChild(closeB);
@@ -353,12 +377,14 @@
   });
 
   function setTool(t) { if (t !== 'text') commitText(); state.tool = t; sync(); }
-  function setColor(c) { state.color = c; if (state.tool === 'mouse' || state.tool === 'eraser') state.tool = 'pen'; save(); sync(); }
+  function setColor(c) { if (editing) { editing.color = c; ta.style.color = c; } state.color = c; if (state.tool === 'mouse' || state.tool === 'eraser') state.tool = 'pen'; save(); sync(); }
   function undo() { shapes.pop(); paint(); }
   function clearAll() { editing = null; ta.style.display = 'none'; shapes = []; cur = null; paint(); }
   function sync() {
     box.classList.toggle('open', state.open);
     box.classList.toggle('mini', state.mini);
+    box.classList.toggle('text', state.tool === 'text');
+    fsVal.textContent = state.fsize + 'px';
     panel.style.zoom = state.zoom;
     panel.style.maxHeight = 'calc((100vh - 140px) / ' + state.zoom + ')';
     miniB.setAttribute('aria-pressed', state.mini ? 'true' : 'false');
@@ -384,6 +410,7 @@
     else if (k === 'escape') setTool('mouse');
     else if (k === 'delete' || k === 'backspace') { clearAll(); e.preventDefault(); }
     else if (/^[1-6]$/.test(k)) { setColor(COLORS[+k - 1].c); e.preventDefault(); }
+    else if (k === '[' || k === ']') { setFont(k === ']' ? 1 : -1); e.preventDefault(); }
   }, true);
 
   var api = {
