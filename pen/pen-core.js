@@ -45,8 +45,8 @@
   var KEY = 'zpen-settings';
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
-  var state = { open: false, tool: 'mouse', color: saved.color || COLORS[0].c, width: saved.width || WIDTHS[1].w, pos: saved.pos || null };
-  function save() { try { localStorage.setItem(KEY, JSON.stringify({ color: state.color, width: state.width, pos: state.pos })); } catch (e) {} }
+  var state = { open: false, tool: 'mouse', color: saved.color || COLORS[0].c, width: saved.width || WIDTHS[1].w, pos: saved.pos || null, zoom: saved.zoom || 1, mini: !!saved.mini };
+  function save() { try { localStorage.setItem(KEY, JSON.stringify({ color: state.color, width: state.width, pos: state.pos, zoom: state.zoom, mini: state.mini })); } catch (e) {} }
 
   var shapes = [], cur = null, drawing = false;
 
@@ -84,6 +84,10 @@
     '.w i{display:block;width:26px;border-radius:4px;background:#1b2230}',
     '.w[aria-pressed="true"]{border-color:#c8321e;box-shadow:0 0 0 1px #c8321e}',
     'button:focus-visible{outline:3px solid #1f6feb;outline-offset:2px}',
+    '.sz{display:flex;gap:4px;padding:0 0 6px;margin-bottom:2px;border-bottom:1px solid #dde1e8}',
+    '.sz button{flex:1;min-width:26px;height:26px;padding:0 4px;border:1px solid #dde1e8;border-radius:7px;background:#fff;color:#1b2230;font-weight:700;font-size:12px;font-family:inherit;cursor:pointer}',
+    '.sz button:hover{background:#eef1f5}.sz button[aria-pressed="true"]{border-color:#c8321e;color:#c8321e}',
+    '.box.mini .b span,.box.mini .b kbd,.box.mini .grip span{display:none}.box.mini .panel{width:auto}.box.mini .sw{grid-template-columns:repeat(2,1fr)}.box.mini .wd{grid-template-columns:1fr}.box.mini .sz{flex-direction:column}',
     '@media (max-width:700px){.b span,.b kbd{display:none}.panel{width:auto}.sw{grid-template-columns:repeat(2,1fr)}.wd{grid-template-columns:1fr}}'
   ].join('\n');
   root.appendChild(style);
@@ -243,6 +247,15 @@
   grip.appendChild(el('span', null, '판서 도구')); grip.appendChild(icon('grip', 18));
   grip.title = '끌어서 옮기기';
   panel.appendChild(grip);
+  // 도구상자 크기: 작게(−) · 크게(+) · 아이콘만 (이 사이트에 기억)
+  var ZOOMS = [0.8, 1, 1.25, 1.5, 1.8];
+  var sz = el('div', 'sz');
+  function szBtn(text, title, fn) { var b = el('button', null, text); b.type = 'button'; b.title = title; b.addEventListener('click', fn); sz.appendChild(b); return b; }
+  function zoomBy(d) { var i = ZOOMS.indexOf(state.zoom); if (i < 0) i = 1; state.zoom = ZOOMS[Math.max(0, Math.min(ZOOMS.length - 1, i + d))]; save(); sync(); place(); }
+  szBtn('−', '도구상자 작게', function () { zoomBy(-1); });
+  szBtn('+', '도구상자 크게', function () { zoomBy(1); });
+  var miniB = szBtn('▤', '아이콘만 보기 / 글자도 보기', function () { state.mini = !state.mini; save(); sync(); place(); });
+  panel.appendChild(sz);
   var TOOLS = [['mouse', '마우스', 'Esc'], ['pen', '펜', 'P'], ['hl', '형광펜', 'H'], ['rect', '사각형', 'R'], ['ellipse', '원', 'O'], ['arrow', '화살표', 'A'], ['eraser', '지우개', 'E']];
   var TIPS = { mouse: '그리기 멈추고 화면 누르기 · 스크롤', pen: '자유롭게 그리기', hl: '반투명하게 굵게', rect: '드래그 · Shift는 정사각형', ellipse: '드래그 · Shift는 정원', arrow: '드래그로 화살표', eraser: '닿은 그림 지우기' };
   var toolBtns = TOOLS.map(function (t) {
@@ -291,6 +304,10 @@
   function clearAll() { shapes = []; cur = null; paint(); }
   function sync() {
     box.classList.toggle('open', state.open);
+    box.classList.toggle('mini', state.mini);
+    panel.style.zoom = state.zoom;
+    panel.style.maxHeight = 'calc((100vh - 140px) / ' + state.zoom + ')';
+    miniB.setAttribute('aria-pressed', state.mini ? 'true' : 'false');
     box.style.display = (state.open || launcher) ? '' : 'none';
     if (launch) launch.setAttribute('aria-pressed', state.open ? 'true' : 'false');
     toolBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === state.tool ? 'true' : 'false'); });
