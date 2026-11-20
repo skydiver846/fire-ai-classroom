@@ -203,6 +203,23 @@
     drawing = false;
     if (cur) { if (cur.pts || Math.hypot(cur.x2 - cur.x1, cur.y2 - cur.y1) >= 4) shapes.push(cur); cur = null; paint(); }
   }
+  // 펜 상태에서도 휠로 스크롤: 판 아래의 스크롤 상자(안쪽 상자)를 찾아 대신 굴려 줌. 없으면 페이지가 그대로 스크롤됨
+  function scroller(node) {
+    for (; node && node !== document.body && node !== document.documentElement; node = node.parentElement) {
+      var st = getComputedStyle(node);
+      if (/(auto|scroll|overlay)/.test(st.overflowY + st.overflowX) && (node.scrollHeight > node.clientHeight + 1 || node.scrollWidth > node.clientWidth + 1)) return node;
+    }
+    return null;
+  }
+  cv.addEventListener('wheel', function (e) {
+    var box = scroller(anchorAt(e.clientX, e.clientY));
+    if (!box) return;
+    var k = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? box.clientHeight : 1;
+    var dx = (e.shiftKey && !e.deltaX ? e.deltaY : e.deltaX) * k, dy = (e.shiftKey && !e.deltaX ? 0 : e.deltaY) * k;
+    var y0 = box.scrollTop, x0 = box.scrollLeft;
+    box.scrollBy(dx, dy);
+    if (box.scrollTop !== y0 || box.scrollLeft !== x0) e.preventDefault();   // 상자 끝이면 페이지가 이어서 스크롤
+  }, { passive: false });
   cv.addEventListener('pointerup', end);
   cv.addEventListener('pointercancel', end);
 
